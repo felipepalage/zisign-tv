@@ -1,11 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ZiSign</title>
+  <title>ZiSign - TV Assinaturas</title>
   <link rel="icon" type="image/png" href="img/ZiSIGN.jpg" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     html, body {
+      margin: 0;
+      padding: 0;
       background-color: #ffffff;
       font-family: 'Montserrat', sans-serif;
       color: #1e1e1e;
@@ -13,45 +18,185 @@
       width: 100vw;
       overflow: hidden;
       display: flex;
-      justify-content: center;
-      align-items: center;
       flex-direction: column;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
     }
 
     .logo {
-      max-width: 500px;
-      margin-bottom: 24px;
+      max-width: 600px;
+      margin-bottom: 20px;
     }
 
     .slogan {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 800;
-      color: #222;
-      margin-bottom: 60px;
+      color: #1e1e1e;
+      margin-bottom: 16px;
+    }
+
+    #contador-visual {
+      font-size: 32px;
+      font-weight: 700;
+      color: #ffffff;
+      background-color: #4CAF50;
+      padding: 10px 30px;
+      border-radius: 40px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-top: 10px;
+      transition: all 0.3s ease;
     }
 
     .footer {
-      position: absolute;
-      bottom: 20px;
+      position: relative;
+      bottom: 0;
+      padding: 20px 0;
       font-size: 14px;
       color: #999999;
       text-align: center;
       width: 100%;
+      line-height: 1.6;
+    }
+
+    #popup {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #f1f1f1;
+      color: #000;
+      padding: 16px 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      font-size: 14px;
+      max-width: 280px;
+      z-index: 1000;
+      border: 1px solid #ccc;
+      animation: fadeSlideIn 0.4s ease;
+    }
+
+    #popup-content {
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    #popup-content strong {
+      color: #333;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0px);
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <img src="img/ZiSIGN.jpg" alt="Logo ZiSign" class="logo" />
+  <div class="main">
+    <img src="img/ZiSIGN.jpg" alt="Logo ZiSign" class="logo" />
+    <div class="slogan">A revolução das assinaturas digitais com inteligência artificial.</div>
+    <div id="contador-visual">0 assinaturas</div>
+  </div>
 
-  <div class="slogan">A revolução das assinaturas digitais com inteligência artificial.</div>
+  <div id="popup">
+    <div id="popup-content"></div>
+  </div>
 
   <div class="footer">
     contato@zisign.ai<br>
-    Powered by ZISIGN © 2025
+    Powered by <strong>ZiSign</strong> © 2025
   </div>
+
+  <script>
+    const assinaturasFake = [
+      {
+        id: 1,
+        usuario: "Felipe Palage",
+        cargo: "Desenvolvedor de Sistemas",
+        operacao: "Assinatura de Termo de Responsabilidade",
+        fundo: "FIDC Tech",
+        cedente: "Empresa Zitec",
+        data: "21/07/2025",
+        hora: "14:00"
+      },
+      {
+        id: 2,
+        usuario: "Julia Suzuki",
+        cargo: "Desenvolvedor de Sistemas",
+        operacao: "Assinatura de Procuração",
+        fundo: "FIDC Energia",
+        cedente: "Empresa Zitec",
+        data: "21/07/2025",
+        hora: "14:05"
+      },
+      {
+        id: 3,
+        usuario: "Carlos Eduardo",
+        cargo: "PO",
+        operacao: "Aprovação de Contrato",
+        fundo: "FIDC Saúde",
+        cedente: "Empresa Zitec",
+        data: "21/07/2025",
+        hora: "14:10"
+      }
+    ];
+
+    let indexAtual = 0;
+    let totalAssinaturasExibidas = 0;
+
+    function atualizarContador() {
+      const contadorVisual = document.getElementById('contador-visual');
+      if (contadorVisual) {
+        contadorVisual.innerText = `${totalAssinaturasExibidas} assinatura${totalAssinaturasExibidas !== 1 ? 's' : ''}`;
+      }
+    }
+
+    function exibirAssinatura(data) {
+      const popup = document.getElementById('popup');
+      const content = document.getElementById('popup-content');
+
+      content.innerHTML = `
+        <div><strong>${data.usuario}</strong> (${data.cargo})</div>
+        <div>${data.operacao}</div>
+        <div>${data.fundo} - ${data.cedente}</div>
+        <div>${data.data} às ${data.hora}</div>
+      `;
+
+      popup.style.display = 'block';
+
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 10000);
+
+      totalAssinaturasExibidas++;
+      atualizarContador();
+    }
+
+    function mostrarProximaAssinatura() {
+      if (indexAtual >= assinaturasFake.length) {
+        indexAtual = 0;
+      }
+      exibirAssinatura(assinaturasFake[indexAtual]);
+      indexAtual++;
+    }
+
+    setInterval(mostrarProximaAssinatura, 15000);
+    mostrarProximaAssinatura();
+  </script>
 
 </body>
 </html>
