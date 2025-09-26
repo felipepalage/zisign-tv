@@ -5,15 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>ZiSign </title>
   <link rel="icon" type="image/png" href="img/ZiSIGN.jpg"/>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet"/>
 
   <style>
     :root{
       --bg:#0e0f11; --grad-a:#01251a; --grad-b:#071b2a;
-      --card:rgba(25,27,31,.55); --glass:rgba(255,255,255,.06);
-      --border:rgba(0,255,194,.25); --text:#f4f8f7; --muted:#a8c7bd;
-      --green:#00d187; --green-200:#00ffc2; --ink:#00100b; --accent:#19f5c8;
-      --ok:#00cc66; --warn:#ff8c00;
+      --glass:rgba(255,255,255,.06); --border:rgba(0,255,194,.25);
+      --text:#f4f8f7; --muted:#a8c7bd; --white:#fff;
+      --green:#00d187; --green-200:#00ffc2;
     }
     *{box-sizing:border-box}
     html,body{height:100%;margin:0}
@@ -31,145 +30,92 @@
       height:100%;
       display:grid;
       grid-template-rows:auto 1fr auto;
-      gap:10px;
+      gap:12px;
       padding:16px 18px;
     }
 
-    /* Header */
+    /* Header compacto */
     header{
       display:flex;align-items:center;justify-content:space-between;gap:12px;
       background:linear-gradient(180deg,rgba(8,10,12,.75),rgba(8,10,12,.35));
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:10px 14px;
+      border:1px solid var(--border); border-radius:14px;
+      padding:8px 14px; backdrop-filter:blur(8px);
       box-shadow:0 10px 30px rgba(0,0,0,.35);
-      backdrop-filter:blur(10px);
     }
-    .brand{
-      display:flex;align-items:center;gap:14px
-    }
-    .brand img{
-      height:58px;width:auto;border-radius:10px;
-      filter:drop-shadow(0 0 14px rgba(0,255,194,.25))
-    }
-    .brand h1{
-      font-size:clamp(1.1rem,2.2vw,1.6rem);
-      letter-spacing:.5px;
-      margin:0;color:var(--green-200)
-    }
-    .clock{
-      font-weight:700;
-      color:var(--green-200);
-      letter-spacing:1px;
-    }
-    .controls{
-      display:flex;align-items:center;gap:8px;flex-wrap:wrap
-    }
-    .btn{
-      border:1px solid var(--border); background:linear-gradient(180deg,rgba(0,255,194,.1),rgba(0,255,194,.04));
-      color:var(--text); padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer;
-      display:flex;align-items:center;gap:8px
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{height:48px;width:auto;border-radius:8px;filter:drop-shadow(0 0 12px rgba(0,255,194,.25))}
+    .brand h1{margin:0;color:var(--green-200);font-size:clamp(1.05rem,2vw,1.4rem);letter-spacing:.4px}
+    .clock{font-weight:800;color:var(--green-200);letter-spacing:1px;font-size:clamp(1rem,2vw,1.2rem)}
+    .controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .btn, .switch, .speed{
+      border:1px solid var(--border); border-radius:10px; font-weight:800;
+      background:linear-gradient(180deg,rgba(0,255,194,.08),rgba(0,255,194,.03)); color:var(--text);
+      padding:8px 12px; cursor:pointer; display:flex; align-items:center; gap:8px;
     }
     .btn:hover{box-shadow:0 8px 24px rgba(0,255,194,.18)}
-    .switch{
-      display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-weight:600
-    }
     .switch input{appearance:none;width:44px;height:24px;background:var(--glass);border:1px solid var(--border);border-radius:30px;position:relative;outline:none}
-    .switch input:before{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}
+    .switch input:before{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--white);transition:.2s}
     .switch input:checked{background:rgba(0,255,194,.25)}
     .switch input:checked:before{left:22px;background:var(--green-200)}
-    .speed{
-      border:1px solid var(--border);background:var(--glass);color:var(--text);
-      padding:6px 10px;border-radius:10px;font-weight:700
-    }
+    .speed{appearance:none}
 
-    /* Main grid */
+    /* Main: contador + subtítulo central */
     .main{
-      display:grid;gap:12px;
-      grid-template-columns: 2.2fr 1.2fr;
-      grid-template-rows: 1.1fr 1fr;
-      grid-template-areas:
-        "bigcount kpis"
-        "ticker  side";
-      height:100%;
-      min-height:0;
-    }
-
-    .bigcount{
-      grid-area:bigcount;
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:20px 24px;
-      display:flex;flex-direction:column;justify-content:center;align-items:center;
-      text-align:center;
+      display:grid; place-items:center; position:relative;
+      border:1px solid var(--border); border-radius:18px;
+      background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));
       box-shadow:0 30px 80px rgba(0,0,0,.35);
-      position:relative;overflow:hidden;
+      overflow:hidden;
     }
-    .bigcount:before{
-      content:"";position:absolute;inset:-1px;
-      background:radial-gradient(800px 200px at 10% -40%, rgba(0,255,194,.15), transparent 60%),
-                 radial-gradient(800px 200px at 110% 140%, rgba(0,209,135,.10), transparent 60%);
-      pointer-events:none
+    .main::before{
+      content:""; position:absolute; inset:-1px;
+      background:radial-gradient(900px 220px at 10% -40%, rgba(0,255,194,.18), transparent 60%),
+                 radial-gradient(900px 220px at 110% 140%, rgba(0,209,135,.12), transparent 60%);
+      pointer-events:none;
     }
-    .bigcount .label{opacity:.8;margin-bottom:10px}
-    .bigcount .value{
-      font-size:clamp(42px,9.5vw,120px);
-      font-weight:800; line-height:1;
-      color:#fff; text-shadow:0 0 24px rgba(0,255,194,.20);
+    .center{
+      text-align:center; padding:4vh 2vw;
+      display:flex; flex-direction:column; align-items:center; gap:12px;
     }
-    .bigcount .sub{opacity:.85;margin-top:6px;color:var(--muted)}
+    .label{opacity:.9;color:var(--muted);font-weight:700;font-size:clamp(1rem,2.2vw,1.3rem)}
+    .big{
+      font-size:clamp(56px,12vw,160px); line-height:1; font-weight:900; color:#fff;
+      text-shadow:0 0 30px rgba(0,255,194,.22), 0 0 6px rgba(0,0,0,.6);
+      letter-spacing:1px;
+    }
+    .sub{opacity:.9;color:var(--muted);font-size:clamp(1rem,2.1vw,1.4rem);font-weight:700}
 
-    .kpis{
-      grid-area:kpis;display:grid;gap:12px;
-      grid-template-columns:1fr;grid-auto-rows:1fr;min-height:0;
-    }
-    .card{
-      background:var(--card);border:1px solid var(--border);border-radius:16px;
-      box-shadow:0 20px 60px rgba(0,0,0,.35);padding:16px 16px;
-      display:flex;flex-direction:column;gap:8px;min-height:0;
-    }
-    .card h3{margin:0;font-size:clamp(12px,1.2vw,14px);color:var(--muted);font-weight:700;letter-spacing:.4px}
-    .kpi-value{
-      font-size:clamp(26px,4.2vw,46px);font-weight:800;color:#fff;
-      text-shadow:0 0 18px rgba(0,255,194,.15)
-    }
-    .kpi-sub{font-size:.92rem;color:var(--muted)}
-
+    /* Ticker (rodapé) */
     .ticker{
-      grid-area:ticker;
-      background:var(--card);border:1px solid var(--border);border-radius:16px;
-      padding:0;display:flex;flex-direction:column;overflow:hidden;
+      display:flex; flex-direction:column; overflow:hidden;
+      border:1px solid var(--border); border-radius:14px;
+      background:linear-gradient(180deg,rgba(8,10,12,.75),rgba(8,10,12,.35));
     }
-    .ticker h3{margin:10px 14px;color:var(--muted);font-size:.95rem}
+    .ticker-head{
+      display:flex;align-items:center;justify-content:space-between;padding:8px 12px;
+      color:var(--muted); font-weight:800; letter-spacing:.3px;
+    }
     .ticker-row{
-      white-space:nowrap;display:flex;gap:28px;align-items:center;
-      padding:12px 0;border-top:1px solid var(--border);
+      white-space:nowrap; display:flex; gap:28px; align-items:center;
+      padding:12px 0; border-top:1px solid var(--border);
       animation:scroll 40s linear infinite;
     }
     .ticker:hover .ticker-row{animation-play-state:paused}
     .tick{
-      display:inline-flex;align-items:center;gap:10px;padding:8px 12px;margin-left:12px;
-      border-radius:999px;background:rgba(0,255,194,.08);border:1px solid var(--border)
+      display:inline-flex; align-items:center; gap:10px; padding:10px 14px; margin-left:12px;
+      border-radius:999px; background:rgba(0,255,194,.08); border:1px solid var(--border); font-weight:700;
+      font-size:clamp(.9rem,1.8vw,1rem);
     }
-    .pill{font-size:.75rem;font-weight:800;color:#000;background:var(--green-200);padding:3px 8px;border-radius:999px}
+    .pill{font-size:.8rem;font-weight:900;color:#00110b;background:var(--green-200);padding:4px 10px;border-radius:999px}
+
     @keyframes scroll{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
 
-    .side{
-      grid-area:side;display:grid;gap:12px;grid-template-rows:1fr 1fr;min-height:0;
-    }
-    .spark-wrap{position:relative}
-    canvas{width:100%;height:100%}
-
-    /* Toast (popup) */
+    /* Toast simples (popup) */
     .toast{
       position:fixed;right:24px;bottom:24px;z-index:30;
-      min-width:300px;max-width:380px;
-      background:#0f1214;color:var(--text);
-      border:1px solid var(--border);border-radius:16px;
-      box-shadow:0 20px 80px rgba(0,0,0,.5);
-      transform:translateY(20px);opacity:0;pointer-events:none;
-      display:none;
+      min-width:300px;max-width:380px;background:#0f1214;color:var(--text);
+      border:1px solid var(--border);border-radius:16px;box-shadow:0 20px 80px rgba(0,0,0,.5);
+      transform:translateY(20px);opacity:0;pointer-events:none;display:none;
     }
     .toast-inner{padding:14px 16px}
     .toast.show{display:block;animation:toastIn .35s ease forwards}
@@ -177,21 +123,11 @@
     @keyframes toastIn{to{transform:translateY(0);opacity:1}}
     @keyframes toastOut{to{transform:translateY(10px);opacity:0}}
 
-    /* Footer */
     footer{
       display:flex;align-items:center;justify-content:space-between;gap:10px;
-      background:linear-gradient(180deg,rgba(8,10,12,.75),rgba(8,10,12,.35));
-      border:1px solid var(--border);
-      border-radius:14px;padding:8px 12px;
+      color:var(--muted); font-size:.95rem; opacity:.9;
     }
-    .foot-left{opacity:.85}
-    .foot-right{font-weight:700;color:var(--green-200)}
-
-    /* Responsive stack */
-    @media (max-width: 980px){
-      .main{grid-template-columns:1fr;grid-template-rows:auto auto auto;grid-template-areas:"bigcount" "kpis" "ticker"; }
-      .side{display:none}
-    }
+    .foot-right{font-weight:800;color:var(--green-200)}
   </style>
 </head>
 <body>
@@ -199,22 +135,22 @@
     <header>
       <div class="brand">
         <img src="img/ZiSIGN.jpg" alt="ZiSign"/>
-        <h1>ZiSign </h1>
+        <h1>ZiSign</h1>
       </div>
       <div class="clock" id="clock">--:--:--</div>
       <div class="controls">
         <button class="btn" id="btnFS">⛶ Tela cheia</button>
         <button class="btn" id="btnPlay">⏸ Pausar</button>
-        <label class="switch" title="Som do alerta">
+        <label class="switch" title="Som">
           <input id="toggleSound" type="checkbox" checked/>
           <span>Som</span>
         </label>
-        <label class="switch" title="Toasts (popups)">
+        <label class="switch" title="Toasts">
           <input id="toggleToast" type="checkbox" checked/>
           <span>Toasts</span>
         </label>
         <select id="speed" class="speed" title="Velocidade">
-          <option value="20000">Lento</option>
+          <option value="22000">Lento</option>
           <option value="15000" selected>Médio</option>
           <option value="8000">Rápido</option>
         </select>
@@ -222,61 +158,24 @@
     </header>
 
     <main class="main">
-      <!-- Contador principal -->
-      <section class="bigcount" aria-live="polite">
-        <div class="label">Assinaturas totais exibidas</div>
-        <div class="value" id="totalCount">0</div>
+      <div class="center">
+        <div class="label">Assinaturas exibidas</div>
+        <div class="big" id="totalCount">0</div>
         <div class="sub" id="subCount">—</div>
-      </section>
-
-      <!-- KPIs -->
-      <section class="kpis">
-        <article class="card">
-          <h3>Hoje</h3>
-          <div class="kpi-value" id="kpiToday">0</div>
-          <div class="kpi-sub" id="kpiTodaySub">0% vs. ontem</div>
-        </article>
-        <article class="card">
-          <h3>Última hora</h3>
-          <div class="kpi-value" id="kpiHour">0</div>
-          <div class="kpi-sub">Eventos simulados na última janela de 60 min</div>
-        </article>
-        <article class="card spark-wrap">
-          <h3>Média por minuto (últimos 90 min)</h3>
-          <div style="flex:1;min-height:0">
-            <canvas id="spark" aria-label="Gráfico de tendência de assinaturas" role="img"></canvas>
-          </div>
-        </article>
-      </section>
-
-      <!-- Ticker -->
-      <section class="ticker">
-        <h3>Últimas assinaturas</h3>
-        <div class="ticker-row" id="tickerRow" aria-live="polite"></div>
-      </section>
-
-      <!-- Lado direito (quando houver espaço) -->
-      <section class="side">
-        <article class="card">
-          <h3>Próximas previstas (simuladas)</h3>
-          <div id="nextUp" style="display:grid;gap:10px"></div>
-        </article>
-        <article class="card">
-          <h3>Destaques</h3>
-          <div style="display:grid;gap:8px">
-            <div><span class="pill">TOP</span> Contratos: Termo de Responsabilidade, Procuração, Adendo</div>
-            <div><span class="pill" style="background:#ffe08a;color:#111">PICO</span> 11:00–12:00</div>
-            <div style="opacity:.85">Fonte: feed simulado local</div>
-          </div>
-        </article>
-      </section>
+      </div>
     </main>
 
-    <footer>
-      <div class="foot-left">
-        contato@zisign.ai — Powered by <strong>ZiSign</strong> © 2025
+    <section class="ticker" aria-live="polite">
+      <div class="ticker-head">
+        <div>Últimas assinaturas</div>
+        <div style="opacity:.8" id="rate">— evts/min</div>
       </div>
-      <div class="foot-right" id="footRight">Online</div>
+      <div class="ticker-row" id="tickerRow"></div>
+    </section>
+
+    <footer>
+      <div>contato@zisign.ai — © 2025 ZiSign</div>
+      <div class="foot-right" id="status">Online</div>
     </footer>
   </div>
 
@@ -285,53 +184,42 @@
     <div class="toast-inner" id="toastContent"></div>
   </div>
 
+  <!-- Som de alerta (substitua pelo seu mp3 curto, se quiser) -->
   <audio id="ding" preload="auto">
     <source src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA..." type="audio/mp3">
-    <!-- OBS: coloque um mp3 curto seu aqui se quiser -->
   </audio>
 
   <script>
-    // ====== Configurações ======
+    // ===== Config =====
     const SETTINGS = {
-      toastDuration: 8000,           // ms que o popup fica visível
-      initialInterval: 15000,        // intervalo entre eventos (ms)
-      maxTickerItems: 50,            // quantos rolam no ticker
-      sparkPoints: 90,               // pontos do sparkline (~90 minutos)
+      toastDuration: 7000,
+      initialInterval: 15000,
+      maxTickerItems: 40
     };
 
-    // ====== Dados simulados ======
+    // ===== Dados simulados =====
     const nomes = ["Felipe Palage","Julia Suzuki","Carlos Eduardo","Bruna Lima","Marcos Vieira","Ana Clara","Thiago Moreira","Beatriz Souza","Rafael Nunes","Gustavo Martins","Larissa Prado","Clara Rocha"];
     const cargos = ["Desenvolvedor de Sistemas","PO","Analista","Tech Lead","QA","Analista de Negócios"];
     const operacoes = ["Assinatura de Termo de Responsabilidade","Assinatura de Procuração","Aprovação de Contrato","Adendo Contratual","Termo de Confidencialidade","Aceite de Política"];
     const fundos = ["FIDC Tech","FIDC Energia","FIDC Saúde","FIDC Agro","FIDC Varejo"];
     const cedentes = ["Empresa Zitec","Parceiro Alfa","Grupo Orion","Soluções Beta","Holding Gama"];
 
-    // ====== Estado ======
-    let events = [];                 // histórico exibido
-    let total = 0;                   // total exibido
-    let today = 0;                   // contagem de "hoje"
-    let lastHour = 0;                // janela deslizante 60 min
+    // ===== Estado =====
+    let total = 0;
     let running = true;
     let intervalMs = SETTINGS.initialInterval;
     let timerId = null;
     let soundOn = true;
     let toastOn = true;
-    let sparkData = Array.from({length: SETTINGS.sparkPoints}, () => 0); // média por min
-    let minuteBucket = 0;            // para compor média do spark por minuto
-    let lastMinute = new Date().getMinutes();
 
-    // DOM refs
+    const elClock = document.getElementById('clock');
     const elTotal = document.getElementById('totalCount');
     const elSub = document.getElementById('subCount');
-    const elToday = document.getElementById('kpiToday');
-    const elTodaySub = document.getElementById('kpiTodaySub');
-    const elHour = document.getElementById('kpiHour');
     const elTicker = document.getElementById('tickerRow');
-    const elNextUp = document.getElementById('nextUp');
+    const elRate = document.getElementById('rate');
+    const elStatus = document.getElementById('status');
     const elToast = document.getElementById('toast');
     const elToastContent = document.getElementById('toastContent');
-    const elClock = document.getElementById('clock');
-    const elFootRight = document.getElementById('footRight');
     const audioDing = document.getElementById('ding');
 
     const elBtnFS = document.getElementById('btnFS');
@@ -340,14 +228,10 @@
     const elToggleSound = document.getElementById('toggleSound');
     const elToggleToast = document.getElementById('toggleToast');
 
-    // ====== Util ======
-    const pad2 = (n)=> (n<10? '0'+n : ''+n);
-    function nowStr(){
-      const d = new Date();
-      return `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}/${d.getFullYear()} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
-    }
-    function rand(arr){ return arr[Math.floor(Math.random()*arr.length)] }
-    function animateCount(el, from, to, duration=600){
+    // ===== Utils =====
+    const pad2 = n => (n<10?'0'+n:''+n);
+    const rand = arr => arr[Math.floor(Math.random()*arr.length)];
+    function animateCount(el, from, to, duration=500){
       const start = performance.now();
       function step(ts){
         const p = Math.min(1, (ts-start)/duration);
@@ -358,64 +242,13 @@
       requestAnimationFrame(step);
     }
 
-    // ====== Clock ======
+    // ===== Clock =====
     setInterval(()=>{
-      const d=new Date();
+      const d = new Date();
       elClock.textContent = `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
     }, 1000);
 
-    // ====== Sparkline ======
-    const spark = document.getElementById('spark');
-    const sctx = spark.getContext('2d');
-    function drawSpark(){
-      const w = spark.clientWidth, h = spark.clientHeight;
-      spark.width = w * window.devicePixelRatio;
-      spark.height = h * window.devicePixelRatio;
-      sctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-
-      // bg
-      sctx.clearRect(0,0,w,h);
-      sctx.fillStyle = 'rgba(255,255,255,0.03)';
-      sctx.fillRect(0,0,w,h);
-
-      // axis baseline
-      sctx.strokeStyle = 'rgba(0,255,194,.25)';
-      sctx.lineWidth = 1;
-      sctx.beginPath(); sctx.moveTo(0,h-14); sctx.lineTo(w,h-14); sctx.stroke();
-
-      // series
-      const max = Math.max(1, ...sparkData);
-      const stepX = w / (sparkData.length-1);
-      sctx.beginPath();
-      for(let i=0;i<sparkData.length;i++){
-        const x = i*stepX;
-        const y = h-14 - (sparkData[i]/max)*(h-28);
-        if(i===0) sctx.moveTo(x,y); else sctx.lineTo(x,y);
-      }
-      sctx.strokeStyle = '#00ffc2';
-      sctx.lineWidth = 2;
-      sctx.shadowColor = 'rgba(0,255,194,.35)';
-      sctx.shadowBlur = 8;
-      sctx.stroke();
-      sctx.shadowBlur = 0;
-    }
-    new ResizeObserver(drawSpark).observe(document.getElementById('spark').parentElement);
-
-    // atualiza bucket/minuto -> sparkData shift
-    setInterval(()=>{
-      const d = new Date();
-      const minute = d.getMinutes();
-      if(minute !== lastMinute){
-        // adiciona média do último minuto (min: 0, max: por segundo ~ intervalo)
-        sparkData.push(minuteBucket);
-        if(sparkData.length > SETTINGS.sparkPoints) sparkData.shift();
-        minuteBucket = 0;
-        lastMinute = minute;
-        drawSpark();
-      }
-    }, 1000);
-
-    // ====== Toast ======
+    // ===== Toast =====
     let toastTimeout=null;
     function showToast(html){
       if(!toastOn) return;
@@ -432,57 +265,26 @@
       elToast.style.pointerEvents='none';
       setTimeout(()=>{ elToast.classList.remove('hide'); elToast.style.display='none'; }, 280);
     }
+    document.addEventListener('click', (e)=>{
+      if(!elToast.contains(e.target)) hideToast();
+    });
 
-    // ====== Ticker ======
+    // ===== Ticker =====
     function pushTicker(item){
       const el = document.createElement('div');
       el.className='tick';
       el.innerHTML = `
         <span class="pill">${item.usuario.split(' ')[0]}</span>
         <strong>${item.operacao}</strong>
-        <span style="opacity:.8">• ${item.fundo} • ${item.hora}</span>
+        <span style="opacity:.85">• ${item.fundo} • ${item.hora}</span>
       `;
       elTicker.appendChild(el);
-      // limita
       const extra = elTicker.children.length - SETTINGS.maxTickerItems;
       for(let i=0;i<extra;i++) elTicker.removeChild(elTicker.firstChild);
     }
 
-    // ====== Próximos (side) ======
-    function refreshNextUp(){
-      const soon = Array.from({length:4}).map(()=>({
-        usuario: rand(nomes),
-        operacao: rand(operacoes),
-        fundo: rand(fundos),
-        em: (Math.floor(Math.random()*6)+1)*2 // em X minutos (simulado)
-      }));
-      elNextUp.innerHTML = soon.map(s=>`
-        <div style="display:flex;align-items:center;gap:10px;background:rgba(0,255,194,.06);border:1px solid var(--border);border-radius:12px;padding:8px 10px">
-          <span class="pill">${s.em}m</span>
-          <div style="display:grid">
-            <strong>${s.usuario}</strong>
-            <span style="opacity:.8">${s.operacao} — ${s.fundo}</span>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // ====== KPIs ======
-    function updateKPIs(){
-      elToday.textContent = today.toLocaleString('pt-BR');
-      // comparativo “vs ontem” só ilustrativo (random)
-      const delta = Math.floor((Math.random()*21)-10); // -10% a +10%
-      const arrow = delta >= 0 ? '▲' : '▼';
-      elTodaySub.textContent = `${arrow} ${Math.abs(delta)}% vs. ontem`;
-      elHour.textContent = lastHour.toLocaleString('pt-BR');
-    }
-
-    function recomputeHourWindow(){
-      const cutoff = Date.now() - 60*60*1000;
-      lastHour = events.filter(e=> e.ts >= cutoff).length;
-    }
-
-    // ====== Evento (assinatura) ======
+    // ===== Evento =====
+    let lastEventsTs = [];
     function newEvent(){
       const d = new Date();
       const item = {
@@ -495,18 +297,20 @@
         hora: `${pad2(d.getHours())}:${pad2(d.getMinutes())}`,
         ts: Date.now()
       };
-      events.push(item);
-      total++; today++; minuteBucket++;
 
-      // UI
-      animateCount(elTotal, Number(elTotal.textContent.replace(/\./g,'')), total);
+      total++;
+      animateCount(elTotal, Number(elTotal.textContent.replace(/\./g,''))||0, total);
       elSub.textContent = `${total === 1 ? '1 assinatura' : total.toLocaleString('pt-BR') + ' assinaturas'}`;
-      pushTicker(item);
-      recomputeHourWindow();
-      updateKPIs();
-      drawSpark();
 
-      // Toast
+      pushTicker(item);
+
+      // taxa por minuto (janela 60s, só pra exibir algo útil)
+      const now = Date.now();
+      lastEventsTs.push(now);
+      lastEventsTs = lastEventsTs.filter(t => now - t < 60000);
+      elRate.textContent = `${lastEventsTs.length} evts/min`;
+
+      // toast
       showToast(`
         <div style="display:grid;gap:6px">
           <div><strong>${item.usuario}</strong> <span style="opacity:.8">(${item.cargo})</span></div>
@@ -516,25 +320,24 @@
         </div>
       `);
 
-      // Som
+      // som
       if(soundOn){
         try{ audioDing.currentTime = 0; audioDing.play().catch(()=>{}); }catch{}
       }
-      refreshNextUp();
     }
 
-    // ====== Loop ======
+    // ===== Loop =====
     function startLoop(){
       stopLoop();
       timerId = setInterval(()=>{ if(running) newEvent(); }, intervalMs);
-      elFootRight.textContent = `Online • ${Math.round(60000/intervalMs)} evts/min`;
+      elStatus.textContent = `Online • ${Math.round(60000/intervalMs)} evts/min`;
     }
     function stopLoop(){
       if(timerId) clearInterval(timerId);
       timerId = null;
     }
 
-    // ====== Controles ======
+    // ===== Controles =====
     elBtnFS.addEventListener('click', ()=>{
       if(!document.fullscreenElement){ document.documentElement.requestFullscreen?.(); }
       else{ document.exitFullscreen?.(); }
@@ -548,25 +351,13 @@
       startLoop();
     });
     elToggleSound.addEventListener('change', e=> soundOn = e.target.checked);
-    elToggleToast.addEventListener('change', e=>{
-      toastOn = e.target.checked;
-      if(!toastOn) hideToast();
-    });
+    elToggleToast.addEventListener('change', e=>{ toastOn = e.target.checked; if(!toastOn) hideToast(); });
 
-    // ====== Boot ======
+    // ===== Boot =====
     (function init(){
-      refreshNextUp();
-      updateKPIs();
-      drawSpark();
-      // semente inicial
-      for(let i=0;i<6;i++) newEvent();
+      // semente inicial para não ficar “vazio”
+      for(let i=0;i<4;i++) newEvent();
       startLoop();
-      // ticker animação velocidade dinâmica baseada no CSS (opcional)
-      // nada a fazer aqui — pausa no hover já funciona
-      // fecha toast ao clicar fora
-      document.addEventListener('click', (e)=>{
-        if(!elToast.contains(e.target) && !e.target.closest('.controls')) hideToast();
-      });
     })();
   </script>
 </body>
