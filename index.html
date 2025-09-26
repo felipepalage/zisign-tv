@@ -214,6 +214,9 @@
     .band{grid-template-columns:1fr}
     .mid{grid-template-columns:1fr}
   }
+
+  #fx { display: none !important; }
+
 </style>
 </head>
 <body>
@@ -224,7 +227,6 @@
   <header>
     <div class="brand">
       <img src="img/ZiSIGN.jpg" alt="ZiSign"/>
-      <h1>ZiSign</h1>
     </div>
     <div class="clock" id="clock">--:--:--</div>
     <div class="controls">
@@ -302,15 +304,13 @@
       <div class="h-card">
         <div class="h-inner">
           <div class="h-title">Top documentos</div>
-          <div class="h-big" id="topDocs">Termo • Procuração • Adendo</div>
-          <div class="h-sub">Fonte: feed simulado local</div>
+          <div class="h-big" id="topDocs">Termo de Cessão</div>
         </div>
       </div>
       <div class="h-card">
         <div class="h-inner">
           <div class="h-title">Próximo pico estimado</div>
           <div class="h-big" id="nextPeak">11:00–12:00</div>
-          <div class="h-sub">Modelo simples — demonstração</div>
         </div>
       </div>
     </aside>
@@ -328,13 +328,11 @@
   <div class="toast-inner" id="toastContent"></div>
 </div>
 
-<!-- Som curto (troque pelo seu arquivo base64/URL se quiser) -->
 <audio id="ding" preload="auto">
   <source src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA..." type="audio/mp3">
 </audio>
 
 <script>
-/* ================= FX: Partículas Neo ================= */
 (() => {
   const c = document.getElementById('fx');
   const ctx = c.getContext('2d');
