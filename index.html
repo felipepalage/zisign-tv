@@ -53,7 +53,9 @@
   .brand h1{margin:0; color:var(--green-200); letter-spacing:.6px; font-size:clamp(1.1rem,2.2vw,1.5rem)}
   .clock{font-weight:900; color:var(--green-200); letter-spacing:1px; font-size:clamp(1rem,2vw,1.2rem)}
 
-  .controls{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.controls {
+  display: none !important;
+}
   .btn, .switch, .speed{
     border:1px solid var(--border); border-radius:12px; font-weight:900;
     background:linear-gradient(180deg,rgba(0,255,194,.12),rgba(0,255,194,.05)); color:var(--text);
@@ -228,7 +230,24 @@
     <div class="brand">
       <img src="img/ZiSignPNG.png" alt="ZiSign"/>
     </div>
-    
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="controls">
+      <button class="btn" id="btnFS">⛶ Tela cheia</button>
+      <button class="btn" id="btnPlay">⏸ Pausar</button>
+      <label class="switch" title="Som">
+        <input id="toggleSound" type="checkbox" checked/>
+        <span>Som</span>
+      </label>
+      <label class="switch" title="Toasts">
+        <input id="toggleToast" type="checkbox" checked/>
+        <span>Toasts</span>
+      </label>
+      <select id="speed" class="speed" title="Velocidade">
+        <option value="24000">Lento</option>
+        <option value="15000" selected>Médio</option>
+        <option value="8500">Rápido</option>
+      </select>
+    </div>
   </header>
 
   <!-- BAND 1: COUNTER + GAUGE -->
