@@ -25,7 +25,7 @@
       radial-gradient(1200px 800px at 85% -10%, var(--grad-a) 0%, transparent 60%),
       radial-gradient(1000px 700px at 10% 110%, var(--grad-b) 0%, transparent 60%),
       linear-gradient(180deg,#0a0c0f 0%,#0b0d10 60%,#090b0e 100%);
-    overflow:hidden; /* TV mode */
+    overflow:hidden;
   }
 
   #fx{
@@ -47,17 +47,9 @@
   }
   .brand{display:flex; align-items:center; gap:14px}
   .brand img{height:150px; width:auto; border-radius:12px; filter:drop-shadow(0 0 12px rgba(0,255,194,.25))}
-  .brand h1{margin:0; color:var(--green-200); letter-spacing:.6px; font-size:clamp(1.1rem,2.2vw,1.5rem)}
   .clock{font-weight:900; color:var(--green-200); letter-spacing:1px; font-size:clamp(1rem,2vw,1.2rem)}
 
   .controls { display:none !important; }
-
-  .btn, .switch, .speed{
-    border:1px solid var(--border); border-radius:12px; font-weight:900;
-    background:linear-gradient(180deg,rgba(0,255,194,.12),rgba(0,255,194,.05)); color:var(--text);
-    padding:8px 12px; cursor:pointer; display:flex; align-items:center; gap:8px;
-    box-shadow:0 8px 24px rgba(0,255,194,.08) inset, 0 8px 24px rgba(0,0,0,.2);
-  }
 
   .band{
     display:grid; grid-template-columns:1.4fr .8fr; gap:14px; min-height:0;
@@ -68,7 +60,7 @@
     border:1px solid var(--border); border-radius:20px;
     background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
     box-shadow:0 30px 100px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
-    display:grid; grid-template-columns:1fr; place-items:center;
+    display:grid; place-items:center;
   }
   .counter::before{
     content:""; position:absolute; inset:-1px;
@@ -156,30 +148,65 @@
 
   @keyframes scroll{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
 
+  /* coluna direita inteira para atrasos */
   .highlights{
-    display:grid; grid-template-columns:1fr; gap:12px; min-height:0;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
   }
-  .h-card{ perspective:1200px; position:relative; }
+  .h-card{
+    flex:1;
+    display:flex;
+  }
   .h-inner{
+    flex:1;
+    display:flex;
+    flex-direction:column;
     background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
     border:1px solid var(--border); border-radius:16px; padding:14px 16px;
     color:var(--text); box-shadow:0 16px 60px rgba(0,0,0,.45);
-    transform:rotateX(0deg) rotateY(0deg); transform-style:preserve-3d;
-    transition:transform .25s ease, box-shadow .25s ease;
+    transform-style:preserve-3d;
   }
+  .h-title{font-size:.95rem; color:var(--muted); font-weight:900; margin-bottom:8px}
+  .h-sub{opacity:.9; color:var(--muted); font-weight:800; margin-top:auto;}
+
   .h-card:hover .h-inner{
     transform:rotateX(4deg) rotateY(-4deg);
     box-shadow:0 24px 80px rgba(0,0,0,.55), 0 0 28px rgba(0,255,194,.18);
   }
-  .h-title{font-size:.95rem; color:var(--muted); font-weight:900; margin-bottom:8px}
-  .h-big{font-size:clamp(22px,3.2vw,34px); font-weight:900; color:#fff; text-shadow:0 0 18px rgba(0,255,194,.2)}
-  .h-sub{opacity:.9; color:var(--muted); font-weight:800}
+
+  /* lista ocupa o card inteiro */
+  .delay-list{
+    flex:1;
+    margin:6px 0 8px;
+    overflow:hidden;
+    position:relative;
+  }
+  .delay-track{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    animation:scrollV 20s linear infinite;
+  }
+  .delay-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:.95rem;
+    font-weight:800;
+  }
+  .delay-op{opacity:.9;}
+  .delay-late{color:#ff5c5c;}
+
+  @keyframes scrollV{
+    0%{transform:translateY(0);}
+    100%{transform:translateY(-50%);}
+  }
 
   footer{
     display:flex; align-items:center; justify-content:space-between; gap:10px;
     color:var(--muted); font-size:.95rem; opacity:.9;
   }
-  .foot-right{font-weight:900; color:var(--green-200)}
 
   .toast{
     position:fixed; right:24px; bottom:24px; z-index:30;
@@ -222,11 +249,6 @@
         <input id="toggleToast" type="checkbox" checked/>
         <span>Toasts</span>
       </label>
-      <select id="speed" class="speed" title="Velocidade">
-        <option value="24000">Lento</option>
-        <option value="15000" selected>Médio</option>
-        <option value="8500">Rápido</option>
-      </select>
     </div>
   </header>
 
@@ -274,21 +296,11 @@
     <aside class="highlights">
       <div class="h-card">
         <div class="h-inner">
-          <div class="h-title">Pico da última hora</div>
-          <div class="h-big" id="peakHour">—</div>
-          <div class="h-sub">Janela deslizante de 60 min</div>
-        </div>
-      </div>
-      <div class="h-card">
-        <div class="h-inner">
-          <div class="h-title">Top documentos</div>
-          <div class="h-big" id="topDocs">Operação</div>
-        </div>
-      </div>
-      <div class="h-card">
-        <div class="h-inner">
-          <div class="h-title">Próximo pico estimado</div>
-          <div class="h-big" id="nextPeak">11:00–12:00</div>
+          <div class="h-title">Operações atrasadas</div>
+          <div class="delay-list">
+            <div class="delay-track" id="delayList"></div>
+          </div>
+          <div class="h-sub">Exibindo operações com maior tempo de atraso</div>
         </div>
       </div>
     </aside>
@@ -308,7 +320,6 @@
 </audio>
 
 <script>
-/* partículas (mantido só pelo visual) */
 (() => {
   const c = document.getElementById('fx');
   const ctx = c.getContext('2d');
@@ -355,14 +366,12 @@
   tick();
 })();
 
-/* ==================== CONFIG API ==================== */
-const CNPJ_CERTIFICADORA = "54638076000176"; // ajuste se precisar
-const API_URL = `/dashboard/assinaturas?cnpjCertificadora=${CNPJ_CERTIFICADORA}`;
+const CNPJ_CERTIFICADORA = "54638076000176";
+const API_BASE = "https://custodiabackend-prod.idsf.com.br/";
+const API_URL = `${API_BASE}/api/ZiSign/TV?cnpjCertificadora=${CNPJ_CERTIFICADORA}`;
 
-/* ==================== ESTADO & DOM ==================== */
 let soundOn = true;
 let toastOn = true;
-let peakHourCnt = 0;
 
 const elClock   = document.getElementById('clock');
 const elTotal   = document.getElementById('totalCount');
@@ -374,9 +383,8 @@ const elToast   = document.getElementById('toast');
 const elToastContent = document.getElementById('toastContent');
 const audioDing = document.getElementById('ding');
 const arc       = document.getElementById('arc');
-const elPeakHour= document.getElementById('peakHour');
+const elDelayList = document.getElementById('delayList');
 
-/* utils */
 const pad2 = n => (n<10?'0'+n:''+n);
 function animateCount(el, from, to, duration=600){
   const start = performance.now();
@@ -389,13 +397,11 @@ function animateCount(el, from, to, duration=600){
   requestAnimationFrame(step);
 }
 
-/* relógio */
 setInterval(()=>{
   const d = new Date();
   elClock.textContent = `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
 }, 1000);
 
-/* toast */
 let toastTimeout = null;
 function showToast(html){
   if(!toastOn) return;
@@ -410,13 +416,15 @@ function hideToast(){
   elToast.classList.remove('show');
   elToast.classList.add('hide');
   elToast.style.pointerEvents='none';
-  setTimeout(()=>{ elToast.classList.remove('hide'); elToast.style.display='none'; }, 280);
+  setTimeout(()=>{
+    elToast.classList.remove('hide');
+    elToast.style.display='none';
+  }, 280);
 }
 document.addEventListener('click', (e)=>{
   if(!elToast.contains(e.target)) hideToast();
 });
 
-/* gauge 0–60 */
 function updateGauge(val){
   const max = 60;
   const pct = Math.max(0, Math.min(1, val/max));
@@ -426,34 +434,60 @@ function updateGauge(val){
   elRateNum.textContent = val.toFixed(0);
 }
 
-/* ==================== CARREGAR DADOS REAIS ==================== */
 async function carregarEventosReais(){
   try{
-    const res = await fetch(API_URL, { cache:"no-store" });
+    const res = await fetch(API_URL, { cache:"no-store", mode:"cors" });
     if(!res.ok){
       console.error("Falha ao buscar dados", res.status);
       return;
     }
-    const data = await res.json(); // array de {horario, idOperacaoRecebivel, nomeFundo, cnpjFundo, idFundo}
-    const qtd = Array.isArray(data) ? data.length : 0;
 
+    const json = await res.json();
+
+    let eventos = [];
+    if (Array.isArray(json)) {
+      eventos = json;
+    } else if (json && Array.isArray(json.data)) {
+      eventos = json.data;
+    } else if (json && json.data) {
+      eventos = [json.data];
+    }
+
+    const qtd = eventos.length;
     const atual = Number(elTotal.textContent.replace(/\./g,'')) || 0;
     animateCount(elTotal, atual, qtd);
     elSub.textContent = qtd === 1 ? "1 assinatura" : `${qtd.toLocaleString('pt-BR')} assinaturas`;
 
     elTicker.innerHTML = "";
+    elDelayList.innerHTML = "";
 
     const now = new Date();
     const nowMs = now.getTime();
     let eventosUltimaHora = 0;
 
-    data.forEach(ev=>{
+    const atrasadas = [];
+
+    eventos.forEach(ev=>{
+      const atrasoStr = ev.hrAtraso || "00:00";
+      const partesAtraso = atrasoStr.split(":");
+      const ah = parseInt(partesAtraso[0] || "0", 10);
+      const am = parseInt(partesAtraso[1] || "0", 10);
+      const atrasoMin = (isNaN(ah)?0:ah)*60 + (isNaN(am)?0:am);
+
+      if (atrasoMin > 0){
+        atrasadas.push({
+          ...ev,
+          atrasoStr,
+          atrasoMin
+        });
+      }
+
       const div = document.createElement('div');
       div.className = "tick";
       div.innerHTML = `
         <span class="pill">${ev.horario}</span>
         <strong>${ev.nomeFundo}</strong>
-        <span style="opacity:.85">• Op: ${ev.idOperacaoRecebivel} • CNPJ: ${ev.cnpjFundo}</span>
+        <span style="opacity:.85">• Op: ${ev.idOperacaoRecebivel} • CNPJ: ${ev.cnpjFundo} • Atraso: ${atrasoStr}</span>
       `;
       elTicker.appendChild(div);
 
@@ -465,11 +499,29 @@ async function carregarEventosReais(){
 
     updateGauge(eventosUltimaHora);
     elRateText.textContent = `${eventosUltimaHora} evts/última hora`;
-    peakHourCnt = Math.max(peakHourCnt, eventosUltimaHora);
-    elPeakHour.textContent = `${peakHourCnt.toLocaleString('pt-BR')} evts`;
+
+    if (atrasadas.length > 0){
+      atrasadas.sort((a,b)=>b.atrasoMin - a.atrasoMin);
+      const repetidas = atrasadas.length <= 4 ? atrasadas.concat(atrasadas) : atrasadas;
+      repetidas.slice(0, 10).forEach(ev=>{
+        const row = document.createElement('div');
+        row.className = "delay-item";
+        row.innerHTML = `
+          <span class="delay-op">Op ${ev.idOperacaoRecebivel}</span>
+          <span class="delay-late">${ev.atrasoStr} atrasado</span>
+        `;
+        elDelayList.appendChild(row);
+      });
+    } else {
+      const row = document.createElement('div');
+      row.className = "delay-item";
+      row.innerHTML = `<span class="delay-op">Nenhuma operação atrasada</span>`;
+      elDelayList.appendChild(row);
+    }
 
     if(qtd > 0){
-      const last = data[data.length - 1];
+      const last = eventos[eventos.length - 1];
+      const atrasoLast = last.hrAtraso || "--:--";
       showToast(`
         <div style="display:grid;gap:6px">
           <div><strong>${last.nomeFundo}</strong></div>
@@ -479,7 +531,10 @@ async function carregarEventosReais(){
         </div>
       `);
       if (document.hasFocus() && soundOn){
-        try{ audioDing.currentTime = 0; audioDing.play().catch(()=>{});}catch{}
+        try{
+          audioDing.currentTime = 0;
+          audioDing.play().catch(()=>{});
+        }catch{}
       }
     }
 
@@ -488,18 +543,9 @@ async function carregarEventosReais(){
   }
 }
 
-/* simples: liga/desliga som/toast + fullscreen, se quiser usar depois */
-document.getElementById('toggleSound')?.addEventListener('change', e=> soundOn = e.target.checked);
-document.getElementById('toggleToast')?.addEventListener('change', e=>{ toastOn = e.target.checked; if(!toastOn) hideToast(); });
-document.getElementById('btnFS')?.addEventListener('click', ()=>{
-  if(!document.fullscreenElement){ document.documentElement.requestFullscreen?.(); }
-  else{ document.exitFullscreen?.(); }
-});
-
-/* boot */
 (function init(){
   carregarEventosReais();
-  setInterval(carregarEventosReais, 20000); // atualiza a cada 20s
+  setInterval(carregarEventosReais, 20000);
 })();
 </script>
 </body>
