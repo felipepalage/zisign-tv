@@ -28,19 +28,16 @@
     overflow:hidden; /* TV mode */
   }
 
-  /* Particle canvas sits behind all */
   #fx{
     position:fixed; inset:0; z-index:0; pointer-events:none; filter:contrast(110%) saturate(110%);
   }
 
-  /* Layout grid */
   .wrap{
     position:relative; z-index:1;
     height:100%; display:grid; gap:14px; padding:16px 18px;
     grid-template-rows:auto 1.05fr .85fr auto;
   }
 
-  /* Header PRO */
   header{
     display:flex; align-items:center; justify-content:space-between; gap:12px;
     background:linear-gradient(180deg,rgba(8,10,12,.65),rgba(8,10,12,.28));
@@ -53,23 +50,15 @@
   .brand h1{margin:0; color:var(--green-200); letter-spacing:.6px; font-size:clamp(1.1rem,2.2vw,1.5rem)}
   .clock{font-weight:900; color:var(--green-200); letter-spacing:1px; font-size:clamp(1rem,2vw,1.2rem)}
 
-.controls {
-  display: none !important;
-}
+  .controls { display:none !important; }
+
   .btn, .switch, .speed{
     border:1px solid var(--border); border-radius:12px; font-weight:900;
     background:linear-gradient(180deg,rgba(0,255,194,.12),rgba(0,255,194,.05)); color:var(--text);
     padding:8px 12px; cursor:pointer; display:flex; align-items:center; gap:8px;
     box-shadow:0 8px 24px rgba(0,255,194,.08) inset, 0 8px 24px rgba(0,0,0,.2);
   }
-  .btn:hover{box-shadow:0 12px 28px rgba(0,255,194,.18)}
-  .switch input{appearance:none;width:50px;height:28px;background:var(--glass);border:1px solid var(--border);border-radius:30px;position:relative;outline:none}
-  .switch input:before{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
-  .switch input:checked{background:rgba(0,255,194,.28)}
-  .switch input:checked:before{left:26px;background:var(--green-200)}
-  .speed{appearance:none}
 
-  /* Main band: counter + gauge + stats pulses */
   .band{
     display:grid; grid-template-columns:1.4fr .8fr; gap:14px; min-height:0;
   }
@@ -106,7 +95,6 @@
   }
   .sub{opacity:.92;color:var(--muted);font-size:clamp(1rem,2vw,1.3rem);font-weight:800}
 
-  /* Gauge card (SVG ring + pulse) */
   .gauge{
     position:relative; overflow:hidden;
     border:1px solid var(--border); border-radius:20px;
@@ -134,7 +122,6 @@
     0%,100%{opacity:.35} 50%{opacity:.8}
   }
 
-  /* Middle band: ticker + highlights 3D */
   .mid{
     display:grid; grid-template-columns:1.6fr 1fr; gap:14px; min-height:0;
   }
@@ -172,9 +159,7 @@
   .highlights{
     display:grid; grid-template-columns:1fr; gap:12px; min-height:0;
   }
-  .h-card{
-    perspective:1200px; position:relative;
-  }
+  .h-card{ perspective:1200px; position:relative; }
   .h-inner{
     background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
     border:1px solid var(--border); border-radius:16px; padding:14px 16px;
@@ -190,14 +175,12 @@
   .h-big{font-size:clamp(22px,3.2vw,34px); font-weight:900; color:#fff; text-shadow:0 0 18px rgba(0,255,194,.2)}
   .h-sub{opacity:.9; color:var(--muted); font-weight:800}
 
-  /* Footer */
   footer{
     display:flex; align-items:center; justify-content:space-between; gap:10px;
     color:var(--muted); font-size:.95rem; opacity:.9;
   }
   .foot-right{font-weight:900; color:var(--green-200)}
 
-  /* Toast PRO */
   .toast{
     position:fixed; right:24px; bottom:24px; z-index:30;
     min-width:320px; max-width:420px; background:linear-gradient(180deg,#0f1214,#0c0f11);
@@ -211,21 +194,18 @@
   @keyframes toastIn{to{transform:translateY(0);opacity:1}}
   @keyframes toastOut{to{transform:translateY(10px);opacity:0}}
 
-  /* Responsive stack */
   @media (max-width: 1080px){
     .band{grid-template-columns:1fr}
     .mid{grid-template-columns:1fr}
   }
 
-  #fx { display: none !important; }
-
+  #fx { display:none !important; }
 </style>
 </head>
 <body>
 <canvas id="fx"></canvas>
 
 <div class="wrap">
-  <!-- HEADER -->
   <header>
     <div class="brand">
       <img src="img/ZiSignPNG.png" alt="ZiSign"/>
@@ -250,7 +230,6 @@
     </div>
   </header>
 
-  <!-- BAND 1: COUNTER + GAUGE -->
   <section class="band">
     <article class="counter">
       <div class="inner">
@@ -261,12 +240,10 @@
     </article>
 
     <article class="gauge">
-      <div class="g-head">Ritmo atual (evts/min)</div>
+      <div class="g-head">Ritmo atual (evts/última hora)</div>
       <div class="ring">
         <svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
-          <!-- trilha -->
           <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10" />
-          <!-- progresso -->
           <circle id="arc" cx="60" cy="60" r="50" fill="none" stroke="url(#g1)" stroke-width="10" stroke-linecap="round"
                   stroke-dasharray="0 999" />
           <defs>
@@ -278,19 +255,18 @@
         </svg>
         <div class="value">
           <div class="num" id="rateNum">0</div>
-          <div class="txt">evts/min</div>
+          <div class="txt">evts/última hora</div>
         </div>
         <div class="pulse"></div>
       </div>
     </article>
   </section>
 
-  <!-- BAND 2: TICKER + HIGHLIGHTS -->
   <section class="mid">
     <article class="ticker" aria-live="polite">
       <div class="ticker-head">
         <div>Últimas assinaturas</div>
-        <div style="opacity:.85" id="rateText">— evts/min</div>
+        <div style="opacity:.85" id="rateText">—</div>
       </div>
       <div class="ticker-row" id="tickerRow"></div>
     </article>
@@ -306,7 +282,7 @@
       <div class="h-card">
         <div class="h-inner">
           <div class="h-title">Top documentos</div>
-          <div class="h-big" id="topDocs">Termo de Cessão</div>
+          <div class="h-big" id="topDocs">Operação</div>
         </div>
       </div>
       <div class="h-card">
@@ -318,13 +294,11 @@
     </aside>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div>contato@zisign.ai — © 2025 ZiSign</div>
   </footer>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast" role="status" aria-live="assertive" aria-atomic="true">
   <div class="toast-inner" id="toastContent"></div>
 </div>
@@ -334,6 +308,7 @@
 </audio>
 
 <script>
+/* partículas (mantido só pelo visual) */
 (() => {
   const c = document.getElementById('fx');
   const ctx = c.getContext('2d');
@@ -380,20 +355,14 @@
   tick();
 })();
 
-/* ================= Base de simulação ================= */
-const nomes = ["Felipe Palage","Julia Suzuki","Carlos Eduardo","Bruna Lima","Marcos Vieira","Ana Clara","Thiago Moreira","Beatriz Souza","Rafael Nunes","Gustavo Martins","Larissa Prado","Clara Rocha"];
-const cargos = ["Desenvolvedor de Sistemas","PO","Analista","Tech Lead","QA","Analista de Negócios"];
-const operacoes = ["Assinatura de Termo de Responsabilidade","Assinatura de Procuração","Aprovação de Contrato","Adendo Contratual","Termo de Confidencialidade","Aceite de Política"];
-const fundos = ["FIDC Tech","FIDC Energia","FIDC Saúde","FIDC Agro","FIDC Varejo"];
-const cedentes = ["Empresa Zitec","Parceiro Alfa","Grupo Orion","Soluções Beta","Holding Gama"];
+/* ==================== CONFIG API ==================== */
+const CNPJ_CERTIFICADORA = "54638076000176"; // ajuste se precisar
+const API_URL = `/dashboard/assinaturas?cnpjCertificadora=${CNPJ_CERTIFICADORA}`;
 
-/* ================= Estado & DOM ================= */
-let running = true, intervalMs = 15000, timerId = null;
-let soundOn = true, toastOn = true;
-let total = 0;
-let lastEventsTs = [];     // janela 60s
-let lastHourTs = [];       // janela 60min
-let peakHourCnt = 0;       // pico observado
+/* ==================== ESTADO & DOM ==================== */
+let soundOn = true;
+let toastOn = true;
+let peakHourCnt = 0;
 
 const elClock   = document.getElementById('clock');
 const elTotal   = document.getElementById('totalCount');
@@ -401,22 +370,14 @@ const elSub     = document.getElementById('subCount');
 const elTicker  = document.getElementById('tickerRow');
 const elRateText= document.getElementById('rateText');
 const elRateNum = document.getElementById('rateNum');
-const elStatus  = document.getElementById('status');
 const elToast   = document.getElementById('toast');
 const elToastContent = document.getElementById('toastContent');
 const audioDing = document.getElementById('ding');
 const arc       = document.getElementById('arc');
 const elPeakHour= document.getElementById('peakHour');
 
-const elBtnFS = document.getElementById('btnFS');
-const elBtnPlay = document.getElementById('btnPlay');
-const elSpeed = document.getElementById('speed');
-const elToggleSound = document.getElementById('toggleSound');
-const elToggleToast = document.getElementById('toggleToast');
-
-/* ================= Utils ================= */
+/* utils */
 const pad2 = n => (n<10?'0'+n:''+n);
-const rand = arr => arr[Math.floor(Math.random()*arr.length)];
 function animateCount(el, from, to, duration=600){
   const start = performance.now();
   function step(ts){
@@ -428,13 +389,13 @@ function animateCount(el, from, to, duration=600){
   requestAnimationFrame(step);
 }
 
-/* Clock */
+/* relógio */
 setInterval(()=>{
   const d = new Date();
   elClock.textContent = `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
 }, 1000);
 
-/* Toast */
+/* toast */
 let toastTimeout = null;
 function showToast(html){
   if(!toastOn) return;
@@ -455,111 +416,90 @@ document.addEventListener('click', (e)=>{
   if(!elToast.contains(e.target)) hideToast();
 });
 
-/* Ticker */
-function pushTicker(item){
-  const el = document.createElement('div');
-  el.className='tick';
-  el.innerHTML = `
-    <span class="pill">${item.usuario.split(' ')[0]}</span>
-    <strong>${item.operacao}</strong>
-    <span style="opacity:.85">• ${item.fundo} • ${item.hora}</span>
-  `;
-  elTicker.appendChild(el);
-  // limita
-  while (elTicker.children.length > 50) elTicker.removeChild(elTicker.firstChild);
-}
-
-/* Gauge (SVG dash) de 0 a 60 evts/min */
-function updateGauge(rate){
-  const max = 60; // arbitrário
-  const pct = Math.max(0, Math.min(1, rate/max));
-  const C = 2 * Math.PI * 50; // circ de r=50
+/* gauge 0–60 */
+function updateGauge(val){
+  const max = 60;
+  const pct = Math.max(0, Math.min(1, val/max));
+  const C = 2 * Math.PI * 50;
   const dash = (C * pct).toFixed(1);
   arc.setAttribute('stroke-dasharray', `${dash} ${Math.max(0,C-dash).toFixed(1)}`);
-  elRateNum.textContent = rate.toFixed(0);
+  elRateNum.textContent = val.toFixed(0);
 }
 
-/* Highlights */
-function updatePeak(){
-  const now = Date.now();
-  lastHourTs = lastHourTs.filter(t => now - t < 60*60*1000);
-  peakHourCnt = Math.max(peakHourCnt, lastHourTs.length);
-  elPeakHour.textContent = `${peakHourCnt.toLocaleString('pt-BR')} evts`;
-}
+/* ==================== CARREGAR DADOS REAIS ==================== */
+async function carregarEventosReais(){
+  try{
+    const res = await fetch(API_URL, { cache:"no-store" });
+    if(!res.ok){
+      console.error("Falha ao buscar dados", res.status);
+      return;
+    }
+    const data = await res.json(); // array de {horario, idOperacaoRecebivel, nomeFundo, cnpjFundo, idFundo}
+    const qtd = Array.isArray(data) ? data.length : 0;
 
-/* Evento (assinatura) */
-function newEvent(){
-  const d = new Date();
-  const item = {
-    usuario: rand(nomes),
-    cargo: rand(cargos),
-    operacao: rand(operacoes),
-    fundo: rand(fundos),
-    cedente: rand(cedentes),
-    data: `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}/${d.getFullYear()}`,
-    hora: `${pad2(d.getHours())}:${pad2(d.getMinutes())}`,
-    ts: Date.now()
-  };
+    const atual = Number(elTotal.textContent.replace(/\./g,'')) || 0;
+    animateCount(elTotal, atual, qtd);
+    elSub.textContent = qtd === 1 ? "1 assinatura" : `${qtd.toLocaleString('pt-BR')} assinaturas`;
 
-  total++;
-  animateCount(elTotal, Number(elTotal.textContent.replace(/\./g,''))||0, total);
-  elSub.textContent = `${total === 1 ? '1 assinatura' : total.toLocaleString('pt-BR') + ' assinaturas'}`;
+    elTicker.innerHTML = "";
 
-  pushTicker(item);
+    const now = new Date();
+    const nowMs = now.getTime();
+    let eventosUltimaHora = 0;
 
-  const now = Date.now();
-  lastEventsTs.push(now);
-  lastEventsTs = lastEventsTs.filter(t => now - t < 60000);
-  const rate = lastEventsTs.length; // evts/min (janela 60s)
-  elRateText.textContent = `${rate} evts/min`;
-  updateGauge(rate);
+    data.forEach(ev=>{
+      const div = document.createElement('div');
+      div.className = "tick";
+      div.innerHTML = `
+        <span class="pill">${ev.horario}</span>
+        <strong>${ev.nomeFundo}</strong>
+        <span style="opacity:.85">• Op: ${ev.idOperacaoRecebivel} • CNPJ: ${ev.cnpjFundo}</span>
+      `;
+      elTicker.appendChild(div);
 
-  lastHourTs.push(now);
-  updatePeak();
+      const partes = (ev.horario || "00:00:00").split(":").map(Number);
+      const hh = partes[0] || 0, mm = partes[1] || 0, ss = partes[2] || 0;
+      const ts = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm, ss).getTime();
+      if(nowMs - ts <= 60*60*1000) eventosUltimaHora++;
+    });
 
-  showToast(`
-    <div style="display:grid;gap:6px">
-      <div><strong>${item.usuario}</strong> <span style="opacity:.8">(${item.cargo})</span></div>
-      <div>${item.operacao}</div>
-      <div style="opacity:.9">${item.fundo} — ${item.cedente}</div>
-      <div style="opacity:.75">${item.data} às ${item.hora}</div>
-    </div>
-  `);
+    updateGauge(eventosUltimaHora);
+    elRateText.textContent = `${eventosUltimaHora} evts/última hora`;
+    peakHourCnt = Math.max(peakHourCnt, eventosUltimaHora);
+    elPeakHour.textContent = `${peakHourCnt.toLocaleString('pt-BR')} evts`;
 
-  if (document.hasFocus() && soundOn){
-    try{ const a=document.getElementById('ding'); a.currentTime=0; a.play().catch(()=>{});}catch{}
+    if(qtd > 0){
+      const last = data[data.length - 1];
+      showToast(`
+        <div style="display:grid;gap:6px">
+          <div><strong>${last.nomeFundo}</strong></div>
+          <div>Operação ${last.idOperacaoRecebivel}</div>
+          <div style="opacity:.9">CNPJ ${last.cnpjFundo}</div>
+          <div style="opacity:.75">Atualizado às ${last.horario}</div>
+        </div>
+      `);
+      if (document.hasFocus() && soundOn){
+        try{ audioDing.currentTime = 0; audioDing.play().catch(()=>{});}catch{}
+      }
+    }
+
+  } catch(e){
+    console.error("Erro ao carregar eventos", e);
   }
 }
 
-/* Loop */
-function startLoop(){
-  stopLoop();
-  timerId = setInterval(()=>{ if(running) newEvent(); }, intervalMs);
-  elStatus.textContent = `Online • ${Math.round(60000/intervalMs)} evts/min`;
-}
-function stopLoop(){ if(timerId) clearInterval(timerId); timerId = null; }
-
-/* Controles */
-document.getElementById('btnFS').addEventListener('click', ()=>{
+/* simples: liga/desliga som/toast + fullscreen, se quiser usar depois */
+document.getElementById('toggleSound')?.addEventListener('change', e=> soundOn = e.target.checked);
+document.getElementById('toggleToast')?.addEventListener('change', e=>{ toastOn = e.target.checked; if(!toastOn) hideToast(); });
+document.getElementById('btnFS')?.addEventListener('click', ()=>{
   if(!document.fullscreenElement){ document.documentElement.requestFullscreen?.(); }
   else{ document.exitFullscreen?.(); }
 });
-document.getElementById('btnPlay').addEventListener('click', (e)=>{
-  running = !running;
-  e.currentTarget.textContent = running ? '⏸ Pausar' : '▶️ Reproduzir';
-});
-document.getElementById('speed').addEventListener('change', e=>{
-  intervalMs = Number(e.target.value);
-  startLoop();
-});
-document.getElementById('toggleSound').addEventListener('change', e=> soundOn = e.target.checked);
-document.getElementById('toggleToast').addEventListener('change', e=>{ toastOn = e.target.checked; if(!toastOn) hideToast(); });
 
-/* Boot */
+/* boot */
 (function init(){
-  // semente inicial
-  for(let i=0;i<6;i++) newEvent();
-  startLoop();
+  carregarEventosReais();
+  setInterval(carregarEventosReais, 20000); // atualiza a cada 20s
 })();
 </script>
 </body>
