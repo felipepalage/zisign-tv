@@ -33,7 +33,6 @@
       radial-gradient(1200px 800px at 90% -10%, var(--grad-a) 0%, transparent 60%),
       radial-gradient(900px 700px at 10% 110%, var(--grad-b) 0%, transparent 60%),
       linear-gradient(180deg,#050609 0%,#05070a 45%,#050508 100%);
-    /* trava a tela na TV, sem rolagem */
     overflow:hidden;
     font-size:14px;
   }
@@ -47,20 +46,18 @@
     filter:blur(0.3px);
   }
 
-.wrap{
-  position:relative;
-  z-index:1;
-  height:100vh;        /* trava na altura da tela */
-  padding:16px 18px;
-  display:grid;
-  grid-template-rows:auto 1fr auto auto; /* header fixo, meio flex, footer fixo */
-  row-gap:14px;
-  max-width:1920px;
-  margin:0 auto;
-  overflow:hidden;     /* impede “crescer” e empurrar layout */
-}
-
-
+  .wrap{
+    position:relative;
+    z-index:1;
+    height:100vh;
+    padding:16px 18px;
+    display:grid;
+    grid-template-rows:auto 1fr auto auto;
+    row-gap:14px;
+    max-width:1920px;
+    margin:0 auto;
+    overflow:hidden;
+  }
 
   header{
     display:flex;
@@ -113,7 +110,7 @@
 
   .top-grid{
     display:grid;
-    grid-template-columns:1.1fr 1.1fr 1.4fr;
+    grid-template-columns:1.2fr 1.1fr 1.4fr;
     gap:14px;
     min-height:0;
   }
@@ -128,7 +125,7 @@
     padding:12px 18px;
     display:flex;
     flex-direction:column;
-    gap:6px;
+    gap:10px;
     min-height:0;
   }
   .card-header{
@@ -152,7 +149,6 @@
   }
 
   .total-wrap{
-    flex:1;
     display:flex;
     align-items:center;
     justify-content:space-between;
@@ -164,7 +160,7 @@
     gap:4px;
   }
   .total-value{
-    font-size:40px;
+    font-size:34px;
     line-height:1;
     font-weight:800;
   }
@@ -191,6 +187,20 @@
   .total-label-small{
     font-size:12px;
     color:var(--muted);
+  }
+
+  .pending-ops{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-top:4px;
+  }
+  .pending-title{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    color:var(--muted);
+    opacity:.9;
   }
 
   .gauge-main{
@@ -274,7 +284,7 @@
 
   .mid-grid{
     display:grid;
-    grid-template-columns:2fr 0.9fr;
+    grid-template-columns:1fr;
     gap:14px;
     min-height:0;
     align-items:flex-start;
@@ -305,16 +315,14 @@
     position:relative;
   }
 
-  /* ticker PARADO, sem animação de scroll */
   .ticker-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  white-space:nowrap;   /* uma linha só */
-  padding:10px 14px;
-  overflow:hidden;      /* se passar do tamanho, corta */
-}
-
+    display:flex;
+    align-items:center;
+    gap:10px;
+    white-space:nowrap;
+    padding:10px 14px;
+    overflow:hidden;
+  }
 
   .tick{
     display:inline-flex;
@@ -337,22 +345,6 @@
     font-weight:600;
   }
 
-  /* removidos:
-     .ticker:hover .ticker-row{animation-play-state:paused;}
-     @keyframes scrollX{...}
-  */
-
-  .h-card{
-    background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
-    border-radius:14px;
-    border:1px solid var(--border-soft);
-    box-shadow:0 12px 40px rgba(0,0,0,.7);
-    display:flex;
-    flex-direction:column;
-    padding:10px 14px;
-    max-height:260px;
-    align-self:flex-start;
-  }
   .h-title{
     font-size:11px;
     text-transform:uppercase;
@@ -468,7 +460,7 @@
 
   @media (min-width:1800px) {
     body{font-size:15px;}
-    .total-value{font-size:46px;}
+    .total-value{font-size:38px;}
     .ring .value-num{font-size:36px;}
     .brand img{height:120px;}
   }
@@ -505,7 +497,7 @@
 
   @media (max-width:1100px) {
     body{font-size:13px;}
-    .total-value{font-size:32px;}
+    .total-value{font-size:30px;}
     .ring .value-num{font-size:26px;}
     .brand img{height:64px;}
   }
@@ -513,9 +505,6 @@
   @media (max-height:720px) {
     .wrap{
       padding:10px 12px;
-    }
-    .h-card{
-      max-height:220px;
     }
     .topfund-chart-wrap{
       min-height:160px;
@@ -550,6 +539,13 @@
         <div class="total-pill">
           <div class="total-label-small">Status do painel</div>
           <div class="total-badge">Atualizado em tempo real</div>
+        </div>
+      </div>
+
+      <div class="pending-ops">
+        <div class="pending-title">Top operações com maior atraso</div>
+        <div class="delay-list" style="max-height:120px;">
+          <div class="delay-track" id="delayListTop"></div>
         </div>
       </div>
     </article>
@@ -603,13 +599,6 @@
         <div class="ticker-row" id="tickerRow"></div>
       </div>
     </article>
-
-    <aside class="h-card">
-      <div class="h-title">Top operações com maior atraso</div>
-      <div class="delay-list">
-        <div class="delay-track" id="delayList"></div>
-      </div>
-    </aside>
   </section>
 
   <footer>
@@ -823,7 +812,7 @@ const elToast   = document.getElementById("toast");
 const elToastContent = document.getElementById("toastContent");
 const audioDing = document.getElementById("ding");
 const arc       = document.getElementById("arc");
-const elDelayList = document.getElementById("delayList");
+const elDelayListTop = document.getElementById("delayListTop");
 const elTopFundHeadline = document.getElementById("topFundHeadline");
 const elTopFundList = document.getElementById("topFundList");
 
@@ -1036,14 +1025,13 @@ async function carregarEventosReais(){
       eventos = [json.data];
     }
 
-   const qtd = eventos.length;
-   elTotal.textContent = qtd.toLocaleString("pt-BR");
-    const atual = Number(elTotal.textContent.replace(/\./g,"")) || 0;
+    const qtd = eventos.length;
+    const atual = Number((elTotal.textContent || "0").replace(/\./g,"")) || 0;
     animateCount(elTotal, atual, qtd);
     elSub.textContent = qtd === 1 ? "1 assinatura exibida" : `${qtd.toLocaleString("pt-BR")} assinaturas exibidas`;
 
     elTicker.innerHTML = "";
-    elDelayList.innerHTML = "";
+    if (elDelayListTop) elDelayListTop.innerHTML = "";
 
     const now = new Date();
     const nowMs = now.getTime();
@@ -1105,46 +1093,47 @@ async function carregarEventosReais(){
 
     updateGauge(eventosUltimaHora);
     atualizarFooter(eventosUltimaHora, atrasadas);
-if (atrasadas.length > 0){
-  const mapOps = new Map();
 
-  atrasadas.forEach(ev => {
-    const key = ev.idOperacaoRecebivel;
-    if (!key) return;
-    const existente = mapOps.get(key);
-    if (!existente || ev.atrasoSeg > existente.atrasoSeg) {
-      mapOps.set(key, ev);
+    if (atrasadas.length > 0 && elDelayListTop){
+      const mapOps = new Map();
+
+      atrasadas.forEach(ev => {
+        const key = ev.idOperacaoRecebivel;
+        if (!key) return;
+        const existente = mapOps.get(key);
+        if (!existente || ev.atrasoSeg > existente.atrasoSeg) {
+          mapOps.set(key, ev);
+        }
+      });
+
+      const ordenadas = Array.from(mapOps.values())
+        .sort((a,b)=>b.atrasoSeg - a.atrasoSeg);
+
+      const topOps = ordenadas.slice(0, 4);
+      const maxAtraso = topOps[0].atrasoSeg || 1;
+
+      topOps.forEach((ev, idx)=>{
+        const row = document.createElement("div");
+        row.className = "delay-item";
+
+        const pct = Math.max(18, (ev.atrasoSeg / maxAtraso) * 100);
+
+        row.innerHTML = `
+          <div class="delay-header">
+            <span class="delay-op">Operação ${ev.idOperacaoRecebivel}</span>
+            <span class="delay-rank">#${idx+1}</span>
+          </div>
+          <div class="delay-meter">
+            <div class="delay-bar-outer">
+              <div class="delay-bar-inner" style="width:${pct.toFixed(1)}%"></div>
+            </div>
+            <span class="delay-time">${ev.atrasoStr}</span>
+          </div>
+          <div class="delay-status">Assinatura Pendente</div>
+        `;
+        elDelayListTop.appendChild(row);
+      });
     }
-  });
-
-  const ordenadas = Array.from(mapOps.values())
-    .sort((a,b)=>b.atrasoSeg - a.atrasoSeg);
-
-  const topOps = ordenadas.slice(0, 4);
-  const maxAtraso = topOps[0].atrasoSeg || 1;
-
-  topOps.forEach((ev, idx)=>{
-    const row = document.createElement("div");
-    row.className = "delay-item";
-
-    const pct = Math.max(18, (ev.atrasoSeg / maxAtraso) * 100);
-
-    row.innerHTML = `
-      <div class="delay-header">
-        <span class="delay-op">Operação ${ev.idOperacaoRecebivel}</span>
-        <span class="delay-rank">#${idx+1}</span>
-      </div>
-      <div class="delay-meter">
-        <div class="delay-bar-outer">
-          <div class="delay-bar-inner" style="width:${pct.toFixed(1)}%"></div>
-        </div>
-        <span class="delay-time">${ev.atrasoStr}</span>
-      </div>
-      <div class="delay-status">Assinatura Pendente</div>
-    `;
-    elDelayList.appendChild(row);
-  });
-}
 
     limparHistoricoAntigo();
     salvarHistorico();
