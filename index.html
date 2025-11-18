@@ -33,7 +33,7 @@
       radial-gradient(1200px 800px at 90% -10%, var(--grad-a) 0%, transparent 60%),
       radial-gradient(900px 700px at 10% 110%, var(--grad-b) 0%, transparent 60%),
       linear-gradient(180deg,#050609 0%,#05070a 45%,#050508 100%);
-    overflow:hidden;
+    overflow:auto;
     font-size:14px;
   }
 
@@ -49,10 +49,10 @@
   .wrap{
     position:relative;
     z-index:1;
-    height:100%;
+    min-height:100vh;
     padding:16px 18px;
     display:grid;
-    grid-template-rows:auto 1.65fr 1.1fr auto;
+    grid-template-rows:auto auto auto auto;
     row-gap:14px;
     max-width:1920px;
     margin:0 auto;
@@ -75,7 +75,7 @@
     gap:18px;
   }
   .brand img{
-    height:120px;
+    height:110px;
     width:auto;
   }
   .brand-info{
@@ -125,6 +125,7 @@
     display:flex;
     flex-direction:column;
     gap:6px;
+    min-height:0;
   }
   .card-header{
     display:flex;
@@ -282,6 +283,7 @@
     box-shadow:0 16px 55px rgba(0,0,0,.7);
     display:flex;
     flex-direction:column;
+    min-height:0;
   }
   .ticker-head{
     display:flex;
@@ -342,7 +344,7 @@
     display:flex;
     flex-direction:column;
     padding:10px 14px;
-    max-height:220px;
+    max-height:260px;
     align-self:flex-start;
   }
   .h-title{
@@ -426,6 +428,12 @@
     font-size:11px;
     color:var(--muted);
     opacity:.9;
+    width:100%;
+    padding:10px 14px;
+    background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
+    border:1px solid var(--border-soft);
+    border-radius:14px;
+    box-shadow:0 12px 40px rgba(0,0,0,.7);
   }
 
   .toast{
@@ -451,6 +459,62 @@
   @keyframes toastOut{to{transform:translateY(14px);opacity:0}}
 
   #fx{display:none !important;}
+
+  @media (min-width:1800px) {
+    body{font-size:15px;}
+    .total-value{font-size:46px;}
+    .ring .value-num{font-size:36px;}
+    .brand img{height:120px;}
+  }
+
+  @media (max-width:1400px) {
+    .wrap{
+      padding:12px 12px;
+      grid-template-rows:auto auto auto auto;
+    }
+    header{
+      flex-direction:column;
+      align-items:flex-start;
+      gap:8px;
+    }
+    .brand img{
+      height:80px;
+    }
+    .clock{
+      align-self:flex-start;
+      font-size:12px;
+    }
+    .top-grid{
+      grid-template-columns:1fr;
+    }
+    .mid-grid{
+      grid-template-columns:1fr;
+    }
+    footer{
+      flex-direction:column;
+      align-items:flex-start;
+      gap:10px;
+    }
+  }
+
+  @media (max-width:1100px) {
+    body{font-size:13px;}
+    .total-value{font-size:32px;}
+    .ring .value-num{font-size:26px;}
+    .brand img{height:64px;}
+  }
+
+  @media (max-height:720px) {
+    .wrap{
+      padding:10px 12px;
+    }
+    .h-card{
+      max-height:220px;
+    }
+    .topfund-chart-wrap{
+      min-height:160px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -487,7 +551,7 @@
     <article class="card">
       <div class="card-header">
         <span>Ritmo de assinaturas</span>
-        <span class="label-pill" id="rateText">—</span>
+        <span class="label-pill" id="rateTextMain">—</span>
       </div>
       <div class="gauge-main">
         <div class="ring">
@@ -542,63 +606,44 @@
     </aside>
   </section>
 
- <footer style="
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  width:100%;
-  padding:10px 14px;
-  gap:32px;
-  font-size:12px;
-  color:var(--muted);
-  background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
-  border:1px solid var(--border-soft);
-  border-radius:14px;
-  box-shadow:0 12px 40px rgba(0,0,0,.7);
-">
+  <footer>
+    <div style="min-width:260px; display:flex; flex-direction:column; gap:4px;">
+      <div style="
+        font-size:10px;
+        text-transform:uppercase;
+        letter-spacing:.16em;
+        opacity:.8;
+      ">
+        Últimas assinaturas processadas
+      </div>
+      <div id="footerRateText" style="font-size:12px; opacity:.9;"></div>
+      <div id="footerRateSecondary" style="font-size:11px; opacity:.75;"></div>
+    </div>
 
-  <!-- BLOCO 1 -->
-  <div style="min-width:260px; display:flex; flex-direction:column; gap:4px;">
+    <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+      <div style="
+        font-size:10px;
+        text-transform:uppercase;
+        letter-spacing:.16em;
+        opacity:.8;
+      ">
+        Top operações com maior atraso
+      </div>
+
+      <div class="delay-list" style="max-height:70px; overflow:hidden;">
+        <div class="delay-track" id="delayListFooter"></div>
+      </div>
+    </div>
+
     <div style="
-      font-size:10px;
-      text-transform:uppercase;
-      letter-spacing:.16em;
-      opacity:.8;
+      white-space:nowrap;
+      font-size:11px;
+      opacity:.75;
+      align-self:flex-end;
     ">
-      Últimas assinaturas processadas
+      contato@zisign.ai — © 2025 ZiSign
     </div>
-
-    <div id="footerRateText" style="font-size:12px; opacity:.9;"></div>
-    <div id="rateTextSecondary" style="font-size:11px; opacity:.75;"></div>
-  </div>
-
-  <!-- BLOCO 2 -->
-  <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
-    <div style="
-      font-size:10px;
-      text-transform:uppercase;
-      letter-spacing:.16em;
-      opacity:.8;
-    ">
-      Top operações com maior atraso
-    </div>
-
-    <div class="delay-list" style="max-height:70px; overflow:hidden;">
-      <div class="delay-track" id="delayListFooter"></div>
-    </div>
-  </div>
-
-  <!-- BLOCO 3 -->
-  <div style="
-    white-space:nowrap;
-    font-size:11px;
-    opacity:.75;
-    align-self:flex-end;
-  ">
-    contato@zisign.ai — © 2025 ZiSign
-  </div>
-
-</footer>
+  </footer>
 
 </div>
 
@@ -616,10 +661,20 @@
 function atualizarFooter(eventosUltimaHora, atrasadas) {
   const footerRate = document.getElementById("footerRateText");
   const footerDelayList = document.getElementById("delayListFooter");
+  const footerRateSecondary = document.getElementById("footerRateSecondary");
 
   if (footerRate) {
     footerRate.textContent =
-      `${eventosUltimaHora} evento${eventosUltimaHora !== 1 ? "s" : ""} na última hora`;
+      eventosUltimaHora === 0
+        ? "Nenhum evento na última hora"
+        : `${eventosUltimaHora} evento${eventosUltimaHora !== 1 ? "s" : ""} na última hora`;
+  }
+
+  if (footerRateSecondary) {
+    footerRateSecondary.textContent =
+      eventosUltimaHora === 0
+        ? "Aguardando novas assinaturas"
+        : "Painel atualizado em tempo real";
   }
 
   if (!footerDelayList) return;
@@ -746,7 +801,7 @@ const elClock   = document.getElementById("clock");
 const elTotal   = document.getElementById("totalCount");
 const elSub     = document.getElementById("subCount");
 const elTicker  = document.getElementById("tickerRow");
-const elRateText= document.getElementById("rateText");
+const elRateTextMain = document.getElementById("rateTextMain");
 const elRateTextSecondary = document.getElementById("rateTextSecondary");
 const elRateNum = document.getElementById("rateNum");
 const elToast   = document.getElementById("toast");
@@ -823,9 +878,9 @@ function updateGauge(val){
   const dash = (C * pct).toFixed(1);
   arc.setAttribute("stroke-dasharray", `${dash} ${Math.max(0,C-dash).toFixed(1)}`);
   elRateNum.textContent = val.toFixed(0);
-  const txt = `${val} eventos na última hora`;
-  elRateText.textContent = txt;
-  elRateTextSecondary.textContent = txt;
+  const txt = `${val} evento${val !== 1 ? "s" : ""} na última hora`;
+  if (elRateTextMain) elRateTextMain.textContent = txt;
+  if (elRateTextSecondary) elRateTextSecondary.textContent = txt;
 }
 
 let chartTopFundos = null;
