@@ -33,28 +33,12 @@
       radial-gradient(1200px 800px at 90% -10%, var(--grad-a) 0%, transparent 60%),
       radial-gradient(900px 700px at 10% 110%, var(--grad-b) 0%, transparent 60%),
       linear-gradient(180deg,#050609 0%,#05070a 45%,#050508 100%);
-    overflow:hidden;
+    overflow:auto;
     font-size:14px;
   }
 
-  .stage{
-    position:fixed;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:transparent;
-  }
-
-  .scale-wrap{
-    width:1920px;
-    height:1080px;
-    position:relative;
-    transform-origin:top left;
-  }
-
   #fx{
-    position:absolute;
+    position:fixed;
     inset:0;
     z-index:0;
     pointer-events:none;
@@ -65,11 +49,13 @@
   .wrap{
     position:relative;
     z-index:1;
-    height:100%;
+    min-height:100vh;
     padding:16px 18px;
     display:grid;
-    grid-template-rows:90px 1.5fr 1.1fr 120px;
+    grid-template-rows:auto auto auto auto;
     row-gap:14px;
+    max-width:1920px;
+    margin:0 auto;
   }
 
   header{
@@ -89,7 +75,7 @@
     gap:18px;
   }
   .brand img{
-    height:80px;
+    height:110px;
     width:auto;
   }
   .brand-info{
@@ -123,7 +109,7 @@
 
   .top-grid{
     display:grid;
-    grid-template-columns:1.05fr 1.05fr 1.3fr;
+    grid-template-columns:1.1fr 1.1fr 1.4fr;
     gap:14px;
     min-height:0;
   }
@@ -174,7 +160,7 @@
     gap:4px;
   }
   .total-value{
-    font-size:44px;
+    font-size:40px;
     line-height:1;
     font-weight:800;
   }
@@ -190,6 +176,7 @@
     padding:6px 10px;
     border-radius:999px;
     box-shadow:0 10px 28px rgba(0,255,194,.45);
+    text-align:right;
   }
   .total-pill{
     display:flex;
@@ -209,7 +196,7 @@
   }
   .ring{
     width:100%;
-    max-width:220px;
+    max-width:230px;
     aspect-ratio:1/1;
     position:relative;
   }
@@ -243,7 +230,7 @@
   }
   .topfund-chart-wrap{
     flex:1;
-    min-height:180px;
+    min-height:200px;
     border-radius:12px;
     background:radial-gradient(circle at 0 100%,rgba(0,255,194,.08),transparent 65%);
     border:1px solid rgba(255,255,255,.06);
@@ -286,7 +273,7 @@
     grid-template-columns:2fr 0.9fr;
     gap:14px;
     min-height:0;
-    align-items:stretch;
+    align-items:flex-start;
   }
 
   .ticker{
@@ -357,7 +344,8 @@
     display:flex;
     flex-direction:column;
     padding:10px 14px;
-    max-height:none;
+    max-height:260px;
+    align-self:flex-start;
   }
   .h-title{
     font-size:11px;
@@ -471,140 +459,192 @@
   @keyframes toastOut{to{transform:translateY(14px);opacity:0}}
 
   #fx{display:none !important;}
+
+  @media (min-width:1800px) {
+    body{font-size:15px;}
+    .total-value{font-size:46px;}
+    .ring .value-num{font-size:36px;}
+    .brand img{height:120px;}
+  }
+
+  @media (max-width:1400px) {
+    .wrap{
+      padding:12px 12px;
+      grid-template-rows:auto auto auto auto;
+    }
+    header{
+      flex-direction:column;
+      align-items:flex-start;
+      gap:8px;
+    }
+    .brand img{
+      height:80px;
+    }
+    .clock{
+      align-self:flex-start;
+      font-size:12px;
+    }
+    .top-grid{
+      grid-template-columns:1fr;
+    }
+    .mid-grid{
+      grid-template-columns:1fr;
+    }
+    footer{
+      flex-direction:column;
+      align-items:flex-start;
+      gap:10px;
+    }
+  }
+
+  @media (max-width:1100px) {
+    body{font-size:13px;}
+    .total-value{font-size:32px;}
+    .ring .value-num{font-size:26px;}
+    .brand img{height:64px;}
+  }
+
+  @media (max-height:720px) {
+    .wrap{
+      padding:10px 12px;
+    }
+    .h-card{
+      max-height:220px;
+    }
+    .topfund-chart-wrap{
+      min-height:160px;
+    }
+  }
 </style>
 </head>
 <body>
+<canvas id="fx"></canvas>
 
-<div class="stage">
-  <div class="scale-wrap">
-    <canvas id="fx"></canvas>
-
-    <div class="wrap">
-      <header>
-        <div class="brand">
-          <img src="img/ZiSignPNG.png" alt="ZiSign"/>
-          <div class="brand-info"></div>
-        </div>
-        <div class="clock" id="clock">--:--:--</div>
-        <div class="controls"></div>
-      </header>
-
-      <section class="top-grid">
-        <article class="card">
-          <div class="card-header">
-            <span>Visão geral</span>
-            <span class="label-pill">Total de assinaturas exibidas</span>
-          </div>
-          <div class="total-wrap">
-            <div class="total-main">
-              <div class="total-value" id="totalCount">0</div>
-              <div class="total-sub" id="subCount">—</div>
-            </div>
-            <div class="total-pill">
-              <div class="total-label-small">Status do painel</div>
-              <div class="total-badge">Atualizado em tempo real</div>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-header">
-            <span>Ritmo de assinaturas</span>
-            <span class="label-pill" id="rateTextMain">—</span>
-          </div>
-          <div class="gauge-main">
-            <div class="ring">
-              <svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                  <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stop-color="#00ffc2"/>
-                    <stop offset="100%" stop-color="#00b8ff"/>
-                  </linearGradient>
-                </defs>
-                <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10" />
-                <circle id="arc" cx="60" cy="60" r="50" fill="none" stroke="url(#g1)" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 999" />
-              </svg>
-              <div class="value">
-                <div class="value-num" id="rateNum">0</div>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-header">
-            <span>Fundos que mais atrasam</span>
-            <span class="label-pill">Atraso médio (últimos 7 dias)</span>
-          </div>
-          <div class="topfund-main">
-            <div class="topfund-headline" id="topFundHeadline">Nenhum atraso registrado</div>
-            <div class="topfund-chart-wrap">
-              <canvas id="chartTopFundos"></canvas>
-            </div>
-            <div class="topfund-list" id="topFundList"></div>
-          </div>
-        </article>
-      </section>
-
-      <section class="mid-grid">
-        <article class="ticker" aria-live="polite">
-          <div class="ticker-head">
-            <span>Últimas assinaturas processadas</span>
-            <span id="rateTextSecondary" style="opacity:.9;font-size:inherit;"></span>
-          </div>
-          <div class="ticker-body">
-            <div class="ticker-row" id="tickerRow"></div>
-          </div>
-        </article>
-
-        <aside class="h-card">
-          <div class="h-title">Top operações com maior atraso</div>
-          <div class="delay-list">
-            <div class="delay-track" id="delayList"></div>
-          </div>
-        </aside>
-      </section>
-
-      <footer>
-        <div style="min-width:260px; display:flex; flex-direction:column; gap:4px;">
-          <div style="
-            font-size:10px;
-            text-transform:uppercase;
-            letter-spacing:.16em;
-            opacity:.8;
-          ">
-            Últimas assinaturas processadas
-          </div>
-          <div id="footerRateText" style="font-size:12px; opacity:.9;"></div>
-          <div id="footerRateSecondary" style="font-size:11px; opacity:.75;"></div>
-        </div>
-
-        <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
-          <div style="
-            font-size:10px;
-            text-transform:uppercase;
-            letter-spacing:.16em;
-            opacity:.8;
-          ">
-            Top operações com maior atraso
-          </div>
-
-          <div class="delay-list" style="max-height:70px; overflow:hidden;">
-            <div class="delay-track" id="delayListFooter"></div>
-          </div>
-        </div>
-
-        <div style="
-          white-space:nowrap;
-          font-size:11px;
-          opacity:.75;
-          align-self:flex-end;
-        ">
-          contato@zisign.ai — © 2025 ZiSign
-        </div>
-      </footer>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <img src="img/ZiSignPNG.png" alt="ZiSign"/>
+      <div class="brand-info"></div>
     </div>
-  </div>
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="controls"></div>
+  </header>
+
+  <section class="top-grid">
+    <article class="card">
+      <div class="card-header">
+        <span>Visão geral</span>
+        <span class="label-pill">Total de assinaturas exibidas</span>
+      </div>
+      <div class="total-wrap">
+        <div class="total-main">
+          <div class="total-value" id="totalCount">0</div>
+          <div class="total-sub" id="subCount">—</div>
+        </div>
+        <div class="total-pill">
+          <div class="total-label-small">Status do painel</div>
+          <div class="total-badge">Atualizado em tempo real</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-header">
+        <span>Ritmo de assinaturas</span>
+        <span class="label-pill" id="rateTextMain">—</span>
+      </div>
+      <div class="gauge-main">
+        <div class="ring">
+          <svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00ffc2"/>
+                <stop offset="100%" stop-color="#00b8ff"/>
+              </linearGradient>
+            </defs>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10" />
+            <circle id="arc" cx="60" cy="60" r="50" fill="none" stroke="url(#g1)" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 999" />
+          </svg>
+          <div class="value">
+            <div class="value-num" id="rateNum">0</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-header">
+        <span>Fundos que mais atrasam</span>
+        <span class="label-pill">Atraso médio (últimos 7 dias)</span>
+      </div>
+      <div class="topfund-main">
+        <div class="topfund-headline" id="topFundHeadline">Nenhum atraso registrado</div>
+        <div class="topfund-chart-wrap">
+          <canvas id="chartTopFundos"></canvas>
+        </div>
+        <div class="topfund-list" id="topFundList"></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="mid-grid">
+    <article class="ticker" aria-live="polite">
+      <div class="ticker-head">
+        <span>Últimas assinaturas processadas</span>
+        <span id="rateTextSecondary" style="opacity:.9;font-size:inherit;"></span>
+      </div>
+      <div class="ticker-body">
+        <div class="ticker-row" id="tickerRow"></div>
+      </div>
+    </article>
+
+    <aside class="h-card">
+      <div class="h-title">Top operações com maior atraso</div>
+      <div class="delay-list">
+        <div class="delay-track" id="delayList"></div>
+      </div>
+    </aside>
+  </section>
+
+  <footer>
+    <div style="min-width:260px; display:flex; flex-direction:column; gap:4px;">
+      <div style="
+        font-size:10px;
+        text-transform:uppercase;
+        letter-spacing:.16em;
+        opacity:.8;
+      ">
+        Últimas assinaturas processadas
+      </div>
+      <div id="footerRateText" style="font-size:12px; opacity:.9;"></div>
+      <div id="footerRateSecondary" style="font-size:11px; opacity:.75;"></div>
+    </div>
+
+    <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+      <div style="
+        font-size:10px;
+        text-transform:uppercase;
+        letter-spacing:.16em;
+        opacity:.8;
+      ">
+        Top operações com maior atraso
+      </div>
+
+      <div class="delay-list" style="max-height:70px; overflow:hidden;">
+        <div class="delay-track" id="delayListFooter"></div>
+      </div>
+    </div>
+
+    <div style="
+      white-space:nowrap;
+      font-size:11px;
+      opacity:.75;
+      align-self:flex-end;
+    ">
+      contato@zisign.ai — © 2025 ZiSign
+    </div>
+  </footer>
+
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="assertive" aria-atomic="true">
@@ -618,20 +658,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-function aplicarScale(){
-  const baseW = 1920;
-  const baseH = 1080;
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const scale = Math.min(vw/baseW, vh/baseH);
-  const el = document.querySelector(".scale-wrap");
-  if(el){
-    el.style.transform = "scale(" + scale + ")";
-  }
-}
-window.addEventListener("resize", aplicarScale);
-aplicarScale();
-
 function atualizarFooter(eventosUltimaHora, atrasadas) {
   const footerRate = document.getElementById("footerRateText");
   const footerDelayList = document.getElementById("delayListFooter");
