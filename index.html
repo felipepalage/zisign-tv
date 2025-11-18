@@ -516,8 +516,8 @@ async function carregarEventosReais(){
         const row = document.createElement('div');
         row.className = "delay-item";
         row.innerHTML = `
-          <span class="delay-op">Operação ${ev.idOperacaoRecebivel}</span>
-          <span class="delay-late">${ev.atrasoStr} atrasado</span>
+          <span class="delay-op">Operação : ${ev.idOperacaoRecebivel}</span>
+          <span class="delay-late">${ev.atrasoStr} Assinatura pendente</span>
         `;
         elDelayList.appendChild(row);
       });
