@@ -34,6 +34,7 @@
       radial-gradient(900px 700px at 10% 110%, var(--grad-b) 0%, transparent 60%),
       linear-gradient(180deg,#050609 0%,#05070a 45%,#050508 100%);
     overflow:hidden;
+    font-size:clamp(12px,0.85vw,18px);
   }
 
   #fx{
@@ -44,21 +45,22 @@
   .wrap{
     position:relative; z-index:1;
     height:100%;
-    padding:14px 18px;
+    padding:clamp(10px,1vh,18px) clamp(10px,1.2vw,18px);
     display:grid;
     grid-template-rows:auto minmax(0,1.65fr) minmax(0,1.1fr) auto;
-    row-gap:12px;
+    row-gap:clamp(8px,1vh,14px);
+    max-width:1920px;
+    margin:0 auto;
   }
 
-  /* HEADER */
   header{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:12px;
+    gap:clamp(8px,1vw,16px);
     background:linear-gradient(135deg,rgba(12,17,22,.95),rgba(12,17,22,.94));
-    border-radius:14px;
-    padding:10px 16px;
+    border-radius:clamp(10px,1vw,16px);
+    padding:clamp(8px,0.9vh,12px) clamp(12px,1.4vw,18px);
     border:1px solid var(--border-soft);
     box-shadow:
       0 18px 50px rgba(0,0,0,.6),
@@ -67,10 +69,10 @@
   .brand{
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:clamp(10px,1.2vw,18px);
   }
   .brand img{
-    height:150px;
+    height:clamp(70px,12vh,150px);
     width:auto;
   }
   .brand-info{
@@ -80,42 +82,42 @@
   }
   .brand-title{
     font-weight:800;
-    font-size:1.1rem;
+    font-size:clamp(0.9rem,1.1vw,1.3rem);
     letter-spacing:.05em;
     text-transform:uppercase;
   }
   .brand-sub{
-    font-size:.8rem;
+    font-size:clamp(.7rem,.85vw,.9rem);
     color:var(--muted);
     opacity:.9;
   }
   .clock{
     font-weight:700;
     letter-spacing:.14em;
-    font-size:.95rem;
+    font-size:clamp(.8rem,.95vw,1rem);
     color:var(--accent);
-    padding:6px 12px;
+    padding:clamp(4px,0.5vh,6px) clamp(10px,1.1vw,14px);
     border-radius:999px;
     border:1px solid rgba(0,255,194,.35);
     background:radial-gradient(circle at 0 50%,rgba(0,255,194,.12),transparent 65%);
+    white-space:nowrap;
   }
   .controls{display:none !important;}
 
-  /* TOP GRID: 3 CARDS */
   .top-grid{
     display:grid;
     grid-template-columns:1.1fr 1.1fr 1.4fr;
-    gap:12px;
+    gap:clamp(8px,1vw,14px);
     min-height:0;
   }
   .card{
     background:radial-gradient(circle at 0 0,rgba(0,255,194,.08),transparent 55%)
                ,radial-gradient(circle at 100% 100%,rgba(0,128,255,.06),transparent 55%)
                ,linear-gradient(180deg,var(--panel) 0%,#080c11 100%);
-    border-radius:16px;
+    border-radius:clamp(10px,1vw,16px);
     border:1px solid var(--border-soft);
     box-shadow:0 18px 60px rgba(0,0,0,.7);
-    padding:14px 16px;
+    padding:clamp(10px,1vh,16px) clamp(12px,1.2vw,18px);
     display:flex;
     flex-direction:column;
     gap:6px;
@@ -125,7 +127,7 @@
     align-items:center;
     justify-content:space-between;
     gap:8px;
-    font-size:.78rem;
+    font-size:clamp(.65rem,.8vw,.78rem);
     text-transform:uppercase;
     letter-spacing:.12em;
     color:var(--muted);
@@ -137,15 +139,15 @@
     border:1px solid rgba(0,255,194,.22);
     color:var(--accent);
     font-weight:600;
+    white-space:nowrap;
   }
 
-  /* CARD 1 – TOTAL */
   .total-wrap{
     flex:1;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:10px;
+    gap:clamp(8px,0.9vw,12px);
   }
   .total-main{
     display:flex;
@@ -153,22 +155,23 @@
     gap:4px;
   }
   .total-value{
-    font-size:2.6rem;
+    font-size:clamp(2rem,3.2vw,3.4rem);
     line-height:1;
     font-weight:800;
   }
   .total-sub{
-    font-size:.9rem;
+    font-size:clamp(.8rem,.9vw,.95rem);
     color:var(--muted);
   }
   .total-badge{
-    font-size:.8rem;
+    font-size:clamp(.7rem,.8vw,.85rem);
     font-weight:600;
     color:#061017;
     background:linear-gradient(135deg,var(--accent),var(--accent-soft));
     padding:6px 10px;
     border-radius:999px;
     box-shadow:0 10px 28px rgba(0,255,194,.45);
+    text-align:right;
   }
   .total-pill{
     display:flex;
@@ -177,11 +180,10 @@
     gap:6px;
   }
   .total-label-small{
-    font-size:.75rem;
+    font-size:clamp(.7rem,.8vw,.8rem);
     color:var(--muted);
   }
 
-  /* CARD 2 – GAUGE */
   .gauge-main{
     flex:1;
     display:grid;
@@ -189,7 +191,7 @@
   }
   .ring{
     width:100%;
-    max-width:260px;
+    max-width:clamp(180px,22vh,260px);
     aspect-ratio:1/1;
     position:relative;
   }
@@ -203,16 +205,15 @@
     text-align:center;
   }
   .ring .value-num{
-    font-size:2rem;
+    font-size:clamp(1.6rem,2.2vw,2.4rem);
     font-weight:800;
   }
   .ring .value-sub{
-    font-size:.8rem;
+    font-size:clamp(.75rem,.9vw,.85rem);
     color:var(--muted);
     margin-top:2px;
   }
 
-  /* CARD 3 – GRÁFICO FUNDOS */
   .topfund-main{
     flex:1;
     display:flex;
@@ -221,12 +222,12 @@
     min-height:0;
   }
   .topfund-headline{
-    font-size:.9rem;
+    font-size:clamp(.8rem,.95vw,.95rem);
     font-weight:700;
   }
   .topfund-chart-wrap{
     flex:1;
-    min-height:130px;
+    min-height:clamp(120px,18vh,180px);
     border-radius:12px;
     background:radial-gradient(circle at 0 100%,rgba(0,255,194,.08),transparent 65%);
     border:1px solid rgba(255,255,255,.06);
@@ -240,7 +241,7 @@
     display:flex;
     flex-direction:column;
     gap:3px;
-    font-size:.8rem;
+    font-size:clamp(.7rem,.85vw,.8rem);
   }
   .topfund-item{
     display:grid;
@@ -264,17 +265,16 @@
     font-weight:600;
   }
 
-  /* MIDDLE: TICKER + ATRASOS */
   .mid-grid{
     display:grid;
     grid-template-columns:1.7fr 1.1fr;
-    gap:12px;
+    gap:clamp(8px,1vw,14px);
     min-height:0;
   }
 
   .ticker{
     background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
-    border-radius:16px;
+    border-radius:clamp(10px,1vw,16px);
     border:1px solid var(--border-soft);
     box-shadow:0 16px 55px rgba(0,0,0,.7);
     display:flex;
@@ -284,8 +284,8 @@
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:8px 14px 10px;
-    font-size:.8rem;
+    padding:clamp(6px,0.8vh,8px) clamp(12px,1.2vw,14px) clamp(8px,0.9vh,10px);
+    font-size:clamp(.7rem,.9vw,.8rem);
     color:var(--muted);
     letter-spacing:.12em;
     text-transform:uppercase;
@@ -298,22 +298,22 @@
   .ticker-row{
     display:flex;
     align-items:center;
-    gap:22px;
+    gap:clamp(14px,1.4vw,22px);
     white-space:nowrap;
-    padding:12px 0;
+    padding:clamp(8px,0.9vh,12px) 0;
     animation:scrollX 38s linear infinite;
   }
   .ticker:hover .ticker-row{animation-play-state:paused;}
   .tick{
     display:inline-flex;
     align-items:center;
-    gap:10px;
-    padding:10px 14px;
-    margin-left:10px;
+    gap:clamp(6px,0.8vw,10px);
+    padding:clamp(8px,0.9vh,10px) clamp(10px,1vw,14px);
+    margin-left:clamp(8px,1vw,10px);
     border-radius:999px;
     background:rgba(14,26,34,.95);
     border:1px solid rgba(0,255,194,.18);
-    font-size:.8rem;
+    font-size:clamp(.7rem,.85vw,.8rem);
     box-shadow:0 10px 30px rgba(0,0,0,.7);
   }
   .pill{
@@ -321,7 +321,7 @@
     border-radius:999px;
     background:rgba(0,255,194,.12);
     border:1px solid rgba(0,255,194,.55);
-    font-size:.78rem;
+    font-size:clamp(.7rem,.8vw,.78rem);
     color:var(--accent);
     font-weight:600;
   }
@@ -333,15 +333,15 @@
 
   .h-card{
     background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
-    border-radius:16px;
+    border-radius:clamp(10px,1vw,16px);
     border:1px solid var(--border-soft);
     box-shadow:0 16px 55px rgba(0,0,0,.7);
     display:flex;
     flex-direction:column;
-    padding:10px 14px;
+    padding:clamp(8px,0.9vh,10px) clamp(12px,1.2vw,14px);
   }
   .h-title{
-    font-size:.8rem;
+    font-size:clamp(.7rem,.9vw,.8rem);
     text-transform:uppercase;
     letter-spacing:.12em;
     color:var(--muted);
@@ -364,7 +364,7 @@
     display:flex;
     align-items:center;
     justify-content:space-between;
-    font-size:.8rem;
+    font-size:clamp(.7rem,.85vw,.8rem);
   }
   .delay-op{
     color:var(--text);
@@ -376,7 +376,7 @@
   }
   .h-sub{
     margin-top:6px;
-    font-size:.76rem;
+    font-size:clamp(.68rem,.8vw,.76rem);
     color:var(--muted);
   }
 
@@ -385,24 +385,22 @@
     100%{transform:translateY(-50%)}
   }
 
-  /* FOOTER */
   footer{
     display:flex;
     align-items:center;
     justify-content:flex-end;
-    font-size:.75rem;
+    font-size:clamp(.68rem,.8vw,.75rem);
     color:var(--muted);
     opacity:.9;
   }
 
-  /* TOAST */
   .toast{
     position:fixed;
-    right:18px;
-    bottom:18px;
+    right:clamp(10px,1.2vw,18px);
+    bottom:clamp(10px,1.2vw,18px);
     z-index:30;
-    min-width:260px;
-    max-width:340px;
+    min-width:clamp(220px,18vw,320px);
+    max-width:clamp(260px,22vw,360px);
     background:linear-gradient(180deg,#101722,#090d13);
     border-radius:14px;
     border:1px solid rgba(0,255,194,.25);
@@ -412,15 +410,44 @@
     pointer-events:none;
     display:none;
   }
-  .toast-inner{padding:10px 12px;font-size:.8rem;}
+  .toast-inner{padding:10px 12px;font-size:clamp(.7rem,.85vw,.8rem);}
   .toast.show{display:block;animation:toastIn .25s ease-out forwards;}
   .toast.hide{animation:toastOut .2s ease-in forwards;}
   @keyframes toastIn{to{transform:translateY(0);opacity:1}}
   @keyframes toastOut{to{transform:translateY(14px);opacity:0}}
 
-  @media (max-width: 1080px){
-    .top-grid{grid-template-columns:1fr}
-    .mid-grid{grid-template-columns:1fr}
+  @media (max-width: 1280px){
+    .wrap{
+      grid-template-rows:auto auto auto auto;
+      row-gap:10px;
+    }
+    .top-grid{
+      grid-template-columns:1fr;
+    }
+    .mid-grid{
+      grid-template-columns:1fr;
+    }
+    .brand img{
+      height:clamp(60px,10vh,110px);
+    }
+    .clock{
+      letter-spacing:.1em;
+    }
+  }
+
+  @media (max-height: 720px){
+    .wrap{
+      padding:8px 10px;
+    }
+    header{
+      padding:6px 10px;
+    }
+    .card{
+      padding:10px 12px;
+    }
+    .topfund-chart-wrap{
+      min-height:110px;
+    }
   }
 
   #fx{display:none !important;}
@@ -433,16 +460,13 @@
   <header>
     <div class="brand">
       <img src="img/ZiSignPNG.png" alt="ZiSign"/>
-      <div class="brand-info">
-        <!-- opcional: título/subtítulo aqui -->
-      </div>
+      <div class="brand-info"></div>
     </div>
     <div class="clock" id="clock">--:--:--</div>
     <div class="controls"></div>
   </header>
 
   <section class="top-grid">
-    <!-- TOTAL -->
     <article class="card">
       <div class="card-header">
         <span>Visão geral</span>
@@ -460,7 +484,6 @@
       </div>
     </article>
 
-    <!-- GAUGE -->
     <article class="card">
       <div class="card-header">
         <span>Ritmo de assinaturas</span>
@@ -487,7 +510,6 @@
       </div>
     </article>
 
-    <!-- FUNDOS COM MAIOR ATRASO (histórico 7 dias) -->
     <article class="card">
       <div class="card-header">
         <span>Fundos que mais atrasam</span>
@@ -504,18 +526,16 @@
   </section>
 
   <section class="mid-grid">
-    <!-- TICKER -->
     <article class="ticker" aria-live="polite">
       <div class="ticker-head">
         <span>Últimas assinaturas processadas</span>
-        <span id="rateTextSecondary" style="opacity:.9;font-size:.8rem;"></span>
+        <span id="rateTextSecondary" style="opacity:.9;font-size:inherit;"></span>
       </div>
       <div class="ticker-body">
         <div class="ticker-row" id="tickerRow"></div>
       </div>
     </article>
 
-    <!-- OPERACOES ATRASADAS (snapshot atual) -->
     <aside class="h-card">
       <div class="h-title">Operações com maior tempo de atraso</div>
       <div class="delay-list">
@@ -541,7 +561,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-/* fundo discreto de partículas */
 (() => {
   const c = document.getElementById('fx');
   const ctx = c.getContext('2d');
@@ -589,12 +608,10 @@
   tick();
 })();
 
-/* lógica do painel */
 const CNPJ_CERTIFICADORA = "54638076000176";
 const API_BASE = "https://custodiabackend-staging.idsf.com.br";
 const API_URL = `${API_BASE}/api/ZiSign/TV?cnpjCertificadora=${CNPJ_CERTIFICADORA}`;
 
-/* histórico de 7 dias (persistido em localStorage) */
 const STORAGE_KEY = "zisign_tv_hist_7d";
 const MILLIS_7D = 7 * 24 * 60 * 60 * 1000;
 
@@ -865,7 +882,6 @@ async function carregarEventosReais(){
       const atrasoSeg = hh*3600 + mm*60 + ss;
       const atrasoStr = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
 
-      /* histórico 7 dias: acumula por operação (sem duplicar) */
       if(atrasoSeg > 0){
         const keyHist = `${ev.idOperacaoRecebivel || ""}-${ev.cnpjFundo || ""}`;
         const jaTem = historicoEventos.some(h => h.key === keyHist);
