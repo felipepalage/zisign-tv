@@ -33,7 +33,7 @@
       radial-gradient(1200px 800px at 90% -10%, var(--grad-a) 0%, transparent 60%),
       radial-gradient(900px 700px at 10% 110%, var(--grad-b) 0%, transparent 60%),
       linear-gradient(180deg,#050609 0%,#05070a 45%,#050508 100%);
-    overflow:auto;
+    overflow:hidden;
     font-size:14px;
   }
 
@@ -300,15 +300,15 @@
     overflow:hidden;
     position:relative;
   }
-  .ticker-row{
-    display:flex;
-    align-items:center;
-    gap:20px;
-    white-space:nowrap;
-    padding:10px 0;
-    animation:scrollX 38s linear infinite;
-  }
-  .ticker:hover .ticker-row{animation-play-state:paused;}
+ .ticker-row{
+  display:flex;
+  flex-wrap:wrap;      /* quebra linha se faltar espaço */
+  align-items:center;
+  gap:10px;
+  white-space:normal;  /* permite quebrar linhas */
+  padding:10px 14px;
+}
+
   .tick{
     display:inline-flex;
     align-items:center;
