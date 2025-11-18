@@ -148,7 +148,6 @@
 
   @keyframes scroll{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
 
-  /* coluna direita inteira para atrasos */
   .highlights{
     display:flex;
     flex-direction:column;
@@ -175,7 +174,6 @@
     box-shadow:0 24px 80px rgba(0,0,0,.55), 0 0 28px rgba(0,255,194,.18);
   }
 
-  /* lista ocupa o card inteiro */
   .delay-list{
     flex:1;
     margin:6px 0 8px;
@@ -386,6 +384,12 @@ const arc       = document.getElementById('arc');
 const elDelayList = document.getElementById('delayList');
 
 const pad2 = n => (n<10?'0'+n:''+n);
+const formatCnpj = cnpj => {
+  const d = (cnpj || '').toString().replace(/\D/g,'');
+  if (d.length !== 14) return cnpj || '';
+  return d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+};
+
 function animateCount(el, from, to, duration=600){
   const start = performance.now();
   function step(ts){
@@ -468,17 +472,22 @@ async function carregarEventosReais(){
     const atrasadas = [];
 
     eventos.forEach(ev=>{
-      const atrasoStr = ev.hrAtraso || "00:00";
-      const partesAtraso = atrasoStr.split(":");
+      const atrasoRaw = ev.hrAtraso || "00:00:00";
+      const partesAtraso = atrasoRaw.split(":");
       const ah = parseInt(partesAtraso[0] || "0", 10);
       const am = parseInt(partesAtraso[1] || "0", 10);
-      const atrasoMin = (isNaN(ah)?0:ah)*60 + (isNaN(am)?0:am);
+      const as = parseInt(partesAtraso[2] || "0", 10);
+      const hh = isNaN(ah) ? 0 : ah;
+      const mm = isNaN(am) ? 0 : am;
+      const ss = isNaN(as) ? 0 : as;
+      const atrasoSeg = hh*3600 + mm*60 + ss;
+      const atrasoStr = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
 
-      if (atrasoMin > 0){
+      if (atrasoSeg > 0){
         atrasadas.push({
           ...ev,
           atrasoStr,
-          atrasoMin
+          atrasoSeg
         });
       }
 
@@ -487,13 +496,13 @@ async function carregarEventosReais(){
       div.innerHTML = `
         <span class="pill">${ev.horario}</span>
         <strong>${ev.nomeFundo}</strong>
-        <span style="opacity:.85">• Op: ${ev.idOperacaoRecebivel} • CNPJ: ${ev.cnpjFundo} • Atraso: ${atrasoStr}</span>
+        <span style="opacity:.85">• Op: ${ev.idOperacaoRecebivel} • CNPJ: ${formatCnpj(ev.cnpjFundo)} • Atraso: ${atrasoStr}</span>
       `;
       elTicker.appendChild(div);
 
       const partes = (ev.horario || "00:00:00").split(":").map(Number);
-      const hh = partes[0] || 0, mm = partes[1] || 0, ss = partes[2] || 0;
-      const ts = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm, ss).getTime();
+      const hhEv = partes[0] || 0, mmEv = partes[1] || 0, ssEv = partes[2] || 0;
+      const ts = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hhEv, mmEv, ssEv).getTime();
       if(nowMs - ts <= 60*60*1000) eventosUltimaHora++;
     });
 
@@ -501,13 +510,13 @@ async function carregarEventosReais(){
     elRateText.textContent = `${eventosUltimaHora} evts/última hora`;
 
     if (atrasadas.length > 0){
-      atrasadas.sort((a,b)=>b.atrasoMin - a.atrasoMin);
+      atrasadas.sort((a,b)=>b.atrasoSeg - a.atrasoSeg);
       const repetidas = atrasadas.length <= 4 ? atrasadas.concat(atrasadas) : atrasadas;
       repetidas.slice(0, 10).forEach(ev=>{
         const row = document.createElement('div');
         row.className = "delay-item";
         row.innerHTML = `
-          <span class="delay-op">Op ${ev.idOperacaoRecebivel}</span>
+          <span class="delay-op">Operação ${ev.idOperacaoRecebivel}</span>
           <span class="delay-late">${ev.atrasoStr} atrasado</span>
         `;
         elDelayList.appendChild(row);
@@ -521,12 +530,19 @@ async function carregarEventosReais(){
 
     if(qtd > 0){
       const last = eventos[eventos.length - 1];
-      const atrasoLast = last.hrAtraso || "--:--";
+      const atrasoLastRaw = last.hrAtraso || "00:00:00";
+      const partesLast = atrasoLastRaw.split(":");
+      const ahL = parseInt(partesLast[0] || "0", 10);
+      const amL = parseInt(partesLast[1] || "0", 10);
+      const asL = parseInt(partesLast[2] || "0", 10);
+      const atrasoLast = `${pad2(isNaN(ahL)?0:ahL)}:${pad2(isNaN(amL)?0:amL)}:${pad2(isNaN(asL)?0:asL)}`;
+
       showToast(`
         <div style="display:grid;gap:6px">
           <div><strong>${last.nomeFundo}</strong></div>
           <div>Operação ${last.idOperacaoRecebivel}</div>
-          <div style="opacity:.9">CNPJ ${last.cnpjFundo}</div>
+          <div style="opacity:.9">CNPJ ${formatCnpj(last.cnpjFundo)}</div>
+          <div style="opacity:.75">Atraso: ${atrasoLast}</div>
           <div style="opacity:.75">Atualizado às ${last.horario}</div>
         </div>
       `);
