@@ -47,17 +47,20 @@
     filter:blur(0.3px);
   }
 
-  .wrap{
-    position:relative;
-    z-index:1;
-    min-height:100vh;
-    padding:16px 18px;
-    display:grid;
-    grid-template-rows:auto auto auto auto;
-    row-gap:14px;
-    max-width:1920px;
-    margin:0 auto;
-  }
+.wrap{
+  position:relative;
+  z-index:1;
+  height:100vh;        /* trava na altura da tela */
+  padding:16px 18px;
+  display:grid;
+  grid-template-rows:auto 1fr auto auto; /* header fixo, meio flex, footer fixo */
+  row-gap:14px;
+  max-width:1920px;
+  margin:0 auto;
+  overflow:hidden;     /* impede “crescer” e empurrar layout */
+}
+
+
 
   header{
     display:flex;
@@ -304,13 +307,14 @@
 
   /* ticker PARADO, sem animação de scroll */
   .ticker-row{
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    gap:10px;
-    white-space:normal;
-    padding:10px 14px;
-  }
+  display:flex;
+  align-items:center;
+  gap:10px;
+  white-space:nowrap;   /* uma linha só */
+  padding:10px 14px;
+  overflow:hidden;      /* se passar do tamanho, corta */
+}
+
 
   .tick{
     display:inline-flex;
@@ -1032,7 +1036,8 @@ async function carregarEventosReais(){
       eventos = [json.data];
     }
 
-    const qtd = eventos.length;
+   const qtd = eventos.length;
+   elTotal.textContent = qtd.toLocaleString("pt-BR");
     const atual = Number(elTotal.textContent.replace(/\./g,"")) || 0;
     animateCount(elTotal, atual, qtd);
     elSub.textContent = qtd === 1 ? "1 assinatura exibida" : `${qtd.toLocaleString("pt-BR")} assinaturas exibidas`;
@@ -1100,51 +1105,46 @@ async function carregarEventosReais(){
 
     updateGauge(eventosUltimaHora);
     atualizarFooter(eventosUltimaHora, atrasadas);
+if (atrasadas.length > 0){
+  const mapOps = new Map();
 
-    if (atrasadas.length > 0){
-      const mapOps = new Map();
-      atrasadas.forEach(ev => {
-        const key = ev.idOperacaoRecebivel;
-        if (!key) return;
-        const existente = mapOps.get(key);
-        if (!existente || ev.atrasoSeg > existente.atrasoSeg) {
-          mapOps.set(key, ev);
-        }
-      });
-
-      const ordenadas = Array.from(mapOps.values())
-        .sort((a,b)=>b.atrasoSeg - a.atrasoSeg);
-
-      const topOps = ordenadas.slice(0, 4);
-      const maxAtraso = topOps[0].atrasoSeg || 1;
-
-      topOps.forEach((ev, idx)=>{
-        const row = document.createElement("div");
-        row.className = "delay-item";
-
-        const pct = Math.max(18, (ev.atrasoSeg / maxAtraso) * 100);
-
-        row.innerHTML = `
-          <div class="delay-header">
-            <span class="delay-op">Operação ${ev.idOperacaoRecebivel}</span>
-            <span class="delay-rank">#${idx+1}</span>
-          </div>
-          <div class="delay-meter">
-            <div class="delay-bar-outer">
-              <div class="delay-bar-inner" style="width:${pct.toFixed(1)}%"></div>
-            </div>
-            <span class="delay-time">${ev.atrasoStr}</span>
-          </div>
-          <div class="delay-status">Assinatura Pendente</div>
-        `;
-        elDelayList.appendChild(row);
-      });
-    } else {
-      const row = document.createElement("div");
-      row.className = "delay-item";
-      row.innerHTML = `<span class="delay-op">Nenhuma operação atrasada registrada</span>`;
-      elDelayList.appendChild(row);
+  atrasadas.forEach(ev => {
+    const key = ev.idOperacaoRecebivel;
+    if (!key) return;
+    const existente = mapOps.get(key);
+    if (!existente || ev.atrasoSeg > existente.atrasoSeg) {
+      mapOps.set(key, ev);
     }
+  });
+
+  const ordenadas = Array.from(mapOps.values())
+    .sort((a,b)=>b.atrasoSeg - a.atrasoSeg);
+
+  const topOps = ordenadas.slice(0, 4);
+  const maxAtraso = topOps[0].atrasoSeg || 1;
+
+  topOps.forEach((ev, idx)=>{
+    const row = document.createElement("div");
+    row.className = "delay-item";
+
+    const pct = Math.max(18, (ev.atrasoSeg / maxAtraso) * 100);
+
+    row.innerHTML = `
+      <div class="delay-header">
+        <span class="delay-op">Operação ${ev.idOperacaoRecebivel}</span>
+        <span class="delay-rank">#${idx+1}</span>
+      </div>
+      <div class="delay-meter">
+        <div class="delay-bar-outer">
+          <div class="delay-bar-inner" style="width:${pct.toFixed(1)}%"></div>
+        </div>
+        <span class="delay-time">${ev.atrasoStr}</span>
+      </div>
+      <div class="delay-status">Assinatura Pendente</div>
+    `;
+    elDelayList.appendChild(row);
+  });
+}
 
     limparHistoricoAntigo();
     salvarHistorico();
