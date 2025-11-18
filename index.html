@@ -38,12 +38,17 @@
   }
 
   #fx{
-    position:fixed; inset:0; z-index:0; pointer-events:none;
-    opacity:.5; filter:blur(0.3px);
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    opacity:.5;
+    filter:blur(0.3px);
   }
 
   .wrap{
-    position:relative; z-index:1;
+    position:relative;
+    z-index:1;
     height:100%;
     padding:16px 18px;
     display:grid;
@@ -62,9 +67,7 @@
     border-radius:16px;
     padding:10px 18px;
     border:1px solid var(--border-soft);
-    box-shadow:
-      0 18px 50px rgba(0,0,0,.6),
-      0 0 0 1px rgba(0,0,0,.5);
+    box-shadow:0 18px 50px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.5);
   }
   .brand{
     display:flex;
@@ -197,22 +200,20 @@
     position:relative;
   }
   .ring svg{
-    width:100%;height:100%;
+    width:100%;
+    height:100%;
     transform:rotate(-90deg);
   }
   .ring .value{
-    position:absolute; inset:0;
-    display:grid; place-items:center;
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
     text-align:center;
   }
   .ring .value-num{
     font-size:32px;
     font-weight:800;
-  }
-  .ring .value-sub{
-    font-size:12px;
-    color:var(--muted);
-    margin-top:2px;
   }
 
   .topfund-main{
@@ -228,7 +229,7 @@
   }
   .topfund-chart-wrap{
     flex:1;
-    min-height:160px;
+    min-height:200px;
     border-radius:12px;
     background:radial-gradient(circle at 0 100%,rgba(0,255,194,.08),transparent 65%);
     border:1px solid rgba(255,255,255,.06);
@@ -268,9 +269,10 @@
 
   .mid-grid{
     display:grid;
-    grid-template-columns:1.7fr 1.1fr;
+    grid-template-columns:2fr 0.9fr;
     gap:14px;
     min-height:0;
+    align-items:flex-start;
   }
 
   .ticker{
@@ -334,17 +336,19 @@
 
   .h-card{
     background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
-    border-radius:16px;
+    border-radius:14px;
     border:1px solid var(--border-soft);
-    box-shadow:0 16px 55px rgba(0,0,0,.7);
+    box-shadow:0 12px 40px rgba(0,0,0,.7);
     display:flex;
     flex-direction:column;
     padding:10px 14px;
+    max-height:220px;
+    align-self:flex-start;
   }
   .h-title{
-    font-size:12px;
+    font-size:11px;
     text-transform:uppercase;
-    letter-spacing:.12em;
+    letter-spacing:.16em;
     color:var(--muted);
     margin-bottom:6px;
   }
@@ -358,38 +362,67 @@
   .delay-track{
     display:flex;
     flex-direction:column;
-    gap:4px;
-    animation:scrollY 18s linear infinite;
+    gap:6px;
   }
   .delay-item{
     display:flex;
+    flex-direction:column;
+    gap:4px;
+    font-size:11px;
+  }
+  .delay-header{
+    display:flex;
     align-items:center;
     justify-content:space-between;
-    font-size:12px;
   }
   .delay-op{
     color:var(--text);
-    opacity:.9;
-  }
-  .delay-late{
-    color:var(--danger);
     font-weight:600;
+    opacity:.95;
   }
-  .h-sub{
-    margin-top:6px;
-    font-size:11px;
+  .delay-rank{
+    font-size:10px;
     color:var(--muted);
+    opacity:.85;
   }
-
-  @keyframes scrollY{
-    0%{transform:translateY(0)}
-    100%{transform:translateY(-50%)}
+  .delay-meter{
+    display:grid;
+    grid-template-columns:1fr auto;
+    align-items:center;
+    gap:8px;
+  }
+  .delay-bar-outer{
+    position:relative;
+    width:100%;
+    height:6px;
+    border-radius:999px;
+    background:rgba(255,255,255,.06);
+    overflow:hidden;
+  }
+  .delay-bar-inner{
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    background:linear-gradient(90deg,var(--danger),#ff8b8b);
+  }
+  .delay-time{
+    font-variant-numeric:tabular-nums;
+    color:var(--muted);
+    font-size:11px;
+  }
+  .delay-status{
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    color:var(--danger);
+    opacity:.9;
   }
 
   footer{
     display:flex;
-    align-items:center;
-    justify-content:flex-end;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:16px;
     font-size:11px;
     color:var(--muted);
     opacity:.9;
@@ -466,8 +499,7 @@
               </linearGradient>
             </defs>
             <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10" />
-            <circle id="arc" cx="60" cy="60" r="50" fill="none" stroke="url(#g1)" stroke-width="10" stroke-linecap="round"
-                    stroke-dasharray="0 999" />
+            <circle id="arc" cx="60" cy="60" r="50" fill="none" stroke="url(#g1)" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 999" />
           </svg>
           <div class="value">
             <div class="value-num" id="rateNum">0</div>
@@ -503,17 +535,71 @@
     </article>
 
     <aside class="h-card">
-      <div class="h-title">Operações com maior tempo de atraso</div>
+      <div class="h-title">Top operações com maior atraso</div>
       <div class="delay-list">
         <div class="delay-track" id="delayList"></div>
       </div>
-      <div class="h-sub">Exibindo operações com maiores atrasos de assinatura registrados.</div>
     </aside>
   </section>
 
-  <footer>
+ <footer style="
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  width:100%;
+  padding:10px 14px;
+  gap:32px;
+  font-size:12px;
+  color:var(--muted);
+  background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
+  border:1px solid var(--border-soft);
+  border-radius:14px;
+  box-shadow:0 12px 40px rgba(0,0,0,.7);
+">
+
+  <!-- BLOCO 1 -->
+  <div style="min-width:260px; display:flex; flex-direction:column; gap:4px;">
+    <div style="
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      opacity:.8;
+    ">
+      Últimas assinaturas processadas
+    </div>
+
+    <div id="footerRateText" style="font-size:12px; opacity:.9;"></div>
+    <div id="rateTextSecondary" style="font-size:11px; opacity:.75;"></div>
+  </div>
+
+  <!-- BLOCO 2 -->
+  <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+    <div style="
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      opacity:.8;
+    ">
+      Top operações com maior atraso
+    </div>
+
+    <div class="delay-list" style="max-height:70px; overflow:hidden;">
+      <div class="delay-track" id="delayListFooter"></div>
+    </div>
+  </div>
+
+  <!-- BLOCO 3 -->
+  <div style="
+    white-space:nowrap;
+    font-size:11px;
+    opacity:.75;
+    align-self:flex-end;
+  ">
     contato@zisign.ai — © 2025 ZiSign
-  </footer>
+  </div>
+
+</footer>
+
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="assertive" aria-atomic="true">
@@ -527,19 +613,60 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+function atualizarFooter(eventosUltimaHora, atrasadas) {
+  const footerRate = document.getElementById("footerRateText");
+  const footerDelayList = document.getElementById("delayListFooter");
+
+  if (footerRate) {
+    footerRate.textContent =
+      `${eventosUltimaHora} evento${eventosUltimaHora !== 1 ? "s" : ""} na última hora`;
+  }
+
+  if (!footerDelayList) return;
+
+  footerDelayList.innerHTML = "";
+
+  if (!atrasadas.length) {
+    footerDelayList.innerHTML =
+      `<div class="delay-item">
+         <span class="delay-op">Nenhuma operação atrasada registrada</span>
+       </div>`;
+    return;
+  }
+
+  const ordenado = atrasadas
+    .slice()
+    .sort((a, b) => b.atrasoSeg - a.atrasoSeg)
+    .slice(0, 4);
+
+  ordenado.forEach(ev => {
+    const row = document.createElement("div");
+    row.className = "delay-item";
+    row.innerHTML = `
+      <span class="delay-op">Operação ${ev.idOperacaoRecebivel}</span>
+      <span class="delay-late">${ev.atrasoStr} · Assinatura Pendente</span>
+    `;
+    footerDelayList.appendChild(row);
+  });
+}
+
 (() => {
-  const c = document.getElementById('fx');
-  const ctx = c.getContext('2d');
+  const c = document.getElementById("fx");
+  const ctx = c.getContext("2d");
   let w, h, dpr;
   function resize(){
     dpr = window.devicePixelRatio || 1;
-    w = c.clientWidth; h = c.clientHeight;
-    c.width = w*dpr; c.height = h*dpr;
+    w = c.clientWidth;
+    h = c.clientHeight;
+    c.width = w*dpr;
+    c.height = h*dpr;
     ctx.setTransform(dpr,0,0,dpr,0,0);
   }
-  window.addEventListener('resize', resize); resize();
+  window.addEventListener("resize", resize);
+  resize();
 
-  const N = 80, pts = [];
+  const N = 80;
+  const pts = [];
   for(let i=0;i<N;i++){
     pts.push({
       x: Math.random()*w,
@@ -557,17 +684,23 @@
       p.x += Math.cos(p.a)*p.sp;
       p.y += Math.sin(p.a)*p.sp;
 
-      if(p.x<-20) p.x=w+20; if(p.x>w+20) p.x=-20;
-      if(p.y<-20) p.y=h+20; if(p.y>h+20) p.y=-20;
+      if(p.x<-20) p.x=w+20;
+      if(p.x>w+20) p.x=-20;
+      if(p.y<-20) p.y=h+20;
+      if(p.y>h+20) p.y=-20;
 
       const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*5);
       g.addColorStop(0, `hsla(${p.hue},100%,60%,.18)`);
       g.addColorStop(1, `hsla(${p.hue},100%,60%,0)`);
       ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r*5,0,Math.PI*2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r*5,0,Math.PI*2);
+      ctx.fill();
 
       ctx.fillStyle = `hsla(${p.hue},100%,70%,.55)`;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
     }
     requestAnimationFrame(tick);
   }
@@ -609,26 +742,26 @@ let historicoEventos = carregarHistorico();
 let soundOn = true;
 let toastOn = true;
 
-const elClock   = document.getElementById('clock');
-const elTotal   = document.getElementById('totalCount');
-const elSub     = document.getElementById('subCount');
-const elTicker  = document.getElementById('tickerRow');
-const elRateText= document.getElementById('rateText');
-const elRateTextSecondary = document.getElementById('rateTextSecondary');
-const elRateNum = document.getElementById('rateNum');
-const elToast   = document.getElementById('toast');
-const elToastContent = document.getElementById('toastContent');
-const audioDing = document.getElementById('ding');
-const arc       = document.getElementById('arc');
-const elDelayList = document.getElementById('delayList');
-const elTopFundHeadline = document.getElementById('topFundHeadline');
-const elTopFundList = document.getElementById('topFundList');
+const elClock   = document.getElementById("clock");
+const elTotal   = document.getElementById("totalCount");
+const elSub     = document.getElementById("subCount");
+const elTicker  = document.getElementById("tickerRow");
+const elRateText= document.getElementById("rateText");
+const elRateTextSecondary = document.getElementById("rateTextSecondary");
+const elRateNum = document.getElementById("rateNum");
+const elToast   = document.getElementById("toast");
+const elToastContent = document.getElementById("toastContent");
+const audioDing = document.getElementById("ding");
+const arc       = document.getElementById("arc");
+const elDelayList = document.getElementById("delayList");
+const elTopFundHeadline = document.getElementById("topFundHeadline");
+const elTopFundList = document.getElementById("topFundList");
 
-const pad2 = n => (n<10?'0'+n:''+n);
+const pad2 = n => (n<10 ? "0"+n : ""+n);
 const formatCnpj = cnpj => {
-  const d = (cnpj || '').toString().replace(/\D/g,'');
-  if (d.length !== 14) return cnpj || '';
-  return d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+  const d = (cnpj || "").toString().replace(/\D/g,"");
+  if (d.length !== 14) return cnpj || "";
+  return d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,"$1.$2.$3/$4-$5");
 };
 const formatDurationFromSeconds = totalSeconds => {
   const s = Math.max(0, Math.floor(totalSeconds || 0));
@@ -649,7 +782,7 @@ function animateCount(el, from, to, duration=600){
   function step(ts){
     const p = Math.min(1, (ts-start)/duration);
     const val = Math.round(from + (to-from)*p);
-    el.textContent = val.toLocaleString('pt-BR');
+    el.textContent = val.toLocaleString("pt-BR");
     if(p<1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
@@ -664,22 +797,22 @@ let toastTimeout = null;
 function showToast(html){
   if(!toastOn) return;
   elToastContent.innerHTML = html;
-  elToast.classList.remove('hide');
-  elToast.classList.add('show');
-  elToast.style.pointerEvents='auto';
+  elToast.classList.remove("hide");
+  elToast.classList.add("show");
+  elToast.style.pointerEvents="auto";
   clearTimeout(toastTimeout);
   toastTimeout = setTimeout(hideToast, 6500);
 }
 function hideToast(){
-  elToast.classList.remove('show');
-  elToast.classList.add('hide');
-  elToast.style.pointerEvents='none';
+  elToast.classList.remove("show");
+  elToast.classList.add("hide");
+  elToast.style.pointerEvents="none";
   setTimeout(()=>{
-    elToast.classList.remove('hide');
-    elToast.style.display='none';
+    elToast.classList.remove("hide");
+    elToast.style.display="none";
   }, 220);
 }
-document.addEventListener('click', (e)=>{
+document.addEventListener("click", (e)=>{
   if(!elToast.contains(e.target)) hideToast();
 });
 
@@ -688,7 +821,7 @@ function updateGauge(val){
   const pct = Math.max(0, Math.min(1, val/max));
   const C = 2 * Math.PI * 50;
   const dash = (C * pct).toFixed(1);
-  arc.setAttribute('stroke-dasharray', `${dash} ${Math.max(0,C-dash).toFixed(1)}`);
+  arc.setAttribute("stroke-dasharray", `${dash} ${Math.max(0,C-dash).toFixed(1)}`);
   elRateNum.textContent = val.toFixed(0);
   const txt = `${val} eventos na última hora`;
   elRateText.textContent = txt;
@@ -716,7 +849,7 @@ function atualizarGraficoFundos(ranking){
 
   elTopFundList.innerHTML = "";
   ranking.slice(0,5).forEach((f,i)=>{
-    const row = document.createElement('div');
+    const row = document.createElement("div");
     row.className = "topfund-item";
     row.innerHTML = `
       <span class="tf-pos">${i+1}º</span>
@@ -726,7 +859,7 @@ function atualizarGraficoFundos(ranking){
     elTopFundList.appendChild(row);
   });
 
-  const ctx = document.getElementById('chartTopFundos').getContext('2d');
+  const ctx = document.getElementById("chartTopFundos").getContext("2d");
   const top5 = ranking.slice(0,5);
   const labels = top5.map(f=>abreviarFundo(f.nomeFundo, 20));
   const data = top5.map(f=>Number((f.mediaAtrasoSeg/60).toFixed(1)));
@@ -737,7 +870,7 @@ function atualizarGraficoFundos(ranking){
   }
 
   chartTopFundos = new Chart(ctx, {
-    type:'bar',
+    type:"bar",
     data:{
       labels,
       datasets:[{
@@ -758,20 +891,20 @@ function atualizarGraficoFundos(ranking){
             },
             label:(context)=>{
               const v = context.raw;
-              return `${v.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})} min`;
+              return `${v.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})} min`;
             }
           }
         }
       },
       scales:{
         x:{
-          ticks:{color:'#9fb4c0',font:{size:9}},
+          ticks:{color:"#9fb4c0",font:{size:9}},
           grid:{display:false}
         },
         y:{
           beginAtZero:true,
-          ticks:{color:'#9fb4c0',font:{size:9}},
-          grid:{color:'rgba(255,255,255,.06)'}
+          ticks:{color:"#9fb4c0",font:{size:9}},
+          grid:{color:"rgba(255,255,255,.06)"}
         }
       }
     }
@@ -834,9 +967,9 @@ async function carregarEventosReais(){
     }
 
     const qtd = eventos.length;
-    const atual = Number(elTotal.textContent.replace(/\./g,'')) || 0;
+    const atual = Number(elTotal.textContent.replace(/\./g,"")) || 0;
     animateCount(elTotal, atual, qtd);
-    elSub.textContent = qtd === 1 ? "1 assinatura exibida" : `${qtd.toLocaleString('pt-BR')} assinaturas exibidas`;
+    elSub.textContent = qtd === 1 ? "1 assinatura exibida" : `${qtd.toLocaleString("pt-BR")} assinaturas exibidas`;
 
     elTicker.innerHTML = "";
     elDelayList.innerHTML = "";
@@ -882,7 +1015,7 @@ async function carregarEventosReais(){
         });
       }
 
-      const div = document.createElement('div');
+      const div = document.createElement("div");
       div.className = "tick";
       div.innerHTML = `
         <span class="pill">${ev.horario}</span>
@@ -892,27 +1025,44 @@ async function carregarEventosReais(){
       elTicker.appendChild(div);
 
       const partes = (ev.horario || "00:00:00").split(":").map(Number);
-      const hhEv = partes[0] || 0, mmEv = partes[1] || 0, ssEv = partes[2] || 0;
+      const hhEv = partes[0] || 0;
+      const mmEv = partes[1] || 0;
+      const ssEv = partes[2] || 0;
       const ts = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hhEv, mmEv, ssEv).getTime();
       if(nowMs - ts <= 60*60*1000) eventosUltimaHora++;
     });
 
     updateGauge(eventosUltimaHora);
+    atualizarFooter(eventosUltimaHora, atrasadas);
 
     if (atrasadas.length > 0){
       atrasadas.sort((a,b)=>b.atrasoSeg - a.atrasoSeg);
-      const repetidas = atrasadas.length <= 4 ? atrasadas.concat(atrasadas) : atrasadas;
-      repetidas.slice(0, 10).forEach(ev=>{
-        const row = document.createElement('div');
+      const topOps = atrasadas.slice(0, 4);
+      const maxAtraso = topOps[0].atrasoSeg || 1;
+
+      topOps.forEach((ev, idx)=>{
+        const row = document.createElement("div");
         row.className = "delay-item";
+
+        const pct = Math.max(18, (ev.atrasoSeg / maxAtraso) * 100);
+
         row.innerHTML = `
-          <span class="delay-op">Operação : ${ev.idOperacaoRecebivel}</span>
-          <span class="delay-late">${ev.atrasoStr} · Assinatura Pendente</span>
+          <div class="delay-header">
+            <span class="delay-op">Operação ${ev.idOperacaoRecebivel}</span>
+            <span class="delay-rank">#${idx+1}</span>
+          </div>
+          <div class="delay-meter">
+            <div class="delay-bar-outer">
+              <div class="delay-bar-inner" style="width:${pct.toFixed(1)}%"></div>
+            </div>
+            <span class="delay-time">${ev.atrasoStr}</span>
+          </div>
+          <div class="delay-status">Assinatura Pendente</div>
         `;
         elDelayList.appendChild(row);
       });
     } else {
-      const row = document.createElement('div');
+      const row = document.createElement("div");
       row.className = "delay-item";
       row.innerHTML = `<span class="delay-op">Nenhuma operação atrasada registrada</span>`;
       elDelayList.appendChild(row);
