@@ -33,6 +33,7 @@
       radial-gradient(1200px 800px at 90% -10%, var(--grad-a) 0%, transparent 60%),
       radial-gradient(900px 700px at 10% 110%, var(--grad-b) 0%, transparent 60%),
       linear-gradient(180deg,#050609 0%,#05070a 45%,#050508 100%);
+    /* trava a tela na TV, sem rolagem */
     overflow:hidden;
     font-size:14px;
   }
@@ -300,21 +301,22 @@
     overflow:hidden;
     position:relative;
   }
- .ticker-row{
-  display:flex;
-  flex-wrap:wrap;      /* quebra linha se faltar espaço */
-  align-items:center;
-  gap:10px;
-  white-space:normal;  /* permite quebrar linhas */
-  padding:10px 14px;
-}
+
+  /* ticker PARADO, sem animação de scroll */
+  .ticker-row{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px;
+    white-space:normal;
+    padding:10px 14px;
+  }
 
   .tick{
     display:inline-flex;
     align-items:center;
     gap:10px;
-    padding:10px 14px;
-    margin-left:10px;
+    padding:8px 12px;
     border-radius:999px;
     background:rgba(14,26,34,.95);
     border:1px solid rgba(0,255,194,.18);
@@ -331,10 +333,10 @@
     font-weight:600;
   }
 
-  @keyframes scrollX{
-    0%{transform:translateX(100%)}
-    100%{transform:translateX(-100%)}
-  }
+  /* removidos:
+     .ticker:hover .ticker-row{animation-play-state:paused;}
+     @keyframes scrollX{...}
+  */
 
   .h-card{
     background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
@@ -689,8 +691,17 @@ function atualizarFooter(eventosUltimaHora, atrasadas) {
     return;
   }
 
-  const ordenado = atrasadas
-    .slice()
+  const map = new Map();
+  atrasadas.forEach(ev => {
+    const key = ev.idOperacaoRecebivel;
+    if (!key) return;
+    const existente = map.get(key);
+    if (!existente || ev.atrasoSeg > existente.atrasoSeg) {
+      map.set(key, ev);
+    }
+  });
+
+  const ordenado = Array.from(map.values())
     .sort((a, b) => b.atrasoSeg - a.atrasoSeg)
     .slice(0, 4);
 
@@ -832,7 +843,7 @@ const abreviarFundo = (nome, max=20) => {
   return n.slice(0, max-1) + "…";
 };
 
-function animateCount(el, from, to, duration=600){
+function animateCount(el, from, to, duration=400){
   const start = performance.now();
   function step(ts){
     const p = Math.min(1, (ts-start)/duration);
@@ -1036,7 +1047,7 @@ async function carregarEventosReais(){
     const atrasadas = [];
 
     eventos.forEach(ev=>{
-      const atrasoRaw = ev.hrAtraso || "00:00:00";
+      const atrasoRaw = (ev.hrAtraso || "00:00:00").toString().trim();
       const partesAtraso = atrasoRaw.split(":");
       const ah = parseInt(partesAtraso[0] || "0", 10);
       const am = parseInt(partesAtraso[1] || "0", 10);
@@ -1091,8 +1102,20 @@ async function carregarEventosReais(){
     atualizarFooter(eventosUltimaHora, atrasadas);
 
     if (atrasadas.length > 0){
-      atrasadas.sort((a,b)=>b.atrasoSeg - a.atrasoSeg);
-      const topOps = atrasadas.slice(0, 4);
+      const mapOps = new Map();
+      atrasadas.forEach(ev => {
+        const key = ev.idOperacaoRecebivel;
+        if (!key) return;
+        const existente = mapOps.get(key);
+        if (!existente || ev.atrasoSeg > existente.atrasoSeg) {
+          mapOps.set(key, ev);
+        }
+      });
+
+      const ordenadas = Array.from(mapOps.values())
+        .sort((a,b)=>b.atrasoSeg - a.atrasoSeg);
+
+      const topOps = ordenadas.slice(0, 4);
       const maxAtraso = topOps[0].atrasoSeg || 1;
 
       topOps.forEach((ev, idx)=>{
@@ -1129,7 +1152,7 @@ async function carregarEventosReais(){
 
     if(qtd > 0){
       const last = eventos[eventos.length - 1];
-      const atrasoLastRaw = last.hrAtraso || "00:00:00";
+      const atrasoLastRaw = (last.hrAtraso || "00:00:00").toString().trim();
       const partesLast = atrasoLastRaw.split(":");
       const ahL = parseInt(partesLast[0] || "0", 10);
       const amL = parseInt(partesLast[1] || "0", 10);
