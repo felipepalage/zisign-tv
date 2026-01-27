@@ -3,204 +3,264 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ZiSign TV</title>
+<title>ZiSign</title>
 <link rel="icon" type="image/png" href="img/ZiSignPNG.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet"/>
 
 <style>
   :root{
-    --bg:#050609;
-    --grad-a:#071e18;
-    --grad-b:#061527;
-    --panel:#0c1116;
-    --panel-soft:#121922;
-    --border:rgba(0,255,194,.18);
-    --border-soft:rgba(255,255,255,.06);
-    --text:#f4f8f7;
-    --muted:#9fb4c0;
+    --bg0:#05070b;
+    --bg1:#070c12;
+    --card:rgba(255,255,255,.06);
+    --card2:rgba(255,255,255,.04);
+    --border:rgba(255,255,255,.10);
+    --muted:rgba(255,255,255,.65);
+    --text:rgba(255,255,255,.92);
     --accent:#00f0c0;
-    --accent-soft:#00d187;
     --danger:#ff5c7a;
-    --warn:#ffc96a;
+    --ok:#00f0c0;
+    --shadow:0 22px 70px rgba(0,0,0,.55);
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{
     font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-    color:var(--text);
     background:
-      radial-gradient(1200px 800px at 90% -10%, var(--grad-a) 0%, transparent 60%),
-      radial-gradient(900px 700px at 10% 110%, var(--grad-b) 0%, transparent 60%),
-      linear-gradient(180deg,#050609 0%,#05070a 45%,#050508 100%);
+      radial-gradient(900px 600px at 10% 20%, rgba(0,240,192,.10) 0%, transparent 60%),
+      radial-gradient(900px 600px at 90% 10%, rgba(0,160,255,.10) 0%, transparent 60%),
+      linear-gradient(180deg,var(--bg0),var(--bg1));
+    color:var(--text);
     overflow:hidden;
-    font-size:14px;
   }
 
   .wrap{
-    position:relative;
-    z-index:1;
     height:100vh;
-    padding:16px 18px;
-    display:grid;
-    grid-template-rows:auto 1fr auto;
-    row-gap:14px;
     max-width:1920px;
     margin:0 auto;
-    overflow:hidden;
+    padding:18px;
+    display:grid;
+    grid-template-rows:auto 1fr auto;
+    gap:14px;
   }
 
+  /* HEADER minimal */
   header{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:16px;
-    background:linear-gradient(135deg,rgba(12,17,22,.95),rgba(12,17,22,.94));
-    border-radius:16px;
-    padding:10px 18px;
-    border:1px solid var(--border-soft);
-    box-shadow:0 18px 50px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.5);
+    padding:10px 12px;
   }
-  .brand{display:flex;align-items:center;gap:14px;}
-  .brand img{height:54px;width:auto;opacity:.95}
-  .brand-info{display:flex;flex-direction:column;gap:2px;}
-  .brand-title{font-weight:800;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#eafff9}
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    opacity:.95;
+  }
+  .brand img{height:200px;width:auto}
+  .brand .dot{
+    width:7px;height:7px;border-radius:999px;background:var(--accent);
+    box-shadow:0 0 0 4px rgba(0,240,192,.12);
+  }
+  .brand .title{
+    font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:12px;
+  }
   .clock{
-    font-weight:800;letter-spacing:.14em;font-size:13px;color:var(--accent);
-    padding:6px 14px;border-radius:999px;border:1px solid rgba(0,255,194,.30);
-    background:radial-gradient(circle at 0 50%,rgba(0,255,194,.10),transparent 65%);
-    white-space:nowrap;
+    font-weight:800;
+    letter-spacing:.18em;
+    font-size:12px;
+    color:rgba(255,255,255,.85);
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(10px);
   }
 
+  /* GRID */
   .top-grid{
     display:grid;
-    grid-template-columns:1.1fr 1fr 1.4fr;
+    grid-template-columns:1fr 1fr 1.2fr;
     gap:14px;
     min-height:0;
   }
 
   .card{
-    background:
-      radial-gradient(circle at 0 0,rgba(0,255,194,.08),transparent 55%),
-      radial-gradient(circle at 100% 100%,rgba(0,128,255,.06),transparent 55%),
-      linear-gradient(180deg,var(--panel) 0%,#080c11 100%);
-    border-radius:16px;
-    border:1px solid var(--border-soft);
-    box-shadow:0 18px 60px rgba(0,0,0,.7);
-    padding:12px 18px;
+    min-height:0;
+    border-radius:18px;
+    background:linear-gradient(180deg,var(--card),var(--card2));
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+    backdrop-filter: blur(14px);
+    padding:16px;
     display:flex;
     flex-direction:column;
+    gap:12px;
+  }
+
+  .card-head{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+  }
+  .card-title{
+    font-weight:800;
+    font-size:12px;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.78);
+  }
+  .pill{
+    font-size:11px;
+    font-weight:800;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.04);
+    color:rgba(255,255,255,.80);
+    white-space:nowrap;
+  }
+  .pill.ok{border-color:rgba(0,240,192,.25); color:var(--accent); background:rgba(0,240,192,.08)}
+  .pill.bad{border-color:rgba(255,92,122,.25); color:var(--danger); background:rgba(255,92,122,.08)}
+
+  /* KPIs */
+  .kpi{
+    display:flex;align-items:flex-end;justify-content:space-between;
     gap:10px;
-    min-height:0;
   }
+  .kpi .num{font-size:44px;line-height:1;font-weight:900;letter-spacing:-.02em}
+  .kpi .sub{color:var(--muted);font-size:12px;margin-top:4px}
+  .kpi .right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 
-  .card-header{
-    display:flex;align-items:center;justify-content:space-between;gap:8px;
-    font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);opacity:.95;
-  }
-  .card-header .label-pill{
-    padding:4px 9px;border-radius:999px;border:1px solid rgba(0,255,194,.20);
-    color:var(--accent);font-weight:700;white-space:nowrap;
-  }
-
-  .total-wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-  .total-main{display:flex;flex-direction:column;gap:4px;}
-  .total-value{font-size:34px;line-height:1;font-weight:800;}
-  .total-sub{font-size:13px;color:var(--muted);}
-  .total-pill{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
-  .total-label-small{font-size:12px;color:var(--muted);}
-  .total-badge{
-    font-size:12px;font-weight:800;color:#061017;
-    background:linear-gradient(135deg,var(--accent),var(--accent-soft));
-    padding:6px 10px;border-radius:999px;box-shadow:0 10px 28px rgba(0,255,194,.35);
-  }
-
-  .pending-title{
-    font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);opacity:.9;
-  }
+  /* Delay list */
   .delay-list{min-height:0;overflow:hidden}
-  .delay-track{display:flex;flex-direction:column;gap:6px}
-  .delay-item{display:flex;flex-direction:column;gap:4px;font-size:11px}
-  .delay-header{display:flex;align-items:center;justify-content:space-between}
-  .delay-op{color:var(--text);font-weight:800;opacity:.95}
-  .delay-rank{font-size:10px;color:var(--muted);opacity:.85}
-  .delay-meter{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
-  .delay-bar-outer{height:6px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}
-  .delay-bar-inner{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(90deg,var(--danger),#ff8b8b)}
-  .delay-time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:11px}
-  .delay-status{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--danger);opacity:.9}
-
-  .gauge-main{flex:1;display:grid;place-items:center}
-  .ring{width:100%;max-width:230px;aspect-ratio:1/1;position:relative}
-  .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-  .ring .value{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
-  .ring .value-num{font-size:32px;font-weight:900}
-
-  .topfund-main{flex:1;display:flex;flex-direction:column;gap:8px;min-height:0}
-  .topfund-headline{font-size:13px;font-weight:900}
-  .topfund-chart-wrap{
-    flex:1;min-height:200px;border-radius:12px;padding:6px 8px;
-    background:radial-gradient(circle at 0 100%,rgba(0,255,194,.08),transparent 65%);
-    border:1px solid rgba(255,255,255,.06);
+  .delay-track{display:flex;flex-direction:column;gap:8px}
+  .delay-item{
+    padding:10px 12px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(0,0,0,.14);
+    display:flex;flex-direction:column;gap:6px;
   }
-  .topfund-chart-wrap canvas{width:100% !important;height:100% !important}
-  .topfund-list{display:flex;flex-direction:column;gap:3px;font-size:12px}
-  .topfund-item{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:6px}
-  .tf-pos{font-weight:900;color:var(--accent);min-width:26px}
-  .tf-name{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-  .tf-delay{color:var(--muted);font-weight:900}
+  .delay-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+  .delay-op{font-weight:800;font-size:12px;opacity:.95}
+  .delay-time{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:800}
+  .bar{
+    height:6px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden
+  }
+  .bar > i{
+    display:block;height:100%;
+    background:linear-gradient(90deg, rgba(255,92,122,.95), rgba(255,170,170,.95));
+    width:30%;
+    border-radius:inherit;
+  }
 
+  /* Gauge */
+  .gauge{
+    flex:1;
+    display:grid;
+    place-items:center;
+    padding:8px 0;
+  }
+  .ring{width:100%;max-width:220px;aspect-ratio:1/1;position:relative}
+  .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .ring .center{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+  .ring .center .big{font-size:38px;font-weight:900}
+  .ring .center .small{font-size:12px;color:var(--muted);font-weight:800;margin-top:6px}
+
+  /* Chart area */
+  .chart-wrap{
+    flex:1;min-height:210px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(0,0,0,.12);
+    padding:10px;
+  }
+  .chart-wrap canvas{width:100% !important;height:100% !important}
+  .rank{display:flex;flex-direction:column;gap:6px}
+  .rank-row{
+    display:grid;
+    grid-template-columns:22px 1fr auto;
+    gap:10px;
+    align-items:center;
+    padding:8px 10px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.06);
+    background:rgba(255,255,255,.03);
+  }
+  .pos{font-weight:900;color:var(--accent)}
+  .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .val{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:900}
+
+  /* TICKER */
   .ticker{
-    background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
-    border-radius:16px;border:1px solid var(--border-soft);
-    box-shadow:0 16px 55px rgba(0,0,0,.7);
-    display:flex;flex-direction:column;min-height:0;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.10);
+    background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+    box-shadow:var(--shadow);
+    backdrop-filter: blur(14px);
+    display:flex;flex-direction:column;
+    min-height:0;
   }
   .ticker-head{
     display:flex;align-items:center;justify-content:space-between;
-    padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06);
-    font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;
+    padding:12px 16px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .ticker-head .left{
+    font-weight:800;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+    font-size:12px;
+    color:rgba(255,255,255,.78);
   }
 
-  .table{display:grid;gap:8px;padding:12px 14px;overflow:auto}
+  .table{padding:12px 14px;overflow:auto;display:grid;gap:8px}
   .row{
     display:grid;
-    grid-template-columns:92px 1.4fr 130px 120px;
-    gap:10px;align-items:center;
-    padding:10px 12px;border-radius:14px;
-    background:rgba(14,26,34,.75);
-    border:1px solid rgba(255,255,255,.06);
+    grid-template-columns:90px 1fr 110px 110px;
+    gap:10px;
+    align-items:center;
+    padding:12px 12px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(0,0,0,.12);
   }
-  .pill{
-    padding:4px 10px;border-radius:999px;
-    background:rgba(0,255,194,.12);
-    border:1px solid rgba(0,255,194,.55);
-    font-size:12px;color:var(--accent);font-weight:900;
-    width:max-content;
+  .time{
+    font-variant-numeric:tabular-nums;
+    font-weight:900;
+    color:rgba(255,255,255,.85);
   }
-  .badge{
-    padding:4px 10px;border-radius:999px;font-weight:900;font-size:11px;
-    width:max-content;justify-self:start;
+  .main{
+    display:flex;flex-direction:column;gap:4px;min-width:0;
   }
-  .badge.danger{background:rgba(255,92,122,.15);border:1px solid rgba(255,92,122,.35);color:var(--danger)}
-  .badge.ok{background:rgba(0,255,194,.10);border:1px solid rgba(0,255,194,.30);color:var(--accent)}
-  .small{color:var(--muted);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .main b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .main span{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tag{
+    justify-self:start;
+    font-size:11px;font-weight:900;
+    padding:6px 10px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.04);
+  }
+  .tag.ok{border-color:rgba(0,240,192,.25); color:var(--accent); background:rgba(0,240,192,.08)}
+  .tag.bad{border-color:rgba(255,92,122,.25); color:var(--danger); background:rgba(255,92,122,.08)}
+  .late{
+    justify-self:end;
+    font-variant-numeric:tabular-nums;
+    font-weight:900;
+    color:rgba(255,255,255,.88);
+  }
 
   footer{
-    display:flex;align-items:center;justify-content:space-between;gap:16px;
-    font-size:11px;color:var(--muted);opacity:.9;
-    padding:10px 14px;background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
-    border:1px solid var(--border-soft);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.7);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 12px;
+    color:rgba(255,255,255,.55);
+    font-size:11px;
   }
 
   @media (max-width:1400px){
-    .wrap{padding:12px 12px}
-    header{flex-direction:column;align-items:flex-start}
+    .wrap{padding:12px}
     .top-grid{grid-template-columns:1fr}
-    .brand img{height:52px}
-    .row{grid-template-columns:92px 1fr}
+    .row{grid-template-columns:90px 1fr}
     .row > :nth-child(3), .row > :nth-child(4){justify-self:start}
-    footer{flex-direction:column;align-items:flex-start}
+    footer{flex-direction:column;align-items:flex-start;gap:6px}
   }
 </style>
 </head>
@@ -210,86 +270,87 @@
   <header>
     <div class="brand">
       <img src="img/ZiSignPNG.png" alt="ZiSign"/>
-      <div class="brand-info">
-        <div class="brand-title">ZISIGN</div>
-      </div>
+      <span class="dot" aria-hidden="true"></span>
     </div>
     <div class="clock" id="clock">--:--:--</div>
   </header>
 
   <section class="top-grid">
+    <!-- Geral -->
     <article class="card">
-      <div class="card-header">
-        <span>Visão geral</span>
-        <span class="label-pill">Total de assinaturas exibidas</span>
+      <div class="card-head">
+        <div class="card-title">Visão geral</div>
+        <span class="pill" id="panelStatus">Atualizado</span>
       </div>
 
-      <div class="total-wrap">
-        <div class="total-main">
-          <div class="total-value" id="totalCount">0</div>
-          <div class="total-sub" id="subCount">—</div>
+      <div class="kpi">
+        <div>
+          <div class="num" id="totalCount">0</div>
+          <div class="sub" id="subCount">—</div>
         </div>
-        <div class="total-pill">
-          <div class="total-label-small">Status do painel</div>
-          <div class="total-badge" id="panelStatus">Atualizado</div>
+        <div class="right">
+          <span class="pill ok" id="rateTextMain">—</span>
         </div>
       </div>
 
-      <div class="pending-ops">
-        <div class="pending-title">Top operações com maior atraso</div>
-        <div class="delay-list" style="max-height:120px;">
+      <div>
+        <div class="card-title" style="margin-bottom:8px;opacity:.9">Maiores atrasos</div>
+        <div class="delay-list" style="max-height:160px;">
           <div class="delay-track" id="delayListTop"></div>
         </div>
       </div>
     </article>
 
+    <!-- Gauge -->
     <article class="card">
-      <div class="card-header">
-        <span>Ritmo de assinaturas</span>
-        <span class="label-pill" id="rateTextMain">—</span>
+      <div class="card-head">
+        <div class="card-title">Ritmo</div>
+        <span class="pill" id="rateTextSecondary">—</span>
       </div>
-      <div class="gauge-main">
+
+      <div class="gauge">
         <div class="ring">
-          <svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
+          <svg viewBox="0 0 120 120">
             <defs>
               <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stop-color="#00ffc2"/>
                 <stop offset="100%" stop-color="#00b8ff"/>
               </linearGradient>
             </defs>
-            <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10" />
+            <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="10" />
             <circle id="arc" cx="60" cy="60" r="50" fill="none" stroke="url(#g1)" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 999" />
           </svg>
-          <div class="value"><div class="value-num" id="rateNum">0</div></div>
+          <div class="center">
+            <div class="big" id="rateNum">0</div>
+          </div>
         </div>
       </div>
     </article>
 
+    <!-- Fundos -->
     <article class="card">
-      <div class="card-header">
-        <span>Fundos que mais atrasam</span>
-        <span class="label-pill">Atraso médio (últimos 7 dias)</span>
+      <div class="card-head">
+        <div class="card-title">Fundos</div>
+        <span class="pill">média (7 dias)</span>
       </div>
-      <div class="topfund-main">
-        <div class="topfund-headline" id="topFundHeadline">Nenhum atraso registrado</div>
-        <div class="topfund-chart-wrap"><canvas id="chartTopFundos"></canvas></div>
-        <div class="topfund-list" id="topFundList"></div>
-      </div>
+
+      <div style="font-weight:900;font-size:14px" id="topFundHeadline">Nenhum atraso registrado</div>
+      <div class="chart-wrap"><canvas id="chartTopFundos"></canvas></div>
+      <div class="rank" id="topFundList"></div>
     </article>
   </section>
 
   <section class="ticker" aria-live="polite">
     <div class="ticker-head">
-      <span>Assinaturas pendentes (ordenadas por atraso)</span>
-      <span id="rateTextSecondary" style="opacity:.9;font-size:inherit;"></span>
+      <div class="left">Pendências</div>
+      <div class="pill" id="footerRateText">—</div>
     </div>
     <div class="table" id="tickerTable"></div>
   </section>
 
   <footer>
-    <div id="footerRateText"></div>
     <div id="footerRateSecondary"></div>
-    <div style="white-space:nowrap;opacity:.75">contato@zisign.ai — © 2025 ZiSign</div>
+    <div style="white-space:nowrap;">contato@zisign.ai — © 2025 ZiSign</div>
   </footer>
 </div>
 
@@ -298,7 +359,7 @@
 <script>
 const CFG = {
   cnpj:  "54638076000176",
-  base:  "https://custodiabackend-prod.idsf.com.br/",
+  base:  "https://custodiabackend-prod.idsf.com.br",
   amb:   "custodia",
   token: "DHQzckJ0TGWHiFxaVuUlmrBLWXwuejrtSAT0Mf47gvclZ5GKY543iYKNeLfqlzngXH0YcKGLe4qyv0avru3xeVGBp9yUQKKKlSyJ"
 };
@@ -351,7 +412,6 @@ const abreviarFundo = (nome, max=24) => {
   if(n.length <= max) return n;
   return n.slice(0, max-1) + "…";
 };
-
 function animateCount(el, from, to, duration=350){
   const start = performance.now();
   function step(ts){
@@ -362,7 +422,6 @@ function animateCount(el, from, to, duration=350){
   }
   requestAnimationFrame(step);
 }
-
 setInterval(()=>{
   const d = new Date();
   elClock.textContent = `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
@@ -411,16 +470,16 @@ function atualizarGraficoFundos(ranking){
 
   const top = ranking[0];
   elTopFundHeadline.textContent =
-    `${abreviarFundo(top.nomeFundo, 34)} — atraso médio de ${formatDurationFromSeconds(top.mediaAtrasoSeg)}`;
+    `${abreviarFundo(top.nomeFundo, 40)} — ${formatDurationFromSeconds(top.mediaAtrasoSeg)}`;
 
   elTopFundList.innerHTML = "";
   ranking.slice(0,5).forEach((f,i)=>{
     const row = document.createElement("div");
-    row.className = "topfund-item";
+    row.className = "rank-row";
     row.innerHTML = `
-      <span class="tf-pos">${i+1}º</span>
-      <span class="tf-name" title="${f.nomeFundo}">${abreviarFundo(f.nomeFundo, 22)}</span>
-      <span class="tf-delay">${formatDurationFromSeconds(f.mediaAtrasoSeg)}</span>
+      <div class="pos">${i+1}</div>
+      <div class="name" title="${f.nomeFundo}">${abreviarFundo(f.nomeFundo, 32)}</div>
+      <div class="val">${formatDurationFromSeconds(f.mediaAtrasoSeg)}</div>
     `;
     elTopFundList.appendChild(row);
   });
@@ -435,7 +494,7 @@ function atualizarGraficoFundos(ranking){
 
   chartTopFundos = new Chart(ctx, {
     type:"bar",
-    data:{ labels, datasets:[{ data, borderRadius:8 }] },
+    data:{ labels, datasets:[{ data, borderRadius:10 }] },
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{
@@ -448,8 +507,8 @@ function atualizarGraficoFundos(ranking){
         }
       },
       scales:{
-        x:{ ticks:{color:"#9fb4c0",font:{size:9}}, grid:{display:false} },
-        y:{ beginAtZero:true, ticks:{color:"#9fb4c0",font:{size:9}}, grid:{color:"rgba(255,255,255,.06)"} }
+        x:{ ticks:{color:"rgba(255,255,255,.65)",font:{size:10}}, grid:{display:false} },
+        y:{ beginAtZero:true, ticks:{color:"rgba(255,255,255,.65)",font:{size:10}}, grid:{color:"rgba(255,255,255,.06)"} }
       }
     }
   });
@@ -485,7 +544,7 @@ function construirRanking7Dias(){
 function renderDelayTop(atrasadas){
   elDelayListTop.innerHTML = "";
   if(!atrasadas.length){
-    elDelayListTop.innerHTML = `<div class="delay-item"><span class="delay-op">Nenhuma operação atrasada registrada</span></div>`;
+    elDelayListTop.innerHTML = `<div style="color:rgba(255,255,255,.55);font-weight:800">Sem atrasos</div>`;
     return;
   }
 
@@ -497,25 +556,19 @@ function renderDelayTop(atrasadas){
     if(!cur || ev.atrasoSeg > cur.atrasoSeg) mapOps.set(key, ev);
   }
 
-  const ordenadas = Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg).slice(0,4);
+  const ordenadas = Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg).slice(0,3);
   const maxAtraso = ordenadas[0]?.atrasoSeg || 1;
 
-  ordenadas.forEach((ev, idx)=>{
-    const pct = Math.max(18, (ev.atrasoSeg / maxAtraso) * 100);
+  ordenadas.forEach(ev=>{
+    const pct = Math.max(12, (ev.atrasoSeg / maxAtraso) * 100);
     const row = document.createElement("div");
     row.className = "delay-item";
     row.innerHTML = `
-      <div class="delay-header">
-        <span class="delay-op">Operação ${ev.idOperacaoRecebivel}</span>
-        <span class="delay-rank">#${idx+1}</span>
+      <div class="delay-top">
+        <div class="delay-op">Operação ${ev.idOperacaoRecebivel}</div>
+        <div class="delay-time">${ev.atrasoStr}</div>
       </div>
-      <div class="delay-meter">
-        <div class="delay-bar-outer">
-          <div class="delay-bar-inner" style="width:${pct.toFixed(1)}%"></div>
-        </div>
-        <span class="delay-time">${ev.atrasoStr}</span>
-      </div>
-      <div class="delay-status">Assinatura Pendente</div>
+      <div class="bar"><i style="width:${pct.toFixed(1)}%"></i></div>
     `;
     elDelayListTop.appendChild(row);
   });
@@ -524,7 +577,16 @@ function renderDelayTop(atrasadas){
 function renderTabela(eventos){
   elTable.innerHTML = "";
   if(!eventos.length){
-    elTable.innerHTML = `<div class="row"><span class="pill">—</span><div><div style="font-weight:900">Nenhuma assinatura pendente</div><div class="small">Aguardando eventos</div></div><span class="badge ok">OK</span><div style="text-align:right;font-weight:900">00:00:00</div></div>`;
+    elTable.innerHTML = `
+      <div class="row">
+        <div class="time">—</div>
+        <div class="main">
+          <b>Nenhuma pendência</b>
+          <span>Aguardando eventos</span>
+        </div>
+        <div class="tag ok">OK</div>
+        <div class="late">00:00:00</div>
+      </div>`;
     return;
   }
 
@@ -537,13 +599,13 @@ function renderTabela(eventos){
       const row = document.createElement("div");
       row.className = "row";
       row.innerHTML = `
-        <span class="pill">${ev.horario || "--:--:--"}</span>
-        <div>
-          <div style="font-weight:900">${abreviarFundo(ev.nomeFundo||"", 28)}</div>
-          <div class="small">Operação ${ev.idOperacaoRecebivel} · CNPJ ${formatCnpj(ev.cnpjFundo)}</div>
+        <div class="time">${ev.horario || "--:--:--"}</div>
+        <div class="main">
+          <b>${abreviarFundo(ev.nomeFundo||"", 40)}</b>
+          <span>Operação ${ev.idOperacaoRecebivel} · CNPJ ${formatCnpj(ev.cnpjFundo)}</span>
         </div>
-        <span class="badge ${isLate ? "danger" : "ok"}">${isLate ? "PENDENTE" : "OK"}</span>
-        <div style="text-align:right;font-variant-numeric:tabular-nums;font-weight:900">${ev.atrasoStr || "00:00:00"}</div>
+        <div class="tag ${isLate ? "bad" : "ok"}">${isLate ? "PENDENTE" : "OK"}</div>
+        <div class="late">${ev.atrasoStr || "00:00:00"}</div>
       `;
       elTable.appendChild(row);
     });
@@ -552,25 +614,23 @@ function renderTabela(eventos){
 /** ================== FETCH ================== **/
 async function carregarEventosReais(){
   try{
+    elPanelStatus.className = "pill";
     elPanelStatus.textContent = "Carregando…";
 
     const res = await fetch(API_URL, {
       cache:"no-store",
-      headers:{
-        "Ambiente": CFG.amb,
-        "Token": CFG.token
-      }
+      headers:{ "Ambiente": CFG.amb, "Token": CFG.token }
     });
 
     if(!res.ok){
-      elPanelStatus.textContent = `Erro HTTP ${res.status}`;
+      elPanelStatus.className = "pill bad";
+      elPanelStatus.textContent = "Erro";
       console.error("Falha ao buscar dados", res.status, await res.text());
       renderTabela([]);
       return;
     }
 
     const json = await res.json();
-
     let eventos = [];
     if (Array.isArray(json)) eventos = json;
     else if (json && Array.isArray(json.data)) eventos = json.data;
@@ -585,13 +645,10 @@ async function carregarEventosReais(){
       const atrasoRaw = (ev.hrAtraso || "00:00:00").toString().trim();
       const [ah,am,as] = atrasoRaw.split(":");
       const hh = Number(ah)||0, mm = Number(am)||0, ss = Number(as)||0;
-      const atrasoSeg = hh*3600 + mm*60 + ss;
-      const atrasoStr = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
+      ev.atrasoSeg = hh*3600 + mm*60 + ss;
+      ev.atrasoStr = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
 
-      ev.atrasoSeg = atrasoSeg;
-      ev.atrasoStr = atrasoStr;
-
-      if(atrasoSeg>0) atrasadas.push(ev);
+      if(ev.atrasoSeg>0) atrasadas.push(ev);
 
       const partes = (ev.horario || "00:00:00").split(":").map(Number);
       const ts = new Date(now.getFullYear(), now.getMonth(), now.getDate(), partes[0]||0, partes[1]||0, partes[2]||0).getTime();
@@ -601,13 +658,14 @@ async function carregarEventosReais(){
     const qtd = eventos.length;
     const atual = Number((elTotal.textContent || "0").replace(/\./g,"")) || 0;
     animateCount(elTotal, atual, qtd);
-    elSub.textContent = qtd === 1 ? "1 assinatura exibida" : `${qtd.toLocaleString("pt-BR")} assinaturas exibidas`;
+    elSub.textContent = qtd === 1 ? "1 assinatura" : `${qtd.toLocaleString("pt-BR")} assinaturas`;
 
     elFooterRateText.textContent =
-      eventosUltimaHora === 0 ? "Nenhum evento na última hora" : `${eventosUltimaHora} evento${eventosUltimaHora !== 1 ? "s" : ""} na última hora`;
+      eventosUltimaHora === 0 ? "0 eventos / hora" : `${eventosUltimaHora} eventos / hora`;
 
-    elFooterRateSecondary.textContent = `Ambiente: ${CFG.amb}`;
-    elPanelStatus.textContent = `OK · ${new Date().toLocaleTimeString("pt-BR")}`;
+    elFooterRateSecondary.textContent = "Atualização automática";
+    elPanelStatus.className = "pill ok";
+    elPanelStatus.textContent = "Online";
 
     updateGauge(eventosUltimaHora);
     renderDelayTop(atrasadas);
@@ -634,7 +692,8 @@ async function carregarEventosReais(){
     construirRanking7Dias();
 
   } catch(e){
-    elPanelStatus.textContent = "Erro (ver console)";
+    elPanelStatus.className = "pill bad";
+    elPanelStatus.textContent = "Erro";
     console.error("Erro ao carregar eventos", e);
     renderTabela([]);
   }
