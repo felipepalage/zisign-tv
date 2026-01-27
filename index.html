@@ -37,22 +37,13 @@
     font-size:14px;
   }
 
-  #fx{
-    position:fixed;
-    inset:0;
-    z-index:0;
-    pointer-events:none;
-    opacity:.5;
-    filter:blur(0.3px);
-  }
-
   .wrap{
     position:relative;
     z-index:1;
     height:100vh;
     padding:16px 18px;
     display:grid;
-    grid-template-rows:auto 1fr auto auto;
+    grid-template-rows:auto 1fr auto;
     row-gap:14px;
     max-width:1920px;
     margin:0 auto;
@@ -70,50 +61,25 @@
     border:1px solid var(--border-soft);
     box-shadow:0 18px 50px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.5);
   }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:18px;
-  }
-  .brand img{
-    height:110px;
-    width:auto;
-  }
-  .brand-info{
-    display:flex;
-    flex-direction:column;
-    gap:3px;
-  }
-  .brand-title{
-    font-weight:800;
-    font-size:16px;
-    letter-spacing:.05em;
-    text-transform:uppercase;
-  }
-  .brand-sub{
-    font-size:12px;
-    color:var(--muted);
-    opacity:.9;
-  }
+  .brand{display:flex;align-items:center;gap:18px;}
+  .brand img{height:90px;width:auto;}
+  .brand-info{display:flex;flex-direction:column;gap:2px;}
+  .brand-title{font-weight:800;font-size:16px;letter-spacing:.05em;text-transform:uppercase;}
+  .brand-sub{font-size:12px;color:var(--muted);opacity:.9;}
   .clock{
-    font-weight:700;
-    letter-spacing:.14em;
-    font-size:14px;
-    color:var(--accent);
-    padding:6px 14px;
-    border-radius:999px;
-    border:1px solid rgba(0,255,194,.35);
+    font-weight:700;letter-spacing:.14em;font-size:14px;color:var(--accent);
+    padding:6px 14px;border-radius:999px;border:1px solid rgba(0,255,194,.35);
     background:radial-gradient(circle at 0 50%,rgba(0,255,194,.12),transparent 65%);
     white-space:nowrap;
   }
-  .controls{display:none !important;}
 
   .top-grid{
     display:grid;
-    grid-template-columns:1.2fr 1.1fr 1.4fr;
+    grid-template-columns:1.1fr 1fr 1.4fr;
     gap:14px;
     min-height:0;
   }
+
   .card{
     background:
       radial-gradient(circle at 0 0,rgba(0,255,194,.08),transparent 55%),
@@ -128,401 +94,129 @@
     gap:10px;
     min-height:0;
   }
+
   .card-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:8px;
-    font-size:10px;
-    text-transform:uppercase;
-    letter-spacing:.12em;
-    color:var(--muted);
-    opacity:.95;
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);opacity:.95;
   }
-  .card-header span.label-pill{
-    padding:4px 9px;
-    border-radius:999px;
-    border:1px solid rgba(0,255,194,.22);
-    color:var(--accent);
-    font-weight:600;
-    white-space:nowrap;
+  .card-header .label-pill{
+    padding:4px 9px;border-radius:999px;border:1px solid rgba(0,255,194,.22);
+    color:var(--accent);font-weight:600;white-space:nowrap;
   }
 
-  .total-wrap{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-  }
-  .total-main{
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-  }
-  .total-value{
-    font-size:34px;
-    line-height:1;
-    font-weight:800;
-  }
-  .total-sub{
-    font-size:13px;
-    color:var(--muted);
-  }
+  .total-wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .total-main{display:flex;flex-direction:column;gap:4px;}
+  .total-value{font-size:34px;line-height:1;font-weight:800;}
+  .total-sub{font-size:13px;color:var(--muted);}
+  .total-pill{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+  .total-label-small{font-size:12px;color:var(--muted);}
   .total-badge{
-    font-size:12px;
-    font-weight:600;
-    color:#061017;
+    font-size:12px;font-weight:700;color:#061017;
     background:linear-gradient(135deg,var(--accent),var(--accent-soft));
-    padding:6px 10px;
-    border-radius:999px;
-    box-shadow:0 10px 28px rgba(0,255,194,.45);
-    text-align:right;
-  }
-  .total-pill{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-end;
-    gap:6px;
-  }
-  .total-label-small{
-    font-size:12px;
-    color:var(--muted);
+    padding:6px 10px;border-radius:999px;box-shadow:0 10px 28px rgba(0,255,194,.45);
   }
 
-  .pending-ops{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    margin-top:4px;
-  }
   .pending-title{
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.16em;
-    color:var(--muted);
-    opacity:.9;
+    font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);opacity:.9;
   }
+  .delay-list{min-height:0;overflow:hidden}
+  .delay-track{display:flex;flex-direction:column;gap:6px}
+  .delay-item{display:flex;flex-direction:column;gap:4px;font-size:11px}
+  .delay-header{display:flex;align-items:center;justify-content:space-between}
+  .delay-op{color:var(--text);font-weight:700;opacity:.95}
+  .delay-rank{font-size:10px;color:var(--muted);opacity:.85}
+  .delay-meter{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+  .delay-bar-outer{height:6px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}
+  .delay-bar-inner{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(90deg,var(--danger),#ff8b8b)}
+  .delay-time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:11px}
+  .delay-status{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--danger);opacity:.9}
 
-  .gauge-main{
-    flex:1;
-    display:grid;
-    place-items:center;
-  }
-  .ring{
-    width:100%;
-    max-width:230px;
-    aspect-ratio:1/1;
-    position:relative;
-  }
-  .ring svg{
-    width:100%;
-    height:100%;
-    transform:rotate(-90deg);
-  }
-  .ring .value{
-    position:absolute;
-    inset:0;
-    display:grid;
-    place-items:center;
-    text-align:center;
-  }
-  .ring .value-num{
-    font-size:32px;
-    font-weight:800;
-  }
+  .gauge-main{flex:1;display:grid;place-items:center}
+  .ring{width:100%;max-width:230px;aspect-ratio:1/1;position:relative}
+  .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .ring .value{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+  .ring .value-num{font-size:32px;font-weight:800}
 
-  .topfund-main{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    min-height:0;
-  }
-  .topfund-headline{
-    font-size:13px;
-    font-weight:700;
-  }
+  .topfund-main{flex:1;display:flex;flex-direction:column;gap:8px;min-height:0}
+  .topfund-headline{font-size:13px;font-weight:800}
   .topfund-chart-wrap{
-    flex:1;
-    min-height:200px;
-    border-radius:12px;
+    flex:1;min-height:200px;border-radius:12px;padding:6px 8px;
     background:radial-gradient(circle at 0 100%,rgba(0,255,194,.08),transparent 65%);
     border:1px solid rgba(255,255,255,.06);
-    padding:6px 8px;
   }
-  .topfund-chart-wrap canvas{
-    width:100% !important;
-    height:100% !important;
-  }
-  .topfund-list{
-    display:flex;
-    flex-direction:column;
-    gap:3px;
-    font-size:12px;
-  }
-  .topfund-item{
-    display:grid;
-    grid-template-columns:auto 1fr auto;
-    align-items:center;
-    gap:6px;
-  }
-  .tf-pos{
-    font-weight:700;
-    color:var(--accent);
-    min-width:26px;
-  }
-  .tf-name{
-    overflow:hidden;
-    white-space:nowrap;
-    text-overflow:ellipsis;
-    color:var(--text);
-  }
-  .tf-delay{
-    color:var(--muted);
-    font-weight:600;
-  }
-
-  .mid-grid{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:14px;
-    min-height:0;
-    align-items:flex-start;
-  }
+  .topfund-chart-wrap canvas{width:100% !important;height:100% !important}
+  .topfund-list{display:flex;flex-direction:column;gap:3px;font-size:12px}
+  .topfund-item{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:6px}
+  .tf-pos{font-weight:800;color:var(--accent);min-width:26px}
+  .tf-name{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .tf-delay{color:var(--muted);font-weight:700}
 
   .ticker{
     background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
-    border-radius:16px;
-    border:1px solid var(--border-soft);
+    border-radius:16px;border:1px solid var(--border-soft);
     box-shadow:0 16px 55px rgba(0,0,0,.7);
-    display:flex;
-    flex-direction:column;
-    min-height:0;
+    display:flex;flex-direction:column;min-height:0;
   }
   .ticker-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:8px 14px 10px;
-    font-size:12px;
-    color:var(--muted);
-    letter-spacing:.12em;
-    text-transform:uppercase;
-  }
-  .ticker-body{
-    border-top:1px solid rgba(255,255,255,.06);
-    overflow:hidden;
-    position:relative;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06);
+    font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;
   }
 
-  .ticker-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    white-space:nowrap;
-    padding:10px 14px;
-    overflow:hidden;
-  }
-
-  .tick{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:8px 12px;
-    border-radius:999px;
-    background:rgba(14,26,34,.95);
-    border:1px solid rgba(0,255,194,.18);
-    font-size:12px;
-    box-shadow:0 10px 30px rgba(0,0,0,.7);
+  .table{display:grid;gap:8px;padding:12px 14px;overflow:auto}
+  .row{
+    display:grid;
+    grid-template-columns:92px 1.4fr 130px 120px;
+    gap:10px;align-items:center;
+    padding:10px 12px;border-radius:14px;
+    background:rgba(14,26,34,.75);
+    border:1px solid rgba(255,255,255,.06);
   }
   .pill{
-    padding:4px 10px;
-    border-radius:999px;
+    padding:4px 10px;border-radius:999px;
     background:rgba(0,255,194,.12);
     border:1px solid rgba(0,255,194,.55);
-    font-size:12px;
-    color:var(--accent);
-    font-weight:600;
+    font-size:12px;color:var(--accent);font-weight:700;
+    width:max-content;
   }
-
-  .h-title{
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.16em;
-    color:var(--muted);
-    margin-bottom:6px;
+  .badge{
+    padding:4px 10px;border-radius:999px;font-weight:800;font-size:11px;
+    width:max-content;justify-self:start;
   }
-  .delay-list{
-    flex:1;
-    min-height:0;
-    overflow:hidden;
-    position:relative;
-    margin-top:2px;
-  }
-  .delay-track{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-  }
-  .delay-item{
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-    font-size:11px;
-  }
-  .delay-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-  }
-  .delay-op{
-    color:var(--text);
-    font-weight:600;
-    opacity:.95;
-  }
-  .delay-rank{
-    font-size:10px;
-    color:var(--muted);
-    opacity:.85;
-  }
-  .delay-meter{
-    display:grid;
-    grid-template-columns:1fr auto;
-    align-items:center;
-    gap:8px;
-  }
-  .delay-bar-outer{
-    position:relative;
-    width:100%;
-    height:6px;
-    border-radius:999px;
-    background:rgba(255,255,255,.06);
-    overflow:hidden;
-  }
-  .delay-bar-inner{
-    position:absolute;
-    inset:0;
-    border-radius:inherit;
-    background:linear-gradient(90deg,var(--danger),#ff8b8b);
-  }
-  .delay-time{
-    font-variant-numeric:tabular-nums;
-    color:var(--muted);
-    font-size:11px;
-  }
-  .delay-status{
-    font-size:10px;
-    text-transform:uppercase;
-    letter-spacing:.12em;
-    color:var(--danger);
-    opacity:.9;
-  }
+  .badge.danger{background:rgba(255,92,122,.15);border:1px solid rgba(255,92,122,.35);color:var(--danger)}
+  .badge.ok{background:rgba(0,255,194,.10);border:1px solid rgba(0,255,194,.30);color:var(--accent)}
+  .small{color:var(--muted);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
   footer{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:16px;
-    font-size:11px;
-    color:var(--muted);
-    opacity:.9;
-    width:100%;
-    padding:10px 14px;
-    background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
-    border:1px solid var(--border-soft);
-    border-radius:14px;
-    box-shadow:0 12px 40px rgba(0,0,0,.7);
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    font-size:11px;color:var(--muted);opacity:.9;
+    padding:10px 14px;background:linear-gradient(180deg,var(--panel-soft) 0%,#080b10 100%);
+    border:1px solid var(--border-soft);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.7);
   }
 
-  .toast{
-    position:fixed;
-    right:18px;
-    bottom:18px;
-    z-index:30;
-    min-width:260px;
-    max-width:360px;
-    background:linear-gradient(180deg,#101722,#090d13);
-    border-radius:14px;
-    border:1px solid rgba(0,255,194,.25);
-    box-shadow:0 20px 60px rgba(0,0,0,.8);
-    transform:translateY(20px);
-    opacity:0;
-    pointer-events:none;
-    display:none;
-  }
-  .toast-inner{padding:10px 12px;font-size:12px;}
-  .toast.show{display:block;animation:toastIn .25s ease-out forwards;}
-  .toast.hide{animation:toastOut .2s ease-in forwards;}
-  @keyframes toastIn{to{transform:translateY(0);opacity:1}}
-  @keyframes toastOut{to{transform:translateY(14px);opacity:0}}
-
-  #fx{display:none !important;}
-
-  @media (min-width:1800px) {
-    body{font-size:15px;}
-    .total-value{font-size:38px;}
-    .ring .value-num{font-size:36px;}
-    .brand img{height:120px;}
-  }
-
-  @media (max-width:1400px) {
-    .wrap{
-      padding:12px 12px;
-      grid-template-rows:auto auto auto auto;
-    }
-    header{
-      flex-direction:column;
-      align-items:flex-start;
-      gap:8px;
-    }
-    .brand img{
-      height:80px;
-    }
-    .clock{
-      align-self:flex-start;
-      font-size:12px;
-    }
-    .top-grid{
-      grid-template-columns:1fr;
-    }
-    .mid-grid{
-      grid-template-columns:1fr;
-    }
-    footer{
-      flex-direction:column;
-      align-items:flex-start;
-      gap:10px;
-    }
-  }
-
-  @media (max-width:1100px) {
-    body{font-size:13px;}
-    .total-value{font-size:30px;}
-    .ring .value-num{font-size:26px;}
-    .brand img{height:64px;}
-  }
-
-  @media (max-height:720px) {
-    .wrap{
-      padding:10px 12px;
-    }
-    .topfund-chart-wrap{
-      min-height:160px;
-    }
+  @media (max-width:1400px){
+    .wrap{padding:12px 12px}
+    header{flex-direction:column;align-items:flex-start}
+    .top-grid{grid-template-columns:1fr}
+    .brand img{height:70px}
+    .row{grid-template-columns:92px 1fr}
+    .row > :nth-child(3), .row > :nth-child(4){justify-self:start}
+    footer{flex-direction:column;align-items:flex-start}
   }
 </style>
 </head>
-<body>
-<canvas id="fx"></canvas>
 
+<body>
 <div class="wrap">
   <header>
     <div class="brand">
       <img src="img/ZiSignPNG.png" alt="ZiSign"/>
-      <div class="brand-info"></div>
+      <div class="brand-info">
+        <div class="brand-title">ZiSign TV</div>
+        <div class="brand-sub" id="envText">Local</div>
+      </div>
     </div>
     <div class="clock" id="clock">--:--:--</div>
-    <div class="controls"></div>
   </header>
 
   <section class="top-grid">
@@ -531,6 +225,7 @@
         <span>Visão geral</span>
         <span class="label-pill">Total de assinaturas exibidas</span>
       </div>
+
       <div class="total-wrap">
         <div class="total-main">
           <div class="total-value" id="totalCount">0</div>
@@ -538,7 +233,7 @@
         </div>
         <div class="total-pill">
           <div class="total-label-small">Status do painel</div>
-          <div class="total-badge">Atualizado em tempo real</div>
+          <div class="total-badge" id="panelStatus">Atualizado</div>
         </div>
       </div>
 
@@ -567,9 +262,7 @@
             <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10" />
             <circle id="arc" cx="60" cy="60" r="50" fill="none" stroke="url(#g1)" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 999" />
           </svg>
-          <div class="value">
-            <div class="value-num" id="rateNum">0</div>
-          </div>
+          <div class="value"><div class="value-num" id="rateNum">0</div></div>
         </div>
       </div>
     </article>
@@ -581,240 +274,65 @@
       </div>
       <div class="topfund-main">
         <div class="topfund-headline" id="topFundHeadline">Nenhum atraso registrado</div>
-        <div class="topfund-chart-wrap">
-          <canvas id="chartTopFundos"></canvas>
-        </div>
+        <div class="topfund-chart-wrap"><canvas id="chartTopFundos"></canvas></div>
         <div class="topfund-list" id="topFundList"></div>
       </div>
     </article>
   </section>
 
-  <section class="mid-grid">
-    <article class="ticker" aria-live="polite">
-      <div class="ticker-head">
-        <span>Últimas assinaturas processadas</span>
-        <span id="rateTextSecondary" style="opacity:.9;font-size:inherit;"></span>
-      </div>
-      <div class="ticker-body">
-        <div class="ticker-row" id="tickerRow"></div>
-      </div>
-    </article>
+  <section class="ticker" aria-live="polite">
+    <div class="ticker-head">
+      <span>Assinaturas pendentes (ordenadas por atraso)</span>
+      <span id="rateTextSecondary" style="opacity:.9;font-size:inherit;"></span>
+    </div>
+    <div class="table" id="tickerTable"></div>
   </section>
 
   <footer>
-    <div style="min-width:260px; display:flex; flex-direction:column; gap:4px;">
-      <div style="
-        font-size:10px;
-        text-transform:uppercase;
-        letter-spacing:.16em;
-        opacity:.8;
-      ">
-        Últimas assinaturas processadas
-      </div>
-      <div id="footerRateText" style="font-size:12px; opacity:.9;"></div>
-      <div id="footerRateSecondary" style="font-size:11px; opacity:.75;"></div>
-    </div>
-
-    <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
-      <div style="
-        font-size:10px;
-        text-transform:uppercase;
-        letter-spacing:.16em;
-        opacity:.8;
-      ">
-        Top operações com maior atraso
-      </div>
-
-      <div class="delay-list" style="max-height:70px; overflow:hidden;">
-        <div class="delay-track" id="delayListFooter"></div>
-      </div>
-    </div>
-
-    <div style="
-      white-space:nowrap;
-      font-size:11px;
-      opacity:.75;
-      align-self:flex-end;
-    ">
-      contato@zisign.ai — © 2025 ZiSign
-    </div>
+    <div id="footerRateText"></div>
+    <div id="footerRateSecondary"></div>
+    <div style="white-space:nowrap;opacity:.75">contato@zisign.ai — © 2025 ZiSign</div>
   </footer>
-
 </div>
-
-<div class="toast" id="toast" role="status" aria-live="assertive" aria-atomic="true">
-  <div class="toast-inner" id="toastContent"></div>
-</div>
-
-<audio id="ding" preload="auto">
-  <source src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAA..." type="audio/mp3">
-</audio>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-function atualizarFooter(eventosUltimaHora, atrasadas) {
-  const footerRate = document.getElementById("footerRateText");
-  const footerDelayList = document.getElementById("delayListFooter");
-  const footerRateSecondary = document.getElementById("footerRateSecondary");
+/** ================== CONFIG LOCAL ================== **/
+const CFG = {
+  cnpj:  "54638076000176",
+  base:  "https://localhost:7003",
+  amb:   "custodia",
+  token: "DHQzckJ0TGWHiFxaVuUlmrBLWXwuejrtSAT0Mf47gvclZ5GKY543iYKNeLfqlzngXH0YcKGLe4qyv0avru3xeVGBp9yUQKKKlSyJ" 
+};
 
-  if (footerRate) {
-    footerRate.textContent =
-      eventosUltimaHora === 0
-        ? "Nenhum evento na última hora"
-        : `${eventosUltimaHora} evento${eventosUltimaHora !== 1 ? "s" : ""} na última hora`;
-  }
-
-  if (footerRateSecondary) {
-    footerRateSecondary.textContent =
-      eventosUltimaHora === 0
-        ? "Aguardando novas assinaturas"
-        : "Painel atualizado em tempo real";
-  }
-
-  if (!footerDelayList) return;
-
-  footerDelayList.innerHTML = "";
-
-  if (!atrasadas.length) {
-    footerDelayList.innerHTML =
-      `<div class="delay-item">
-         <span class="delay-op">Nenhuma operação atrasada registrada</span>
-       </div>`;
-    return;
-  }
-
-  const map = new Map();
-  atrasadas.forEach(ev => {
-    const key = ev.idOperacaoRecebivel;
-    if (!key) return;
-    const existente = map.get(key);
-    if (!existente || ev.atrasoSeg > existente.atrasoSeg) {
-      map.set(key, ev);
-    }
-  });
-
-  const ordenado = Array.from(map.values())
-    .sort((a, b) => b.atrasoSeg - a.atrasoSeg)
-    .slice(0, 4);
-
-  ordenado.forEach(ev => {
-    const row = document.createElement("div");
-    row.className = "delay-item";
-    row.innerHTML = `
-      <span class="delay-op">Operação ${ev.idOperacaoRecebivel}</span>
-      <span class="delay-late">${ev.atrasoStr} · Assinatura Pendente</span>
-    `;
-    footerDelayList.appendChild(row);
-  });
-}
-
+// Override via querystring: ?base=https://localhost:7003&cnpj=...&amb=custodia&token=...
 (() => {
-  const c = document.getElementById("fx");
-  const ctx = c.getContext("2d");
-  let w, h, dpr;
-  function resize(){
-    dpr = window.devicePixelRatio || 1;
-    w = c.clientWidth;
-    h = c.clientHeight;
-    c.width = w*dpr;
-    c.height = h*dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-  window.addEventListener("resize", resize);
-  resize();
-
-  const N = 80;
-  const pts = [];
-  for(let i=0;i<N;i++){
-    pts.push({
-      x: Math.random()*w,
-      y: Math.random()*h,
-      r: Math.random()*1.8+0.5,
-      a: Math.random()*Math.PI*2,
-      sp: .15 + Math.random()*.6,
-      hue: 160 + Math.random()*60
-    });
-  }
-  function tick(){
-    ctx.clearRect(0,0,w,h);
-    for(const p of pts){
-      p.a += (Math.random()-.5)*.08;
-      p.x += Math.cos(p.a)*p.sp;
-      p.y += Math.sin(p.a)*p.sp;
-
-      if(p.x<-20) p.x=w+20;
-      if(p.x>w+20) p.x=-20;
-      if(p.y<-20) p.y=h+20;
-      if(p.y>h+20) p.y=-20;
-
-      const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*5);
-      g.addColorStop(0, `hsla(${p.hue},100%,60%,.18)`);
-      g.addColorStop(1, `hsla(${p.hue},100%,60%,0)`);
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r*5,0,Math.PI*2);
-      ctx.fill();
-
-      ctx.fillStyle = `hsla(${p.hue},100%,70%,.55)`;
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fill();
-    }
-    requestAnimationFrame(tick);
-  }
-  tick();
+  const q = new URLSearchParams(location.search);
+  for (const k of ["base","cnpj","amb","token"]) if (q.get(k)) CFG[k] = q.get(k);
+  document.getElementById("envText").textContent = `${CFG.base} · ${CFG.amb}`;
 })();
 
-const CNPJ_CERTIFICADORA = "54638076000176";
-const API_BASE = "https://custodiabackend-prod.idsf.com.br";
-const API_URL = `${API_BASE}/api/ZiSign/TV?cnpjCertificadora=${CNPJ_CERTIFICADORA}`;
+const API_URL = `${CFG.base}/api/ZiSign/TV?cnpjCertificadora=${encodeURIComponent(CFG.cnpj)}`;
 
-const STORAGE_KEY = "zisign_tv_hist_7d";
-const MILLIS_7D = 7 * 24 * 60 * 60 * 1000;
-
-function carregarHistorico(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return [];
-    const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? arr : [];
-  }catch(e){
-    console.warn("Erro ao carregar histórico", e);
-    return [];
-  }
-}
-function salvarHistorico(){
-  try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(historicoEventos));
-  }catch(e){
-    console.warn("Erro ao salvar histórico", e);
-  }
-}
-function limparHistoricoAntigo(){
-  const limite = Date.now() - MILLIS_7D;
-  historicoEventos = historicoEventos.filter(e => (e.registradoEm || 0) >= limite);
-}
-
-let historicoEventos = carregarHistorico();
-
-let soundOn = true;
-let toastOn = true;
-
+/** ================== HELPERS ================== **/
 const elClock   = document.getElementById("clock");
 const elTotal   = document.getElementById("totalCount");
 const elSub     = document.getElementById("subCount");
-const elTicker  = document.getElementById("tickerRow");
+const elTable   = document.getElementById("tickerTable");
 const elRateTextMain = document.getElementById("rateTextMain");
 const elRateTextSecondary = document.getElementById("rateTextSecondary");
 const elRateNum = document.getElementById("rateNum");
-const elToast   = document.getElementById("toast");
-const elToastContent = document.getElementById("toastContent");
-const audioDing = document.getElementById("ding");
+const elPanelStatus = document.getElementById("panelStatus");
 const arc       = document.getElementById("arc");
 const elDelayListTop = document.getElementById("delayListTop");
 const elTopFundHeadline = document.getElementById("topFundHeadline");
 const elTopFundList = document.getElementById("topFundList");
+const elFooterRateText = document.getElementById("footerRateText");
+const elFooterRateSecondary = document.getElementById("footerRateSecondary");
+
+const STORAGE_KEY = "zisign_tv_hist_7d";
+const MILLIS_7D = 7 * 24 * 60 * 60 * 1000;
 
 const pad2 = n => (n<10 ? "0"+n : ""+n);
 const formatCnpj = cnpj => {
@@ -829,14 +347,14 @@ const formatDurationFromSeconds = totalSeconds => {
   const sec = s%60;
   return `${pad2(h)}:${pad2(m)}:${pad2(sec)}`;
 };
-const abreviarFundo = (nome, max=20) => {
+const abreviarFundo = (nome, max=24) => {
   if(!nome) return "";
   const n = nome.trim();
   if(n.length <= max) return n;
   return n.slice(0, max-1) + "…";
 };
 
-function animateCount(el, from, to, duration=400){
+function animateCount(el, from, to, duration=350){
   const start = performance.now();
   function step(ts){
     const p = Math.min(1, (ts-start)/duration);
@@ -852,29 +370,6 @@ setInterval(()=>{
   elClock.textContent = `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;
 }, 1000);
 
-let toastTimeout = null;
-function showToast(html){
-  if(!toastOn) return;
-  elToastContent.innerHTML = html;
-  elToast.classList.remove("hide");
-  elToast.classList.add("show");
-  elToast.style.pointerEvents="auto";
-  clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(hideToast, 6500);
-}
-function hideToast(){
-  elToast.classList.remove("show");
-  elToast.classList.add("hide");
-  elToast.style.pointerEvents="none";
-  setTimeout(()=>{
-    elToast.classList.remove("hide");
-    elToast.style.display="none";
-  }, 220);
-}
-document.addEventListener("click", (e)=>{
-  if(!elToast.contains(e.target)) hideToast();
-});
-
 function updateGauge(val){
   const max = 60;
   const pct = Math.max(0, Math.min(1, val/max));
@@ -883,28 +378,42 @@ function updateGauge(val){
   arc.setAttribute("stroke-dasharray", `${dash} ${Math.max(0,C-dash).toFixed(1)}`);
   elRateNum.textContent = val.toFixed(0);
   const txt = `${val} evento${val !== 1 ? "s" : ""} na última hora`;
-  if (elRateTextMain) elRateTextMain.textContent = txt;
-  if (elRateTextSecondary) elRateTextSecondary.textContent = txt;
+  elRateTextMain.textContent = txt;
+  elRateTextSecondary.textContent = txt;
 }
 
+/** ================== HISTÓRICO 7D (para ranking fundos) ================== **/
+function carregarHistorico(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return [];
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr : [];
+  }catch{ return []; }
+}
+function salvarHistorico(hist){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(hist)); }catch{}
+}
+function limparHistoricoAntigo(hist){
+  const limite = Date.now() - MILLIS_7D;
+  return hist.filter(e => (e.registradoEm || 0) >= limite);
+}
+let historicoEventos = carregarHistorico();
+
+/** ================== CHART ================== **/
 let chartTopFundos = null;
 
 function atualizarGraficoFundos(ranking){
-  if(!elTopFundHeadline || !elTopFundList) return;
-
   if(!ranking || ranking.length === 0){
     elTopFundHeadline.textContent = "Nenhum atraso registrado nos últimos 7 dias";
     elTopFundList.innerHTML = "";
-    if(chartTopFundos){
-      chartTopFundos.destroy();
-      chartTopFundos = null;
-    }
+    if(chartTopFundos){ chartTopFundos.destroy(); chartTopFundos = null; }
     return;
   }
 
   const top = ranking[0];
   elTopFundHeadline.textContent =
-    `${abreviarFundo(top.nomeFundo, 32)} — atraso médio de ${formatDurationFromSeconds(top.mediaAtrasoSeg)}`;
+    `${abreviarFundo(top.nomeFundo, 34)} — atraso médio de ${formatDurationFromSeconds(top.mediaAtrasoSeg)}`;
 
   elTopFundList.innerHTML = "";
   ranking.slice(0,5).forEach((f,i)=>{
@@ -924,105 +433,174 @@ function atualizarGraficoFundos(ranking){
   const data = top5.map(f=>Number((f.mediaAtrasoSeg/60).toFixed(1)));
   const top5Ref = top5.map(f => ({ ...f }));
 
-  if(chartTopFundos){
-    chartTopFundos.destroy();
-  }
+  if(chartTopFundos) chartTopFundos.destroy();
 
   chartTopFundos = new Chart(ctx, {
     type:"bar",
-    data:{
-      labels,
-      datasets:[{
-        data,
-        borderRadius:8
-      }]
-    },
+    data:{ labels, datasets:[{ data, borderRadius:8 }] },
     options:{
-      responsive:true,
-      maintainAspectRatio:false,
+      responsive:true, maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
         tooltip:{
           callbacks:{
-            title:(items)=>{
-              const idx = items[0].dataIndex;
-              return top5Ref[idx]?.nomeFundo || items[0].label;
-            },
-            label:(context)=>{
-              const v = context.raw;
-              return `${v.toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})} min`;
-            }
+            title:(items)=> top5Ref[items[0].dataIndex]?.nomeFundo || items[0].label,
+            label:(c)=> `${Number(c.raw).toLocaleString("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1})} min`
           }
         }
       },
       scales:{
-        x:{
-          ticks:{color:"#9fb4c0",font:{size:9}},
-          grid:{display:false}
-        },
-        y:{
-          beginAtZero:true,
-          ticks:{color:"#9fb4c0",font:{size:9}},
-          grid:{color:"rgba(255,255,255,.06)"}
-        }
+        x:{ ticks:{color:"#9fb4c0",font:{size:9}}, grid:{display:false} },
+        y:{ beginAtZero:true, ticks:{color:"#9fb4c0",font:{size:9}}, grid:{color:"rgba(255,255,255,.06)"} }
       }
     }
   });
 }
 
 function construirRanking7Dias(){
-  limparHistoricoAntigo();
+  historicoEventos = limparHistoricoAntigo(historicoEventos);
 
-  const porFundoHist = new Map();
-
-  historicoEventos.forEach(h=>{
-    if(!h || !h.nomeFundo) return;
+  const porFundo = new Map();
+  for(const h of historicoEventos){
+    if(!h?.nomeFundo) continue;
     const atrasoSeg = h.atrasoSeg || 0;
-    if(atrasoSeg <= 0) return;
+    if(atrasoSeg <= 0) continue;
 
-    const keyF = (h.cnpjFundo || h.nomeFundo).toString();
-    if(!porFundoHist.has(keyF)){
-      porFundoHist.set(keyF,{
-        nomeFundo: h.nomeFundo,
-        cnpjFundo: h.cnpjFundo || "",
-        totalAtrasoSeg: 0,
-        qtd: 0
-      });
+    const key = (h.cnpjFundo || h.nomeFundo).toString();
+    if(!porFundo.has(key)){
+      porFundo.set(key,{ nomeFundo:h.nomeFundo, cnpjFundo:h.cnpjFundo||"", totalAtrasoSeg:0, qtd:0 });
     }
-    const agg = porFundoHist.get(keyF);
+    const agg = porFundo.get(key);
     agg.totalAtrasoSeg += atrasoSeg;
     agg.qtd += 1;
-  });
+  }
 
-  const rankingFundos = Array.from(porFundoHist.values())
-    .filter(f=>f.qtd > 0)
-    .map(f=>({
-      nomeFundo: f.nomeFundo,
-      cnpjFundo: f.cnpjFundo,
-      mediaAtrasoSeg: f.totalAtrasoSeg / f.qtd
-    }))
+  const ranking = Array.from(porFundo.values())
+    .filter(f=>f.qtd>0)
+    .map(f=>({ nomeFundo:f.nomeFundo, cnpjFundo:f.cnpjFundo, mediaAtrasoSeg:f.totalAtrasoSeg/f.qtd }))
     .sort((a,b)=>b.mediaAtrasoSeg - a.mediaAtrasoSeg);
 
-  atualizarGraficoFundos(rankingFundos);
+  atualizarGraficoFundos(ranking);
 }
 
+/** ================== UI HELPERS ================== **/
+function renderDelayTop(atrasadas){
+  elDelayListTop.innerHTML = "";
+  if(!atrasadas.length){
+    elDelayListTop.innerHTML = `<div class="delay-item"><span class="delay-op">Nenhuma operação atrasada registrada</span></div>`;
+    return;
+  }
+
+  const mapOps = new Map();
+  for(const ev of atrasadas){
+    const key = ev.idOperacaoRecebivel;
+    if(!key) continue;
+    const cur = mapOps.get(key);
+    if(!cur || ev.atrasoSeg > cur.atrasoSeg) mapOps.set(key, ev);
+  }
+
+  const ordenadas = Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg).slice(0,4);
+  const maxAtraso = ordenadas[0]?.atrasoSeg || 1;
+
+  ordenadas.forEach((ev, idx)=>{
+    const pct = Math.max(18, (ev.atrasoSeg / maxAtraso) * 100);
+    const row = document.createElement("div");
+    row.className = "delay-item";
+    row.innerHTML = `
+      <div class="delay-header">
+        <span class="delay-op">Operação ${ev.idOperacaoRecebivel}</span>
+        <span class="delay-rank">#${idx+1}</span>
+      </div>
+      <div class="delay-meter">
+        <div class="delay-bar-outer">
+          <div class="delay-bar-inner" style="width:${pct.toFixed(1)}%"></div>
+        </div>
+        <span class="delay-time">${ev.atrasoStr}</span>
+      </div>
+      <div class="delay-status">Assinatura Pendente</div>
+    `;
+    elDelayListTop.appendChild(row);
+  });
+}
+
+function renderTabela(eventos){
+  elTable.innerHTML = "";
+  if(!eventos.length){
+    elTable.innerHTML = `<div class="row"><span class="pill">—</span><div><div style="font-weight:800">Nenhuma assinatura pendente</div><div class="small">Aguardando eventos</div></div><span class="badge ok">OK</span><div style="text-align:right;font-weight:800">00:00:00</div></div>`;
+    return;
+  }
+
+  // Ordena por maior atraso e limita a 30 no painel
+  eventos
+    .slice()
+    .sort((a,b)=>(b.atrasoSeg||0)-(a.atrasoSeg||0))
+    .slice(0, 30)
+    .forEach(ev=>{
+      const isLate = (ev.atrasoSeg||0) > 0;
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <span class="pill">${ev.horario || "--:--:--"}</span>
+        <div>
+          <div style="font-weight:800">${abreviarFundo(ev.nomeFundo||"", 28)}</div>
+          <div class="small">Operação ${ev.idOperacaoRecebivel} · CNPJ ${formatCnpj(ev.cnpjFundo)}</div>
+        </div>
+        <span class="badge ${isLate ? "danger" : "ok"}">${isLate ? "PENDENTE" : "OK"}</span>
+        <div style="text-align:right;font-variant-numeric:tabular-nums;font-weight:800">${ev.atrasoStr || "00:00:00"}</div>
+      `;
+      elTable.appendChild(row);
+    });
+}
+
+/** ================== FETCH ================== **/
 async function carregarEventosReais(){
   try{
-    const res = await fetch(API_URL, { cache:"no-store", mode:"cors" });
+    elPanelStatus.textContent = "Carregando…";
+
+    const res = await fetch(API_URL, {
+      cache:"no-store",
+      headers:{
+        "Ambiente": CFG.amb,
+        "Token": CFG.token
+      }
+    });
+
     if(!res.ok){
-      console.error("Falha ao buscar dados", res.status);
+      elPanelStatus.textContent = `Erro HTTP ${res.status}`;
+      console.error("Falha ao buscar dados", res.status, await res.text());
+      renderTabela([]);
       return;
     }
 
     const json = await res.json();
 
+    // aceita array ou {data: array}
     let eventos = [];
-    if (Array.isArray(json)) {
-      eventos = json;
-    } else if (json && Array.isArray(json.data)) {
-      eventos = json.data;
-    } else if (json && json.data) {
-      eventos = [json.data];
+    if (Array.isArray(json)) eventos = json;
+    else if (json && Array.isArray(json.data)) eventos = json.data;
+    else if (json && json.data) eventos = [json.data];
+
+    // calcula atrasoSeg/atrasoStr
+    const atrasadas = [];
+    const now = new Date();
+    const nowMs = now.getTime();
+    let eventosUltimaHora = 0;
+
+    for(const ev of eventos){
+      const atrasoRaw = (ev.hrAtraso || "00:00:00").toString().trim();
+      const [ah,am,as] = atrasoRaw.split(":");
+      const hh = Number(ah)||0, mm = Number(am)||0, ss = Number(as)||0;
+      const atrasoSeg = hh*3600 + mm*60 + ss;
+      const atrasoStr = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
+
+      ev.atrasoSeg = atrasoSeg;
+      ev.atrasoStr = atrasoStr;
+
+      if(atrasoSeg>0) atrasadas.push(ev);
+
+      const partes = (ev.horario || "00:00:00").split(":").map(Number);
+      const ts = new Date(now.getFullYear(), now.getMonth(), now.getDate(), partes[0]||0, partes[1]||0, partes[2]||0).getTime();
+      if(nowMs - ts <= 60*60*1000) eventosUltimaHora++;
     }
 
     const qtd = eventos.length;
@@ -1030,143 +608,40 @@ async function carregarEventosReais(){
     animateCount(elTotal, atual, qtd);
     elSub.textContent = qtd === 1 ? "1 assinatura exibida" : `${qtd.toLocaleString("pt-BR")} assinaturas exibidas`;
 
-    elTicker.innerHTML = "";
-    if (elDelayListTop) elDelayListTop.innerHTML = "";
-
-    const now = new Date();
-    const nowMs = now.getTime();
-    let eventosUltimaHora = 0;
-
-    const atrasadas = [];
-
-    eventos.forEach(ev=>{
-      const atrasoRaw = (ev.hrAtraso || "00:00:00").toString().trim();
-      const partesAtraso = atrasoRaw.split(":");
-      const ah = parseInt(partesAtraso[0] || "0", 10);
-      const am = parseInt(partesAtraso[1] || "0", 10);
-      const as = parseInt(partesAtraso[2] || "0", 10);
-      const hh = isNaN(ah) ? 0 : ah;
-      const mm = isNaN(am) ? 0 : am;
-      const ss = isNaN(as) ? 0 : as;
-      const atrasoSeg = hh*3600 + mm*60 + ss;
-      const atrasoStr = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
-
-      if(atrasoSeg > 0){
-        const keyHist = `${ev.idOperacaoRecebivel || ""}-${ev.cnpjFundo || ""}`;
-        const idx = historicoEventos.findIndex(h => h.key === keyHist);
-        if(idx === -1){
-          historicoEventos.push({
-            key: keyHist,
-            nomeFundo: ev.nomeFundo || "Fundo não identificado",
-            cnpjFundo: ev.cnpjFundo || "",
-            atrasoSeg: atrasoSeg,
-            registradoEm: Date.now()
-          });
-        } else {
-          historicoEventos[idx].atrasoSeg = atrasoSeg;
-          historicoEventos[idx].registradoEm = Date.now();
-        }
-
-        atrasadas.push({
-          ...ev,
-          atrasoStr,
-          atrasoSeg
-        });
-      }
-
-      const div = document.createElement("div");
-      div.className = "tick";
-      div.innerHTML = `
-        <span class="pill">${ev.horario}</span>
-        <span title="${ev.nomeFundo || ""}"><strong>${abreviarFundo(ev.nomeFundo || "", 20)}</strong></span>
-        <span style="opacity:.9">Operação: ${ev.idOperacaoRecebivel} · CNPJ ${formatCnpj(ev.cnpjFundo)} · Atraso ${atrasoStr}</span>
-      `;
-      elTicker.appendChild(div);
-
-      const partes = (ev.horario || "00:00:00").split(":").map(Number);
-      const hhEv = partes[0] || 0;
-      const mmEv = partes[1] || 0;
-      const ssEv = partes[2] || 0;
-      const ts = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hhEv, mmEv, ssEv).getTime();
-      if(nowMs - ts <= 60*60*1000) eventosUltimaHora++;
-    });
+    elFooterRateText.textContent =
+      eventosUltimaHora === 0 ? "Nenhum evento na última hora" : `${eventosUltimaHora} evento${eventosUltimaHora !== 1 ? "s" : ""} na última hora`;
+    elFooterRateSecondary.textContent = "Painel atualizado em tempo real";
+    elPanelStatus.textContent = `OK · ${new Date().toLocaleTimeString("pt-BR")}`;
 
     updateGauge(eventosUltimaHora);
-    atualizarFooter(eventosUltimaHora, atrasadas);
+    renderDelayTop(atrasadas);
+    renderTabela(eventos);
 
-    if (atrasadas.length > 0 && elDelayListTop){
-      const mapOps = new Map();
-
-      atrasadas.forEach(ev => {
-        const key = ev.idOperacaoRecebivel;
-        if (!key) return;
-        const existente = mapOps.get(key);
-        if (!existente || ev.atrasoSeg > existente.atrasoSeg) {
-          mapOps.set(key, ev);
-        }
-      });
-
-      const ordenadas = Array.from(mapOps.values())
-        .sort((a,b)=>b.atrasoSeg - a.atrasoSeg);
-
-      const topOps = ordenadas.slice(0, 4);
-      const maxAtraso = topOps[0].atrasoSeg || 1;
-
-      topOps.forEach((ev, idx)=>{
-        const row = document.createElement("div");
-        row.className = "delay-item";
-
-        const pct = Math.max(18, (ev.atrasoSeg / maxAtraso) * 100);
-
-        row.innerHTML = `
-          <div class="delay-header">
-            <span class="delay-op">Operação ${ev.idOperacaoRecebivel}</span>
-            <span class="delay-rank">#${idx+1}</span>
-          </div>
-          <div class="delay-meter">
-            <div class="delay-bar-outer">
-              <div class="delay-bar-inner" style="width:${pct.toFixed(1)}%"></div>
-            </div>
-            <span class="delay-time">${ev.atrasoStr}</span>
-          </div>
-          <div class="delay-status">Assinatura Pendente</div>
-        `;
-        elDelayListTop.appendChild(row);
-      });
-    }
-
-    limparHistoricoAntigo();
-    salvarHistorico();
-    construirRanking7Dias();
-
-    if(qtd > 0){
-      const last = eventos[eventos.length - 1];
-      const atrasoLastRaw = (last.hrAtraso || "00:00:00").toString().trim();
-      const partesLast = atrasoLastRaw.split(":");
-      const ahL = parseInt(partesLast[0] || "0", 10);
-      const amL = parseInt(partesLast[1] || "0", 10);
-      const asL = parseInt(partesLast[2] || "0", 10);
-      const atrasoLast = `${pad2(isNaN(ahL)?0:ahL)}:${pad2(isNaN(amL)?0:amL)}:${pad2(isNaN(asL)?0:asL)}`;
-
-      showToast(`
-        <div style="display:grid;gap:4px">
-          <div><strong>${last.nomeFundo}</strong></div>
-          <div>Operação ${last.idOperacaoRecebivel}</div>
-          <div style="opacity:.9">CNPJ ${formatCnpj(last.cnpjFundo)}</div>
-          <div style="opacity:.8">Atraso: ${atrasoLast}</div>
-          <div style="opacity:.7">Atualizado às ${last.horario}</div>
-        </div>
-      `);
-      if (document.hasFocus() && soundOn){
-        try{
-          audioDing.currentTime = 0;
-          audioDing.play().catch(()=>{});
-        }catch{}
+    // Histórico 7d (para ranking fundos)
+    historicoEventos = limparHistoricoAntigo(historicoEventos);
+    for(const ev of atrasadas){
+      const keyHist = `${ev.idOperacaoRecebivel || ""}-${ev.cnpjFundo || ""}`;
+      const idx = historicoEventos.findIndex(h => h.key === keyHist);
+      if(idx === -1){
+        historicoEventos.push({
+          key: keyHist,
+          nomeFundo: ev.nomeFundo || "Fundo não identificado",
+          cnpjFundo: ev.cnpjFundo || "",
+          atrasoSeg: ev.atrasoSeg || 0,
+          registradoEm: Date.now()
+        });
+      } else {
+        historicoEventos[idx].atrasoSeg = ev.atrasoSeg || 0;
+        historicoEventos[idx].registradoEm = Date.now();
       }
     }
+    salvarHistorico(historicoEventos);
+    construirRanking7Dias();
 
   } catch(e){
+    elPanelStatus.textContent = "Erro (ver console)";
     console.error("Erro ao carregar eventos", e);
+    renderTabela([]);
   }
 }
 
