@@ -104,22 +104,24 @@
   .kpi .sub{color:var(--muted);font-size:.8rem;margin-top:6px}
   .kpi .right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 
-  /* ===== Maiores atrasos: TOP 1 e 2 fixos + rolagem automática do resto ===== */
+  /* ===== Maiores atrasos: preencher área vazia + scroll lento ===== */
   .delay-list{
     position:relative;
     min-height:0;
-    height:210px;            /* altura do bloco todo (TV) */
-    overflow:hidden;         /* sem scrollbar */
+    height:260px;                 /* um pouco mais alto pra TV */
+    overflow:hidden;              /* sem scrollbar */
     display:flex;
     flex-direction:column;
     gap:10px;
   }
 
   .delay-pinned{display:flex;flex-direction:column;gap:8px}
+
+  /* o resto ocupa TUDO que sobrar, e o conteúdo vai “preencher” porque duplicamos até passar da altura */
   .delay-scroll{
     min-height:0;
     flex:1;
-    overflow:hidden;         /* sem scrollbar */
+    overflow:hidden;
   }
 
   .delay-track{
@@ -154,15 +156,13 @@
   .bar{height:7px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
   .bar > i{display:block;height:100%;background:linear-gradient(90deg, rgba(255,92,122,.95), rgba(255,170,170,.95));width:30%}
 
-  /* rolagem automática só no wrap do "resto" */
   .delay-scroll.auto .delay-track{
-    animation: delayScroll var(--delayDur, 18s) linear infinite;
+    animation: delayScroll var(--delayDur, 30s) linear infinite; /* default lento */
   }
   @keyframes delayScroll{
     0%   { transform: translateY(0); }
     100% { transform: translateY(calc(-1 * var(--delayShift, 0px))); }
   }
-  .delay-scroll.auto:active .delay-track{ animation-play-state:paused; }
   @media (prefers-reduced-motion: reduce){
     .delay-scroll.auto .delay-track{ animation:none; }
   }
@@ -295,7 +295,6 @@
       <div>
         <div class="card-title" style="margin-bottom:8px;opacity:.9">Maiores atrasos</div>
 
-        <!-- TOP 1 e TOP 2 fixos + rolagem automática do resto -->
         <div class="delay-list">
           <div class="delay-pinned" id="delayPinned"></div>
           <div class="delay-scroll" id="delayScrollWrap">
@@ -544,9 +543,9 @@ function construirRanking7Dias(){
   atualizarGraficoFundos(ranking);
 }
 
-/* ===== AQUI: TOP 1 e 2 fixos + rolagem devagar do resto (vai até o fim) ===== */
+/* ===== FIX: preencher o vazio embaixo + scroll mais devagar ===== */
 function renderDelayTop(atrasadas){
-  // RESET total (pra não herdar animação)
+  // RESET
   elDelayPinned.innerHTML = "";
   elDelayListTop.innerHTML = "";
   elDelayScrollWrap.classList.remove("auto");
@@ -558,7 +557,7 @@ function renderDelayTop(atrasadas){
     return;
   }
 
-  // dedup por operação (pega maior atraso por ID)
+  // dedup por operação (maior atraso por ID)
   const mapOps = new Map();
   for(const ev of atrasadas){
     const key = ev.idOperacaoRecebivel;
@@ -569,8 +568,8 @@ function renderDelayTop(atrasadas){
 
   const ordenadas = Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg);
 
-  // mantém mais itens pra rolar até “lá embaixo”
-  const maxMostrar = 14; // ajuste se quiser
+  // mais itens pra “encher” + rolar
+  const maxMostrar = 18;
   const items = ordenadas.slice(0, maxMostrar);
   const maxAtraso = items[0]?.atrasoSeg || 1;
 
@@ -600,23 +599,45 @@ function renderDelayTop(atrasadas){
   if(top1) elDelayPinned.appendChild(renderItem(top1, "p1"));
   if(top2) elDelayPinned.appendChild(renderItem(top2, "p2"));
 
-  // resto (a partir do 3)
-  const rest = items.slice(2);
+  // RESTO
+  let rest = items.slice(2);
   rest.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
 
-  // se não tem o suficiente pra rolar, fica estático
-  if(rest.length <= 3){
+  // Se não tem resto suficiente, acabou.
+  if(rest.length === 0) return;
+
+  // ===== preencher área vazia =====
+  // duplicar o RESTO até o track ficar MAIOR que a altura visível,
+  // assim nunca aparece “buraco preto”.
+  const viewH = elDelayScrollWrap.clientHeight;
+  let safety = 0;
+
+  while (elDelayListTop.scrollHeight < viewH * 1.25 && rest.length > 0 && safety < 8) {
+    rest.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
+    safety++;
+  }
+
+  // Se mesmo assim não ficou grande o suficiente, não anima (fica “cheio” e estático)
+  const baseHeight = elDelayListTop.scrollHeight;
+  if(baseHeight <= viewH * 1.05){
     return;
   }
 
-  // mede altura do RESTO, duplica e anima contínuo (vai até o final)
-  const baseHeight = elDelayListTop.scrollHeight;
+  // ===== scroll contínuo até o fim =====
+  // pega altura de UM bloco base (antes do último append pra loop perfeito):
+  // aqui vamos considerar metade do conteúdo (primeira metade) como "base"
+  // Então garantimos que o track tem pelo menos 2 bases.
+  // Se não tiver, duplica mais uma vez.
+  const before = baseHeight;
   rest.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
+  const after = elDelayListTop.scrollHeight;
 
-  // scroll mais devagar: ~18px/s (bem mais lento)
-  const pxPerSecond = 18;
-  const shift = baseHeight;           // 1 ciclo = altura original do RESTO
-  const dur = Math.max(18, Math.min(60, shift / pxPerSecond));
+  // shift = altura antes de duplicar (um ciclo)
+  const shift = before;
+
+  // MAIS DEVAGAR: ~10px/s (bem lento)
+  const pxPerSecond = 10;
+  const dur = Math.max(30, Math.min(120, shift / pxPerSecond));
 
   elDelayScrollWrap.classList.add("auto");
   elDelayScrollWrap.style.setProperty("--delayShift", `${shift}px`);
