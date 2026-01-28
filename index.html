@@ -1,318 +1,481 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ZiSign TV</title>
-
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ZiSign</title>
+<link rel="icon" type="image/png" href="img/ZiSignPNG.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet"/>
-
 <style>
 :root{
-  --bg0:#05070b; --bg1:#070c12;
-  --card:rgba(255,255,255,.06);
-  --border:rgba(255,255,255,.10);
-  --muted:rgba(255,255,255,.65);
-  --text:rgba(255,255,255,.92);
-  --accent:#00f0c0; --danger:#ff5c7a;
-  --shadow:0 22px 70px rgba(0,0,0,.55);
+  --bg0:#05070b;--bg1:#070c12;--card:rgba(255,255,255,.06);--card2:rgba(255,255,255,.04);
+  --border:rgba(255,255,255,.10);--muted:rgba(255,255,255,.65);--text:rgba(255,255,255,.92);
+  --accent:#00f0c0;--danger:#ff5c7a;--shadow:0 22px 70px rgba(0,0,0,.55);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
+*{box-sizing:border-box;margin:0;padding:0} html,body{height:100%}
+
+/* ✅ TV: mais legível */
+html{font-size:clamp(16px,1.05vw,22px)}
+
 body{
-  font-family:'Montserrat',system-ui;
-  background:linear-gradient(180deg,var(--bg0),var(--bg1));
-  color:var(--text);
+  font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  background:
+    radial-gradient(900px 600px at 10% 20%, rgba(0,240,192,.10) 0%, transparent 60%),
+    radial-gradient(900px 600px at 90% 10%, rgba(0,160,255,.10) 0%, transparent 60%),
+    linear-gradient(180deg,var(--bg0),var(--bg1));
+  color:var(--text);overflow:hidden; /* ✅ TV: evita scroll do body */
 }
-
-/* GRID */
-.wrap{height:100vh;max-width:2560px;margin:auto;padding:12px;display:grid;gap:12px}
-header{display:flex;justify-content:space-between;align-items:center}
-
-/* DASH */
+.wrap{min-height:100vh;max-width:2560px;margin:0 auto;padding:clamp(12px,1.2vw,18px);display:grid;gap:clamp(12px,1vw,14px)}
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 12px}
+.brand{display:flex;align-items:center;gap:12px;opacity:.95}
+.brand img{height:clamp(60px,8vh,110px);width:auto;filter:drop-shadow(0 10px 30px rgba(0,0,0,.45))}
+.clock{font-weight:800;letter-spacing:.18em;font-size:.9rem;color:rgba(255,255,255,.88);
+  padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(10px)}
 .dash{
-  display:grid;
-  gap:12px;
-  grid-template-columns:360px 1fr 1fr;
-  grid-template-rows:320px 360px;
+  display:grid;gap:clamp(12px,1vw,14px);min-height:0;
+  grid-template-columns: 420px 1fr 1fr;  /* ✅ mais largo pra leitura */
+  grid-template-rows: 360px 420px;      /* ✅ mais alto */
   grid-template-areas:
     "side donut bars"
-    "side area ticker";
+    "side area  ticker";
 }
-
-/* CARD */
 .card{
-  border-radius:22px;
-  background:var(--card);
-  border:1px solid var(--border);
-  box-shadow:var(--shadow);
-  backdrop-filter:blur(12px);
-  padding:14px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  min-height:0;
+  min-height:0;border-radius:22px;background:linear-gradient(180deg,var(--card),var(--card2));
+  border:1px solid var(--border);box-shadow:var(--shadow);backdrop-filter:blur(14px);
+  padding:clamp(14px,1vw,18px);display:flex;flex-direction:column;gap:14px;
 }
-
-/* TITLES */
-.title{font-weight:900;font-size:.8rem;text-transform:uppercase;color:rgba(255,255,255,.75)}
-.pill{padding:6px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.10);font-weight:900;font-size:.75rem}
-
-/* LEFT */
+.title{font-weight:900;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.78)}
+.pill{font-size:.82rem;font-weight:900;padding:9px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);color:rgba(255,255,255,.82);white-space:nowrap}
+.pill.ok{border-color:rgba(0,240,192,.25);color:var(--accent);background:rgba(0,240,192,.08)}
+.pill.bad{border-color:rgba(255,92,122,.25);color:var(--danger);background:rgba(255,92,122,.08)}
 .side{grid-area:side}
-.kpiBox{border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:12px;background:rgba(0,0,0,.2)}
-.kpiVal{font-size:2rem;font-weight:900}
 
-/* ATRASOS */
-.delayWrap{flex:1;display:flex;flex-direction:column;gap:10px;min-height:0}
-.delay-list{height:260px;overflow:hidden;display:flex;flex-direction:column}
-.delay-pinned{display:flex;flex-direction:column;gap:8px}
-.delay-scroll{flex:1;overflow:hidden}
-.delay-track{display:flex;flex-direction:column;gap:8px;will-change:transform}
-.delay-item{padding:10px;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.2)}
-.delay-time{color:var(--muted);font-weight:900;font-size:.85rem}
-.bar{height:6px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
-.bar>i{display:block;height:100%;background:linear-gradient(90deg,#ff5c7a,#ff9aa9)}
+/* ✅ KPI maiores */
+.kpiBox{border-radius:20px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.14);padding:16px 16px}
+.kpiLabel{font-weight:900;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.70)}
+.kpiVal{font-weight:900;font-size:2.7rem;letter-spacing:-.02em;margin-top:8px}
+.kpiSub{color:var(--muted);font-weight:800;font-size:.92rem;margin-top:8px}
+.sep{height:1px;background:rgba(255,255,255,.08);margin:4px 0}
 
-/* CHARTS */
-.chartArea{flex:1;border-radius:16px;border:1px solid rgba(255,255,255,.1);padding:10px;background:rgba(0,0,0,.2)}
+/* ✅ Atrasos mais legível (2 fixos + resto rolando) */
+.delayWrap{min-height:0;flex:1;display:flex;flex-direction:column;gap:12px}
+.delay-list{min-height:0;height:340px;overflow:hidden;display:flex;flex-direction:column;gap:12px}
+.delay-pinned{display:flex;flex-direction:column;gap:10px}
+.delay-scroll{min-height:0;flex:1;overflow:hidden}
+.delay-track{will-change:transform;transform:translate3d(0,0,0);display:flex;flex-direction:column;gap:10px}
+.delay-item{padding:14px 14px;border-radius:18px;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.16);display:flex;flex-direction:column;gap:8px}
+.delay-item.p1{border-color:rgba(0,240,192,.22);background:rgba(0,240,192,.06)}
+.delay-item.p2{border-color:rgba(0,184,255,.18);background:rgba(0,184,255,.05)}
+.delay-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.delay-op{font-weight:900;font-size:1.05rem;line-height:1.1;opacity:.95}
+.delay-time{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:900;white-space:nowrap}
+.delay-fundo{
+  margin-top:8px;font-weight:750;font-size:.95rem;color:rgba(255,255,255,.78);
+  white-space:normal;line-height:1.25;max-width:none; /* ✅ 2+ linhas, melhor pra TV */
+}
+.delay-cnpj{color:rgba(255,255,255,.55);font-weight:850}
+.bar{height:8px;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg, rgba(255,92,122,.95), rgba(255,170,170,.95));width:30%}
 
-/* PENDÊNCIAS */
-.ticker{grid-area:ticker;display:flex;flex-direction:column;min-height:0;padding:0}
-.tickerHead{padding:12px;border-bottom:1px solid rgba(255,255,255,.1)}
+.chartCard{padding:14px 14px}
+.chartHead{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.chartArea{flex:1;min-height:0;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.12);padding:12px}
+.chartArea canvas{width:100%!important;height:100%!important}
+.donut{grid-area:donut}
+.bars{grid-area:bars}
+.area{grid-area:area}
+
+/* ✅ ticker: flex + min-height 0 => scroll real */
+.ticker{grid-area:ticker;padding:0;display:flex;flex-direction:column;min-height:0}
+.tickerHead{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
 .table{
   flex:1;
   min-height:0;
   overflow:auto;
-  padding:12px;
+  padding:14px 16px;
   display:grid;
-  gap:10px;
+  gap:12px;
+  max-height:100%;
+  scrollbar-width:none;       /* ✅ hide scrollbar */
+  -ms-overflow-style:none;
 }
+.table::-webkit-scrollbar{width:0;height:0}
 
-/* ROW */
+/* ✅ row maior e mais claro */
 .row{
   display:grid;
-  grid-template-columns:90px 1fr 120px 120px;
-  gap:10px;
+  grid-template-columns:120px 1fr 160px 140px;
+  gap:14px;
   align-items:center;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.1);
-  background:rgba(0,0,0,.25)
+  padding:16px 16px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(0,0,0,.14)
 }
-.time{font-weight:900}
-.tag{padding:6px 12px;border-radius:99px;font-weight:900;font-size:.75rem}
-.tag.bad{color:#ff5c7a;border:1px solid #ff5c7a}
-.tag.ok{color:#00f0c0;border:1px solid #00f0c0}
+.time{font-variant-numeric:tabular-nums;font-weight:900;color:rgba(255,255,255,.90);font-size:1.05rem}
+.main{display:flex;flex-direction:column;gap:6px;min-width:0}
+.main b{font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.main span{font-size:.92rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{justify-self:start;font-size:.9rem;font-weight:900;padding:10px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04)}
+.tag.ok{border-color:rgba(0,240,192,.25);color:var(--accent);background:rgba(0,240,192,.08)}
+.tag.bad{border-color:rgba(255,92,122,.25);color:var(--danger);background:rgba(255,92,122,.08)}
+.late{justify-self:end;font-variant-numeric:tabular-nums;font-weight:900;color:rgba(255,255,255,.92);font-size:1.05rem}
+
+footer{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;color:rgba(255,255,255,.55);font-size:.8rem}
+
+@media (max-width:1500px){
+  body{overflow:auto}
+  .dash{grid-template-columns:1fr;grid-template-rows:auto;grid-template-areas:"side" "donut" "bars" "area" "ticker";}
+  .row{grid-template-columns:120px 1fr} .row>:nth-child(3),.row>:nth-child(4){justify-self:start}
+  footer{flex-direction:column;align-items:flex-start;gap:6px}
+}
 </style>
 </head>
-
 <body>
 <div class="wrap">
+  <header>
+    <div class="brand"><img src="img/ZiSignPNG.png" alt="ZiSign"/></div>
+    <div class="clock" id="clock">--:--:--</div>
+  </header>
 
-<header>
-  <strong>ZiSign</strong>
-  <div id="clock" class="pill">--:--:--</div>
-</header>
+  <section class="dash">
+    <article class="card side">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+        <div class="title">Visão geral</div>
+        <span class="pill" id="panelStatus">Atualizado</span>
+      </div>
 
-<section class="dash">
+      <div class="kpiBox">
+        <div class="kpiLabel">Total pendências</div>
+        <div class="kpiVal" id="totalCount">0</div>
+        <div class="kpiSub" id="subCount">—</div>
+      </div>
 
-<!-- LEFT -->
-<article class="card side">
-  <div class="title">Visão geral</div>
+      <div class="kpiBox">
+        <div class="kpiLabel">Ritmo (última hora)</div>
+        <div class="kpiVal" id="rateNum">0</div>
+        <div class="kpiSub" id="rateTextMain">—</div>
+      </div>
 
-  <div class="kpiBox">
-    <div>Total Pendências</div>
-    <div class="kpiVal" id="totalCount">0</div>
-  </div>
+      <div class="sep"></div>
 
-  <div class="kpiBox">
-    <div>Ritmo (hora)</div>
-    <div class="kpiVal" id="rateNum">0</div>
-  </div>
+      <div class="delayWrap">
+        <div class="title" style="opacity:.9">Maiores atrasos</div>
+        <div class="delay-list">
+          <div class="delay-pinned" id="delayPinned"></div>
+          <div class="delay-scroll" id="delayScrollWrap"><div class="delay-track" id="delayListTop"></div></div>
+        </div>
+      </div>
+    </article>
 
-  <div class="delayWrap">
-    <div class="title">Maiores atrasos</div>
-    <div class="delay-list">
-      <div class="delay-pinned" id="delayPinned"></div>
-      <div class="delay-scroll"><div class="delay-track" id="delayListTop"></div></div>
-    </div>
-  </div>
-</article>
+    <article class="card chartCard donut">
+      <div class="chartHead">
+        <div class="title">Pendências por status</div>
+        <span class="pill ok" id="donutPill">—</span>
+      </div>
+      <div class="chartArea"><canvas id="chartDonut"></canvas></div>
+      <div style="display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-weight:850;font-size:.9rem">
+        <span id="donutLegendA">—</span><span id="donutLegendB">—</span>
+      </div>
+    </article>
 
-<!-- DONUT -->
-<article class="card donut">
-  <div class="title">Pendências por status</div>
-  <div class="chartArea"><canvas id="chartDonut"></canvas></div>
-</article>
+    <article class="card chartCard bars">
+      <div class="chartHead">
+        <div class="title">Eventos por hora (hoje)</div>
+        <span class="pill" id="barsPill">—</span>
+      </div>
+      <div class="chartArea"><canvas id="chartBars"></canvas></div>
+      <div style="color:var(--muted);font-weight:850;font-size:.9rem" id="footerRateSecondary">—</div>
+    </article>
 
-<!-- BARS -->
-<article class="card bars">
-  <div class="title">Eventos por hora</div>
-  <div class="chartArea"><canvas id="chartBars"></canvas></div>
-</article>
+    <article class="card chartCard area">
+      <div class="chartHead">
+        <div class="title">Atraso (Top 8 operações)</div>
+        <span class="pill bad" id="areaPill">—</span>
+      </div>
+      <div class="chartArea"><canvas id="chartArea"></canvas></div>
+    </article>
 
-<!-- AREA -->
-<article class="card area">
-  <div class="title">Atraso Top 8</div>
-  <div class="chartArea"><canvas id="chartArea"></canvas></div>
-</article>
+    <section class="card ticker" aria-live="polite">
+      <div class="tickerHead">
+        <div class="title">Pendências</div>
+        <div class="pill" id="footerRateText">—</div>
+      </div>
+      <div class="table" id="tickerTable"></div>
+    </section>
+  </section>
 
-<!-- TICKER -->
-<section class="card ticker">
-  <div class="tickerHead">
-    <div class="title">Pendências</div>
-  </div>
-  <div class="table" id="tickerTable"></div>
-</section>
-
-</section>
+  <footer>
+    <div>Atualização automática</div>
+    <div style="white-space:nowrap;">contato@zisign.ai — © 2025 ZiSign</div>
+  </footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const API_URL = "https://custodiabackend-prod.idsf.com.br/api/ZiSign/TV?cnpjCertificadora=54638076000176";
+const CFG={cnpj:"54638076000176",base:"https://custodiabackend-prod.idsf.com.br",amb:"custodia",
+token:"DHQzckJ0TGWHiFxaVuUlmrBLWXwuejrtSAT0Mf47gvclZ5GKY543iYKNeLfqlzngXH0YcKGLe4qyv0avru3xeVGBp9yUQKKKlSyJ"};
+(()=>{const q=new URLSearchParams(location.search);for(const k of ["base","cnpj","amb","token"]){const v=q.get(k);if(v)CFG[k]=v;}})();
+const API_URL=`${CFG.base}/api/ZiSign/TV?cnpjCertificadora=${encodeURIComponent(CFG.cnpj)}`;
 
 const elClock=document.getElementById("clock");
 const elTotal=document.getElementById("totalCount");
-const elRate=document.getElementById("rateNum");
-
+const elSub=document.getElementById("subCount");
+const elTable=document.getElementById("tickerTable");
+const elPanelStatus=document.getElementById("panelStatus");
+const elRateTextMain=document.getElementById("rateTextMain");
+const elRateNum=document.getElementById("rateNum");
 const delayPinned=document.getElementById("delayPinned");
 const delayListTop=document.getElementById("delayListTop");
-const elTable=document.getElementById("tickerTable");
+const delayScrollWrap=document.getElementById("delayScrollWrap");
+const elFooterRateText=document.getElementById("footerRateText");
+const elFooterRateSecondary=document.getElementById("footerRateSecondary");
+const elDonutPill=document.getElementById("donutPill");
+const elBarsPill=document.getElementById("barsPill");
+const elAreaPill=document.getElementById("areaPill");
+const elDonutLegendA=document.getElementById("donutLegendA");
+const elDonutLegendB=document.getElementById("donutLegendB");
 
-const pad=n=>n<10?"0"+n:n;
-setInterval(()=>{
-  const d=new Date();
-  elClock.textContent=`${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-},1000);
+const pad2=n=>n<10?("0"+n):(""+n);
+const formatCnpj=cnpj=>{const d=(cnpj||"").toString().replace(/\D/g,"");return d.length===14?d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,"$1.$2.$3/$4-$5"):(cnpj||"");};
+const abreviar=(s,max)=>{s=(s||"").trim();return s.length<=max?s:(s.slice(0,max-1)+"…");};
+const animateCount=(el,from,to,d=280)=>{const st=performance.now();const step=t=>{const p=Math.min(1,(t-st)/d);el.textContent=Math.round(from+(to-from)*p).toLocaleString("pt-BR");if(p<1)requestAnimationFrame(step);};requestAnimationFrame(step);};
 
-/* ===== SCROLL PENDÊNCIAS (TV SAFE) ===== */
-let tickerRAF=null;
-function startTickerScroll(){
-  cancelAnimationFrame(tickerRAF);
-  let dir=1,last=0;
+setInterval(()=>{const d=new Date();elClock.textContent=`${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;},1000);
 
-  function step(t){
+/* ✅ Pendências: scroll automático INFINITO (sem vai-e-volta) */
+let tickerRAF=0;
+function startTickerInfiniteScroll(){
+  if(tickerRAF) cancelAnimationFrame(tickerRAF);
+  let last=0;
+  const speed=18; // px/s (TV-safe)
+  const step=(t)=>{
     if(!last) last=t;
     const dt=(t-last)/1000; last=t;
 
-    const max = elTable.scrollHeight - elTable.clientHeight;
-    if(max > 4){
-      elTable.scrollTop += dir * 14 * dt;
-      if(elTable.scrollTop >= max){ dir=-1; }
-      if(elTable.scrollTop <= 0){ dir=1; }
+    const max=Math.max(0, elTable.scrollHeight - elTable.clientHeight);
+    if(max>4){
+      elTable.scrollTop += speed*dt;
+      if(elTable.scrollTop >= max) elTable.scrollTop = 0; // loop
     }
     tickerRAF=requestAnimationFrame(step);
-  }
+  };
   tickerRAF=requestAnimationFrame(step);
 }
+function applyTickerAutoScroll(){
+  // espera layout calcular alturas (TV/browser lento)
+  requestAnimationFrame(()=>requestAnimationFrame(()=>startTickerInfiniteScroll()));
+}
 
-/* ===== SCROLL ATRASOS (TOP 2 FIXO) ===== */
-let delayY=0, delayRAF=0, delayShift=0;
+/* ===== charts ===== */
+let donut=null,bars=null,area=null;
+const ensureChart=(ctx,prev,cfg)=>{if(prev)prev.destroy();return new Chart(ctx,cfg);};
 
+function buildDonut(total,pend){
+  const ok=Math.max(0,total-pend);
+  elDonutPill.textContent=`${pend} pendente`;
+  elDonutLegendA.textContent=`Pendente: ${pend}`;
+  elDonutLegendB.textContent=`OK: ${ok}`;
+  const ctx=document.getElementById("chartDonut").getContext("2d");
+  donut=ensureChart(ctx,donut,{type:"doughnut",
+    data:{labels:["Pendente","OK"],datasets:[{data:[pend,ok],borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:"72%",plugins:{legend:{display:false}},animation:false}});
+}
+function buildBars(eventos){
+  const h=new Date().getHours();
+  const labels=[],data=[];
+  for(let i=Math.max(0,h-7);i<=h;i++){labels.push(`${pad2(i)}h`);data.push(0);}
+  for(const ev of eventos){
+    const hh=(ev.horario||"00:00:00").split(":").map(Number)[0]||0;
+    const idx=labels.indexOf(`${pad2(hh)}h`); if(idx>=0) data[idx]+=1;
+  }
+  const sum=data.reduce((a,b)=>a+b,0);
+  elBarsPill.textContent=`${sum} no período`;
+  const ctx=document.getElementById("chartBars").getContext("2d");
+  bars=ensureChart(ctx,bars,{type:"bar",
+    data:{labels,datasets:[{data,borderRadius:14}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},animation:false,
+      scales:{x:{grid:{display:false},ticks:{color:"rgba(255,255,255,.65)",font:{size:12}}},
+              y:{beginAtZero:true,grid:{color:"rgba(255,255,255,.06)"},ticks:{color:"rgba(255,255,255,.65)",font:{size:12}}}}}});
+}
+function buildArea(atrasadas){
+  const top=atrasadas.slice().sort((a,b)=>b.atrasoSeg-a.atrasoSeg).slice(0,8);
+  elAreaPill.textContent=top.length?`máx ${top[0].atrasoStr}`:"sem atrasos";
+  const labels=top.map(e=>`#${e.idOperacaoRecebivel}`), data=top.map(e=>Number((e.atrasoSeg/60).toFixed(1)));
+  const ctx=document.getElementById("chartArea").getContext("2d");
+  area=ensureChart(ctx,area,{type:"line",
+    data:{labels,datasets:[{data,tension:.35,fill:true,pointRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},animation:false,
+      scales:{x:{grid:{display:false},ticks:{color:"rgba(255,255,255,.65)",font:{size:12}}},
+              y:{beginAtZero:true,grid:{color:"rgba(255,255,255,.06)"},ticks:{color:"rgba(255,255,255,.65)",font:{size:12}}}}}});
+}
+
+/* ===== ATRASOS: TOP 2 FIXO + RESTO LOOP CONTÍNUO ===== */
+let delayAnim={raf:0,y:0,shift:0,last:0,pxps:1.15}; // mais devagar ainda
+function stopDelayAnim(){
+  if(delayAnim.raf) cancelAnimationFrame(delayAnim.raf);
+  delayAnim={raf:0,y:0,shift:0,last:0,pxps:delayAnim.pxps||1.15};
+  delayListTop.style.transform="translate3d(0,0,0)";
+}
+function startDelayAnim(){
+  stopDelayAnim();
+  const step=(t)=>{
+    if(!delayAnim.last) delayAnim.last=t;
+    const dt=(t-delayAnim.last)/1000; delayAnim.last=t;
+    delayAnim.y += delayAnim.pxps*dt;
+    if(delayAnim.y>=delayAnim.shift) delayAnim.y=0;
+    delayListTop.style.transform=`translate3d(0,${-delayAnim.y}px,0)`;
+    delayAnim.raf=requestAnimationFrame(step);
+  };
+  delayAnim.raf=requestAnimationFrame(step);
+}
 function renderDelayTop(atrasadas){
-  cancelAnimationFrame(delayRAF);
-  delayPinned.innerHTML="";
-  delayListTop.innerHTML="";
-  delayY=0;
-
+  stopDelayAnim();
+  delayPinned.innerHTML=""; delayListTop.innerHTML="";
   if(!atrasadas.length){
-    delayPinned.innerHTML="<div>Sem atrasos</div>";
+    delayPinned.innerHTML=`<div style="color:rgba(255,255,255,.55);font-weight:900">Sem atrasos</div>`;
     return;
   }
 
-  const map=new Map();
-  atrasadas.forEach(ev=>{
-    const k=ev.idOperacaoRecebivel;
-    if(!map.has(k) || ev.atrasoSeg>map.get(k).atrasoSeg) map.set(k,ev);
-  });
-
-  const items=[...map.values()].sort((a,b)=>b.atrasoSeg-a.atrasoSeg);
-
-  const max=items[0]?.atrasoSeg||1;
-
-  function renderItem(ev){
-    const pct=(ev.atrasoSeg/max)*100;
-    const div=document.createElement("div");
-    div.className="delay-item";
-    div.innerHTML=`
-      <div><strong>Operação ${ev.idOperacaoRecebivel}</strong></div>
-      <div class="delay-time">${ev.nomeFundo}</div>
-      <div class="delay-time">${ev.atrasoStr}</div>
-      <div class="bar"><i style="width:${pct}%"></i></div>
-    `;
-    return div;
+  const mapOps=new Map();
+  for(const ev of atrasadas){
+    const k=ev.idOperacaoRecebivel; if(!k) continue;
+    const cur=mapOps.get(k); if(!cur || ev.atrasoSeg>cur.atrasoSeg) mapOps.set(k,ev);
   }
+  const items=Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg).slice(0,160);
+  const maxA=items[0]?.atrasoSeg||1;
 
-  // TOP 2 fixos
-  if(items[0]) delayPinned.appendChild(renderItem(items[0]));
-  if(items[1]) delayPinned.appendChild(renderItem(items[1]));
+  const renderItem=(ev,cls="")=>{
+    const pct=Math.max(10,(ev.atrasoSeg/maxA)*100);
+    const row=document.createElement("div");
+    row.className=`delay-item ${cls}`.trim();
+    row.innerHTML=`
+      <div class="delay-top">
+        <div class="delay-op">
+          Operação ${ev.idOperacaoRecebivel}
+          <div class="delay-fundo" title="${ev.nomeFundo||""}">
+            ${ev.nomeFundo ? ev.nomeFundo : "Fundo não identificado"}
+            <span class="delay-cnpj"> · CNPJ ${formatCnpj(ev.cnpjFundo)}</span>
+          </div>
+        </div>
+        <div class="delay-time">${ev.atrasoStr}</div>
+      </div>
+      <div class="bar"><i style="width:${pct.toFixed(1)}%"></i></div>`;
+    return row;
+  };
 
-  const rest = items.slice(2);
-  rest.forEach(ev=>delayListTop.appendChild(renderItem(ev)));
+  // ✅ TOP 2 fixo
+  if(items[0]) delayPinned.appendChild(renderItem(items[0],"p1"));
+  if(items[1]) delayPinned.appendChild(renderItem(items[1],"p2"));
 
+  const base=items.slice(2);
+  if(!base.length) return;
+
+  base.forEach(ev=>delayListTop.appendChild(renderItem(ev)));
   requestAnimationFrame(()=>{
-    delayShift = delayListTop.scrollHeight;
-    rest.forEach(ev=>delayListTop.appendChild(renderItem(ev))); // clone loop
-
-    function loop(){
-      delayY += 0.6; // DEVAGAR (TV)
-      if(delayY >= delayShift) delayY=0;
-      delayListTop.style.transform = `translateY(${-delayY}px)`;
-      delayRAF=requestAnimationFrame(loop);
+    const viewH=delayScrollWrap.clientHeight;
+    let guard=0;
+    while(delayListTop.scrollHeight < viewH*2.8 && guard<90){
+      base.forEach(ev=>delayListTop.appendChild(renderItem(ev))); guard++;
     }
-    loop();
+    if(delayListTop.scrollHeight <= viewH*1.05) return;
+
+    const shift=delayListTop.scrollHeight;
+    base.forEach(ev=>delayListTop.appendChild(renderItem(ev))); // clone 1 ciclo
+    delayAnim.shift=shift;
+    delayAnim.pxps=1.10; // TV-safe
+    startDelayAnim();
   });
 }
 
-/* ===== TABLE ===== */
 function renderTabela(eventos){
   elTable.innerHTML="";
-  eventos.slice(0,80).forEach(ev=>{
+  if(!eventos.length){
+    elTable.innerHTML=`<div class="row"><div class="time">—</div><div class="main"><b>Nenhuma pendência</b><span>Aguardando eventos</span></div><div class="tag ok">OK</div><div class="late">00:00:00</div></div>`;
+    return;
+  }
+
+  eventos.slice().sort((a,b)=>(b.atrasoSeg||0)-(a.atrasoSeg||0)).slice(0,80).forEach(ev=>{
+    const isLate=(ev.atrasoSeg||0)>0;
     const row=document.createElement("div");
     row.className="row";
     row.innerHTML=`
       <div class="time">${ev.horario||"--:--:--"}</div>
-      <div>${ev.nomeFundo||""}<br><small>${ev.idOperacaoRecebivel}</small></div>
-      <div class="tag bad">PENDENTE</div>
-      <div>${ev.atrasoStr}</div>
-    `;
+      <div class="main">
+        <b title="${ev.nomeFundo||""}">${abreviar(ev.nomeFundo||"",52)}</b>
+        <span>Operação ${ev.idOperacaoRecebivel} · CNPJ ${formatCnpj(ev.cnpjFundo)}</span>
+      </div>
+      <div class="tag ${isLate?"bad":"ok"}">${isLate?"PENDENTE":"OK"}</div>
+      <div class="late">${ev.atrasoStr||"00:00:00"}</div>`;
     elTable.appendChild(row);
   });
-  startTickerScroll();
 }
 
-/* ===== FETCH ===== */
-async function carregar(){
-  const r = await fetch(API_URL);
-  const json = await r.json();
-  const eventos = Array.isArray(json) ? json : json.data || [];
+async function carregarEventosReais(){
+  try{
+    elPanelStatus.className="pill"; elPanelStatus.textContent="Carregando…";
+    const res=await fetch(API_URL,{cache:"no-store",headers:{"Ambiente":CFG.amb,"Token":CFG.token}});
+    if(!res.ok){
+      elPanelStatus.className="pill bad"; elPanelStatus.textContent="Erro";
+      renderTabela([]); renderDelayTop([]); buildDonut(0,0); buildBars([]); buildArea([]); applyTickerAutoScroll();
+      return;
+    }
 
-  const atrasadas=[];
-  let ultHora=0;
-  const now=new Date();
+    const json=await res.json();
+    let eventos=[];
+    if(Array.isArray(json)) eventos=json;
+    else if(json && Array.isArray(json.data)) eventos=json.data;
+    else if(json && json.data) eventos=[json.data];
 
-  eventos.forEach(ev=>{
-    const [h,m,s]=(ev.hrAtraso||"00:00:00").split(":").map(Number);
-    ev.atrasoSeg=h*3600+m*60+s;
-    ev.atrasoStr=`${pad(h)}:${pad(m)}:${pad(s)}`;
-    if(ev.atrasoSeg>0) atrasadas.push(ev);
+    const atrasadas=[];
+    const now=new Date(), nowMs=now.getTime();
+    let eventosUltimaHora=0;
 
-    const [hh,mm,ss]=(ev.horario||"00:00:00").split(":").map(Number);
-    const ts=new Date(now.getFullYear(),now.getMonth(),now.getDate(),hh,mm,ss).getTime();
-    if(now-ts < 3600000) ultHora++;
-  });
+    for(const ev of eventos){
+      const atrasoRaw=(ev.hrAtraso || "00:00:00").toString().trim();
+      const [ah,am,as]=atrasoRaw.split(":");
+      const hh=Number(ah)||0, mm=Number(am)||0, ss=Number(as)||0;
+      ev.atrasoSeg=hh*3600+mm*60+ss;
+      ev.atrasoStr=`${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
+      if(ev.atrasoSeg>0) atrasadas.push(ev);
 
-  elTotal.textContent = eventos.length;
-  elRate.textContent = ultHora;
+      const p=(ev.horario||"00:00:00").split(":").map(Number);
+      const ts=new Date(now.getFullYear(),now.getMonth(),now.getDate(),p[0]||0,p[1]||0,p[2]||0).getTime();
+      if(nowMs-ts<=60*60*1000) eventosUltimaHora++;
+    }
 
-  renderDelayTop(atrasadas);
-  renderTabela(eventos);
+    const qtd=eventos.length;
+    const atual=Number((elTotal.textContent||"0").replace(/\./g,""))||0;
+    animateCount(elTotal,atual,qtd);
+    elSub.textContent=qtd===1?"1 assinatura":`${qtd.toLocaleString("pt-BR")} assinaturas`;
+
+    elRateNum.textContent=eventosUltimaHora.toFixed(0);
+    elRateTextMain.textContent=`${eventosUltimaHora} evento${eventosUltimaHora!==1?"s":""} na última hora`;
+
+    elFooterRateText.textContent=`${eventosUltimaHora} eventos / hora`;
+    elFooterRateSecondary.textContent="Atualização automática";
+    elPanelStatus.className="pill ok"; elPanelStatus.textContent="Online";
+
+    renderDelayTop(atrasadas);
+    renderTabela(eventos);
+
+    buildDonut(qtd,atrasadas.length);
+    buildBars(eventos);
+    buildArea(atrasadas);
+
+    // ✅ scroll automático (sem scrollbar e infinito)
+    applyTickerAutoScroll();
+  }catch(e){
+    elPanelStatus.className="pill bad"; elPanelStatus.textContent="Erro";
+    renderTabela([]); renderDelayTop([]); buildDonut(0,0); buildBars([]); buildArea([]); applyTickerAutoScroll();
+  }
 }
 
-carregar();
-setInterval(carregar,20000);
+(function init(){
+  carregarEventosReais();
+  setInterval(carregarEventosReais,20000);
+})();
 </script>
 </body>
 </html>
