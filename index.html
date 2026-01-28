@@ -104,25 +104,39 @@
   .kpi .sub{color:var(--muted);font-size:.8rem;margin-top:6px}
   .kpi .right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 
-  /* ===== Delay list (TV-safe, sem scroll manual) ===== */
+  /* ===== Maiores atrasos: TOP 1 e 2 fixos + rolagem automática do resto ===== */
   .delay-list{
     position:relative;
     min-height:0;
+    height:210px;            /* altura do bloco todo (TV) */
     overflow:hidden;         /* sem scrollbar */
-    padding-right:0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
   }
+
+  .delay-pinned{display:flex;flex-direction:column;gap:8px}
+  .delay-scroll{
+    min-height:0;
+    flex:1;
+    overflow:hidden;         /* sem scrollbar */
+  }
+
   .delay-track{
     display:flex;
     flex-direction:column;
     gap:8px;
     will-change: transform;
   }
+
   .delay-item{
     padding:10px 12px; border-radius:16px;
     border:1px solid rgba(255,255,255,.08);
     background:rgba(0,0,0,.14);
     display:flex;flex-direction:column;gap:6px;
   }
+  .delay-item.p1{border-color:rgba(0,240,192,.22); background:rgba(0,240,192,.06)}
+  .delay-item.p2{border-color:rgba(0,184,255,.18); background:rgba(0,184,255,.05)}
   .delay-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
   .delay-op{font-weight:900;font-size:.9rem;line-height:1.1;opacity:.95}
   .delay-time{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:900;white-space:nowrap}
@@ -140,16 +154,17 @@
   .bar{height:7px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
   .bar > i{display:block;height:100%;background:linear-gradient(90deg, rgba(255,92,122,.95), rgba(255,170,170,.95));width:30%}
 
-  .delay-list.auto .delay-track{
-    animation: delayScroll var(--delayDur, 14s) linear infinite;
+  /* rolagem automática só no wrap do "resto" */
+  .delay-scroll.auto .delay-track{
+    animation: delayScroll var(--delayDur, 18s) linear infinite;
   }
   @keyframes delayScroll{
     0%   { transform: translateY(0); }
     100% { transform: translateY(calc(-1 * var(--delayShift, 0px))); }
   }
-  .delay-list.auto:active .delay-track{ animation-play-state:paused; }
+  .delay-scroll.auto:active .delay-track{ animation-play-state:paused; }
   @media (prefers-reduced-motion: reduce){
-    .delay-list.auto .delay-track{ animation:none; }
+    .delay-scroll.auto .delay-track{ animation:none; }
   }
 
   .gauge{flex:1;display:grid;place-items:center;padding:6px 0}
@@ -279,8 +294,13 @@
 
       <div>
         <div class="card-title" style="margin-bottom:8px;opacity:.9">Maiores atrasos</div>
-        <div class="delay-list" style="max-height:210px;">
-          <div class="delay-track" id="delayListTop"></div>
+
+        <!-- TOP 1 e TOP 2 fixos + rolagem automática do resto -->
+        <div class="delay-list">
+          <div class="delay-pinned" id="delayPinned"></div>
+          <div class="delay-scroll" id="delayScrollWrap">
+            <div class="delay-track" id="delayListTop"></div>
+          </div>
         </div>
       </div>
     </article>
@@ -365,7 +385,11 @@ const elRateTextSecondary = document.getElementById("rateTextSecondary");
 const elRateNum = document.getElementById("rateNum");
 const elPanelStatus = document.getElementById("panelStatus");
 const arc       = document.getElementById("arc");
+
+const elDelayPinned = document.getElementById("delayPinned");
 const elDelayListTop = document.getElementById("delayListTop");
+const elDelayScrollWrap = document.getElementById("delayScrollWrap");
+
 const elTopFundHeadline = document.getElementById("topFundHeadline");
 const elTopFundList = document.getElementById("topFundList");
 const elFooterRateText = document.getElementById("footerRateText");
@@ -520,17 +544,21 @@ function construirRanking7Dias(){
   atualizarGraficoFundos(ranking);
 }
 
-/* ===== AQUI: auto-rolagem no card de atrasos ===== */
+/* ===== AQUI: TOP 1 e 2 fixos + rolagem devagar do resto (vai até o fim) ===== */
 function renderDelayTop(atrasadas){
+  // RESET total (pra não herdar animação)
+  elDelayPinned.innerHTML = "";
   elDelayListTop.innerHTML = "";
-  const listEl = elDelayListTop.parentElement; // .delay-list
+  elDelayScrollWrap.classList.remove("auto");
+  elDelayScrollWrap.style.removeProperty("--delayShift");
+  elDelayScrollWrap.style.removeProperty("--delayDur");
 
   if(!atrasadas.length){
-    listEl.classList.remove("auto");
-    elDelayListTop.innerHTML = `<div style="color:rgba(255,255,255,.55);font-weight:900">Sem atrasos</div>`;
+    elDelayPinned.innerHTML = `<div style="color:rgba(255,255,255,.55);font-weight:900">Sem atrasos</div>`;
     return;
   }
 
+  // dedup por operação (pega maior atraso por ID)
   const mapOps = new Map();
   for(const ev of atrasadas){
     const key = ev.idOperacaoRecebivel;
@@ -540,13 +568,16 @@ function renderDelayTop(atrasadas){
   }
 
   const ordenadas = Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg);
-  const items = ordenadas.slice(0, 8);
+
+  // mantém mais itens pra rolar até “lá embaixo”
+  const maxMostrar = 14; // ajuste se quiser
+  const items = ordenadas.slice(0, maxMostrar);
   const maxAtraso = items[0]?.atrasoSeg || 1;
 
-  const renderItem = (ev) => {
-    const pct = Math.max(12, (ev.atrasoSeg / maxAtraso) * 100);
+  const renderItem = (ev, extraClass="") => {
+    const pct = Math.max(10, (ev.atrasoSeg / maxAtraso) * 100);
     const row = document.createElement("div");
-    row.className = "delay-item";
+    row.className = `delay-item ${extraClass}`.trim();
     row.innerHTML = `
       <div class="delay-top">
         <div class="delay-op">
@@ -563,29 +594,33 @@ function renderDelayTop(atrasadas){
     return row;
   };
 
-  items.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
+  // TOP 1 e TOP 2 fixos
+  const top1 = items[0];
+  const top2 = items[1];
+  if(top1) elDelayPinned.appendChild(renderItem(top1, "p1"));
+  if(top2) elDelayPinned.appendChild(renderItem(top2, "p2"));
 
-  if(items.length <= 3){
-    listEl.classList.remove("auto");
-    listEl.style.setProperty("--delayShift", `0px`);
-    listEl.style.setProperty("--delayDur", `0s`);
+  // resto (a partir do 3)
+  const rest = items.slice(2);
+  rest.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
+
+  // se não tem o suficiente pra rolar, fica estático
+  if(rest.length <= 3){
     return;
   }
 
-  // mede altura do bloco base, duplica e anima contínuo
+  // mede altura do RESTO, duplica e anima contínuo (vai até o final)
   const baseHeight = elDelayListTop.scrollHeight;
-  items.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
+  rest.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
 
-  listEl.classList.add("auto");
+  // scroll mais devagar: ~18px/s (bem mais lento)
+  const pxPerSecond = 18;
+  const shift = baseHeight;           // 1 ciclo = altura original do RESTO
+  const dur = Math.max(18, Math.min(60, shift / pxPerSecond));
 
-  const gap = 8; // precisa bater com o CSS gap
-  const shift = baseHeight + gap;
-
-  // velocidade ~32px/s (entre 10s e 28s)
-  const dur = Math.max(10, Math.min(28, shift / 32));
-
-  listEl.style.setProperty("--delayShift", `${shift}px`);
-  listEl.style.setProperty("--delayDur", `${dur.toFixed(1)}s`);
+  elDelayScrollWrap.classList.add("auto");
+  elDelayScrollWrap.style.setProperty("--delayShift", `${shift}px`);
+  elDelayScrollWrap.style.setProperty("--delayDur", `${dur.toFixed(1)}s`);
 }
 
 function renderTabela(eventos){
