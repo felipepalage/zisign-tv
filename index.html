@@ -98,7 +98,7 @@
   .kpi .sub{color:var(--muted);font-size:.8rem;margin-top:6px}
   .kpi .right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 
-  /* ===== Maiores atrasos (top1/top2 fixos + scroll JS sem buraco) ===== */
+  /* ===== Maiores atrasos (TOP 3 fixos + scroll JS sem buraco) ===== */
   .delay-list{
     position:relative;
     min-height:0;
@@ -120,6 +120,7 @@
   }
   .delay-item.p1{border-color:rgba(0,240,192,.22); background:rgba(0,240,192,.06)}
   .delay-item.p2{border-color:rgba(0,184,255,.18); background:rgba(0,184,255,.05)}
+  .delay-item.p3{border-color:rgba(255,92,122,.18); background:rgba(255,92,122,.05)}
 
   .delay-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
   .delay-op{font-weight:900;font-size:.9rem;line-height:1.1;opacity:.95}
@@ -506,11 +507,11 @@ function construirRanking7Dias(){
 }
 
 /** ================== SCROLL JS (sem buraco) ================== **/
-let delayAnim = { raf:0, y:0, shift:0, last:0, pxps:4 };
+let delayAnim = { raf:0, y:0, shift:0, last:0, pxps:2.2 };
 
 function stopDelayAnim(){
   if(delayAnim.raf) cancelAnimationFrame(delayAnim.raf);
-  delayAnim = { raf:0, y:0, shift:0, last:0, pxps:delayAnim.pxps || 4 };
+  delayAnim = { raf:0, y:0, shift:0, last:0, pxps:delayAnim.pxps || 2.2 };
   elDelayListTop.style.transform = "translate3d(0,0,0)";
 }
 function startDelayAnim(){
@@ -529,7 +530,7 @@ function startDelayAnim(){
   delayAnim.raf = requestAnimationFrame(step);
 }
 
-/* ===== Maiores atrasos: top1/top2 fixos + preencher 100% do espaço + scroll lento ===== */
+/* TOP 3 fixos + resto scroll automático devagar */
 function renderDelayTop(atrasadas){
   stopDelayAnim();
   elDelayPinned.innerHTML = "";
@@ -540,6 +541,7 @@ function renderDelayTop(atrasadas){
     return;
   }
 
+  // garante 1 item por operação (pega o maior atraso da operação)
   const mapOps = new Map();
   for(const ev of atrasadas){
     const k = ev.idOperacaoRecebivel;
@@ -548,7 +550,10 @@ function renderDelayTop(atrasadas){
     if(!cur || ev.atrasoSeg > cur.atrasoSeg) mapOps.set(k, ev);
   }
 
-  const items = Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg).slice(0, 80);
+  const items = Array.from(mapOps.values())
+    .sort((a,b)=>b.atrasoSeg-a.atrasoSeg)
+    .slice(0, 120);
+
   const maxAtraso = items[0]?.atrasoSeg || 1;
 
   const renderItem = (ev, extraClass="")=>{
@@ -571,38 +576,37 @@ function renderDelayTop(atrasadas){
     return row;
   };
 
-  // TOP 1 e 2 fixos
+  // TOP 3 fixos
   if(items[0]) elDelayPinned.appendChild(renderItem(items[0], "p1"));
   if(items[1]) elDelayPinned.appendChild(renderItem(items[1], "p2"));
+  if(items[2]) elDelayPinned.appendChild(renderItem(items[2], "p3"));
 
-  const base = items.slice(2);
+  const base = items.slice(3);
   if(!base.length) return;
 
-  // Monta 1x
   base.forEach(ev=>elDelayListTop.appendChild(renderItem(ev)));
 
-  // Após layout, repete até preencher e cria loop perfeito
   requestAnimationFrame(()=>{
     const viewH = elDelayScrollWrap.clientHeight;
 
-    // Preenche (sem espaço preto). 2.6x fica bem TV-safe.
+    // Preenche pra não ficar "buraco" (TV-safe)
     let guard = 0;
     while(elDelayListTop.scrollHeight < viewH * 2.6 && guard < 60){
       base.forEach(ev=>elDelayListTop.appendChild(renderItem(ev)));
       guard++;
     }
 
-    // Se não tem altura suficiente, fica estático, mas cheio.
+    // Se não deu altura suficiente, fica estático (mas cheio)
     if(elDelayListTop.scrollHeight <= viewH * 1.05) return;
 
-    // Shift = altura de 1 ciclo (antes do clone final)
+    // Altura de 1 ciclo (antes do clone final)
     const shift = elDelayListTop.scrollHeight;
 
-    // Clona mais 1x pro loop ser contínuo
+    // Clona +1 ciclo pro loop ficar contínuo
     base.forEach(ev=>elDelayListTop.appendChild(renderItem(ev)));
 
     delayAnim.shift = shift;
-    delayAnim.pxps = 3.5; // MAIS DEVAGAR (ajuste aqui)
+    delayAnim.pxps = 2.2; // <<< velocidade do scroll (menor = mais devagar)
     startDelayAnim();
   });
 }
@@ -702,7 +706,7 @@ async function carregarEventosReais(){
     renderDelayTop(atrasadas);
     renderTabela(eventos);
 
-    // historico 7d
+    // histórico 7d
     historicoEventos = limparHistoricoAntigo(historicoEventos);
     for(const ev of atrasadas){
       const keyHist = `${ev.idOperacaoRecebivel || ""}-${ev.cnpjFundo || ""}`;
@@ -728,6 +732,7 @@ async function carregarEventosReais(){
     elPanelStatus.textContent = "Erro";
     console.error("Erro ao carregar eventos", e);
     renderTabela([]);
+    renderDelayTop([]);
   }
 }
 
