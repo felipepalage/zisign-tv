@@ -102,7 +102,7 @@
   .delay-list{
     position:relative;
     min-height:0;
-    height:290px;            /* TV: mais área, sem “vazio” visual */
+    height:300px;
     overflow:hidden;
     display:flex;
     flex-direction:column;
@@ -150,7 +150,7 @@
   .bar > i{display:block;height:100%;background:linear-gradient(90deg, rgba(255,92,122,.95), rgba(255,170,170,.95));width:30%}
 
   .delay-scroll.auto .delay-track{
-    animation: delayScroll var(--delayDur, 60s) linear infinite;
+    animation: delayScroll var(--delayDur, 80s) linear infinite;
   }
   @keyframes delayScroll{
     0%   { transform: translateY(0); }
@@ -385,6 +385,13 @@ const formatCnpj = cnpj => {
   if (d.length !== 14) return cnpj || "";
   return d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,"$1.$2.$3/$4-$5");
 };
+const formatDurationFromSeconds = totalSeconds => {
+  const s = Math.max(0, Math.floor(totalSeconds || 0));
+  const h = Math.floor(s/3600);
+  const m = Math.floor((s%3600)/60);
+  const sec = s%60;
+  return `${pad2(h)}:${pad2(m)}:${pad2(sec)}`;
+};
 const abreviarFundo = (nome, max=24) => {
   if(!nome) return "";
   const n = nome.trim();
@@ -418,20 +425,26 @@ function updateGauge(val){
   elRateTextSecondary.textContent = txt;
 }
 
-/* ===== HISTÓRICO / CHART (mantido) ===== */
-function carregarHistorico(){ try{ const raw=localStorage.getItem(STORAGE_KEY); if(!raw) return []; const arr=JSON.parse(raw); return Array.isArray(arr)?arr:[]; }catch{ return []; } }
-function salvarHistorico(hist){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(hist)); }catch{} }
-function limparHistoricoAntigo(hist){ const limite=Date.now()-MILLIS_7D; return hist.filter(e => (e.registradoEm||0) >= limite); }
-let historicoEventos = carregarHistorico();
-let chartTopFundos = null;
-
-function formatDurationFromSeconds(totalSeconds){
-  const s = Math.max(0, Math.floor(totalSeconds || 0));
-  const h = Math.floor(s/3600);
-  const m = Math.floor((s%3600)/60);
-  const sec = s%60;
-  return `${pad2(h)}:${pad2(m)}:${pad2(sec)}`;
+/** ================== HISTÓRICO 7D (ranking fundos) ================== **/
+function carregarHistorico(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return [];
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr : [];
+  }catch{ return []; }
 }
+function salvarHistorico(hist){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(hist)); }catch{}
+}
+function limparHistoricoAntigo(hist){
+  const limite = Date.now() - MILLIS_7D;
+  return hist.filter(e => (e.registradoEm || 0) >= limite);
+}
+let historicoEventos = carregarHistorico();
+
+/** ================== CHART ================== **/
+let chartTopFundos = null;
 
 function atualizarGraficoFundos(ranking){
   if(!ranking || ranking.length === 0){
@@ -514,7 +527,7 @@ function construirRanking7Dias(){
   atualizarGraficoFundos(ranking);
 }
 
-/* ===== MAIORES ATRASOS: sem espaço vazio (preenche) + loop perfeito + lento ===== */
+/* ===== Maiores atrasos: preenche 100% do espaço + top1/top2 fixos + scroll lento ===== */
 function renderDelayTop(atrasadas){
   // reset
   elDelayPinned.innerHTML = "";
@@ -528,7 +541,7 @@ function renderDelayTop(atrasadas){
     return;
   }
 
-  // dedup por operação (pega maior atraso por ID)
+  // dedup por operação (maior atraso por ID)
   const mapOps = new Map();
   for(const ev of atrasadas){
     const key = ev.idOperacaoRecebivel;
@@ -538,7 +551,7 @@ function renderDelayTop(atrasadas){
   }
 
   const ordenadas = Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg);
-  const items = ordenadas.slice(0, 30);
+  const items = ordenadas.slice(0, 60);
   const maxAtraso = items[0]?.atrasoSeg || 1;
 
   const renderItem = (ev, extraClass="") => {
@@ -565,36 +578,40 @@ function renderDelayTop(atrasadas){
   if(items[0]) elDelayPinned.appendChild(renderItem(items[0], "p1"));
   if(items[1]) elDelayPinned.appendChild(renderItem(items[1], "p2"));
 
-  // resto vai rolar
   const restBase = items.slice(2);
   if(restBase.length === 0) return;
 
-  // 1) adiciona uma vez
+  // base 1x
   restBase.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
 
-  // 2) PREENCHE: duplica até o conteúdo ficar MAIOR que a viewport (sem buraco)
-  const viewH = elDelayScrollWrap.clientHeight;
-  let guard = 0;
-  while (elDelayListTop.scrollHeight < viewH * 1.15 && guard < 12) {
+  // mede depois de renderizar (layout)
+  requestAnimationFrame(() => {
+    const viewH = elDelayScrollWrap.clientHeight;
+
+    // repete até preencher o viewport (sem buraco)
+    let guard = 0;
+    while (elDelayListTop.scrollHeight < viewH * 1.60 && guard < 30) {
+      restBase.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
+      guard++;
+    }
+
+    // se mesmo assim não ficou grande, deixa estático (mas cheio)
+    if(elDelayListTop.scrollHeight <= viewH * 1.05) return;
+
+    // loop perfeito: shift = altura antes de duplicar novamente
+    const shift = elDelayListTop.scrollHeight;
+
+    // duplica mais uma vez pro loop
     restBase.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
-    guard++;
-  }
 
-  // se ainda não ficou grande, deixa estático (mas preenchido)
-  const baseHeight = elDelayListTop.scrollHeight;
-  if(baseHeight <= viewH * 1.02) return;
+    // scroll mais devagar (6px/s)
+    const pxPerSecond = 6;
+    const dur = Math.max(60, Math.min(220, shift / pxPerSecond));
 
-  // 3) LOOP PERFEITO: duplica MAIS UMA “base” e anima o shift = altura ANTES de duplicar
-  const shift = elDelayListTop.scrollHeight;
-  restBase.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
-
-  // 4) MAIS DEVAGAR: 8px/s (bem lento)
-  const pxPerSecond = 8;
-  const dur = Math.max(40, Math.min(160, shift / pxPerSecond));
-
-  elDelayScrollWrap.classList.add("auto");
-  elDelayScrollWrap.style.setProperty("--delayShift", `${shift}px`);
-  elDelayScrollWrap.style.setProperty("--delayDur", `${dur.toFixed(1)}s`);
+    elDelayScrollWrap.classList.add("auto");
+    elDelayScrollWrap.style.setProperty("--delayShift", `${shift}px`);
+    elDelayScrollWrap.style.setProperty("--delayDur", `${dur.toFixed(1)}s`);
+  });
 }
 
 function renderTabela(eventos){
@@ -633,6 +650,7 @@ function renderTabela(eventos){
     });
 }
 
+/** ================== FETCH ================== **/
 async function carregarEventosReais(){
   try{
     elPanelStatus.className = "pill";
@@ -689,6 +707,7 @@ async function carregarEventosReais(){
     renderDelayTop(atrasadas);
     renderTabela(eventos);
 
+    // historico 7d
     historicoEventos = limparHistoricoAntigo(historicoEventos);
     for(const ev of atrasadas){
       const keyHist = `${ev.idOperacaoRecebivel || ""}-${ev.cnpjFundo || ""}`;
