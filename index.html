@@ -28,7 +28,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:10p
 .clock{font-weight:800;letter-spacing:.18em;font-size:.8rem;color:rgba(255,255,255,.88);
   padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
   backdrop-filter:blur(10px)}
-/* ===== DASHBOARD (parecido com a imagem) ===== */
 .dash{
   display:grid;gap:clamp(10px,1vw,14px);min-height:0;
   grid-template-columns: 360px 1fr 1fr;
@@ -38,8 +37,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:10p
     "side area  ticker";
 }
 .card{
-  min-height:0;border-radius:22px;
-  background:linear-gradient(180deg,var(--card),var(--card2));
+  min-height:0;border-radius:22px;background:linear-gradient(180deg,var(--card),var(--card2));
   border:1px solid var(--border);box-shadow:var(--shadow);backdrop-filter:blur(14px);
   padding:clamp(12px,1vw,16px);display:flex;flex-direction:column;gap:12px;
 }
@@ -48,7 +46,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:10p
   background:rgba(255,255,255,.04);color:rgba(255,255,255,.82);white-space:nowrap}
 .pill.ok{border-color:rgba(0,240,192,.25);color:var(--accent);background:rgba(0,240,192,.08)}
 .pill.bad{border-color:rgba(255,92,122,.25);color:var(--danger);background:rgba(255,92,122,.08)}
-/* left KPI stack (igual coluna esquerda da imagem) */
 .side{grid-area:side}
 .kpiBox{border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.14);padding:12px 12px}
 .kpiLabel{font-weight:900;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.70)}
@@ -63,7 +60,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:10p
 .delay-item{padding:10px 12px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.14);display:flex;flex-direction:column;gap:6px}
 .delay-item.p1{border-color:rgba(0,240,192,.22);background:rgba(0,240,192,.06)}
 .delay-item.p2{border-color:rgba(0,184,255,.18);background:rgba(0,184,255,.05)}
-.delay-item.p3{border-color:rgba(255,92,122,.18);background:rgba(255,92,122,.05)}
 .delay-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
 .delay-op{font-weight:900;font-size:.9rem;line-height:1.1;opacity:.95}
 .delay-time{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:900;white-space:nowrap}
@@ -71,7 +67,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:10p
 .delay-cnpj{color:rgba(255,255,255,.55);font-weight:800}
 .bar{height:7px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
 .bar>i{display:block;height:100%;background:linear-gradient(90deg, rgba(255,92,122,.95), rgba(255,170,170,.95));width:30%}
-/* charts */
 .chartCard{padding:12px 12px}
 .chartHead{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .chartArea{flex:1;min-height:0;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.12);padding:10px}
@@ -81,7 +76,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:10p
 .area{grid-area:area}
 .ticker{grid-area:ticker;padding:0}
 .tickerHead{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
-.table{padding:12px 14px;overflow:auto;display:grid;gap:10px;min-height:0}
+.table{padding:12px 14px;overflow:auto;display:grid;gap:10px;min-height:0;max-height:100%}
 .row{display:grid;grid-template-columns:90px 1fr 120px 120px;gap:10px;align-items:center;padding:12px 12px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.12)}
 .time{font-variant-numeric:tabular-nums;font-weight:900;color:rgba(255,255,255,.88)}
 .main{display:flex;flex-direction:column;gap:4px;min-width:0}
@@ -107,7 +102,6 @@ footer{display:flex;align-items:center;justify-content:space-between;padding:10p
   </header>
 
   <section class="dash">
-    <!-- LEFT: KPIs + Top atrasos -->
     <article class="card side">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
         <div class="title">Visão geral</div>
@@ -137,7 +131,6 @@ footer{display:flex;align-items:center;justify-content:space-between;padding:10p
       </div>
     </article>
 
-    <!-- CENTER: Donut -->
     <article class="card chartCard donut">
       <div class="chartHead">
         <div class="title">Pendências por status</div>
@@ -149,7 +142,6 @@ footer{display:flex;align-items:center;justify-content:space-between;padding:10p
       </div>
     </article>
 
-    <!-- RIGHT: Bars -->
     <article class="card chartCard bars">
       <div class="chartHead">
         <div class="title">Eventos por hora (hoje)</div>
@@ -159,7 +151,6 @@ footer{display:flex;align-items:center;justify-content:space-between;padding:10p
       <div style="color:var(--muted);font-weight:800;font-size:.78rem" id="footerRateSecondary">—</div>
     </article>
 
-    <!-- BOTTOM CENTER: Area -->
     <article class="card chartCard area">
       <div class="chartHead">
         <div class="title">Atraso (Top 8 operações)</div>
@@ -168,7 +159,6 @@ footer{display:flex;align-items:center;justify-content:space-between;padding:10p
       <div class="chartArea"><canvas id="chartArea"></canvas></div>
     </article>
 
-    <!-- BOTTOM RIGHT: Ticker/Table -->
     <section class="card ticker" aria-live="polite">
       <div class="tickerHead">
         <div class="title">Pendências</div>
@@ -186,17 +176,10 @@ footer{display:flex;align-items:center;justify-content:space-between;padding:10p
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const CFG = {
-  cnpj:"54638076000176",
-  base:"https://custodiabackend-prod.idsf.com.br",
-  amb:"custodia",
-  token:"DHQzckJ0TGWHiFxaVuUlmrBLWXwuejrtSAT0Mf47gvclZ5GKY543iYKNeLfqlzngXH0YcKGLe4qyv0avru3xeVGBp9yUQKKKlSyJ"
-};
-(() => {
-  const q = new URLSearchParams(location.search);
-  for (const k of ["base","cnpj","amb","token"]) { const v = q.get(k); if (v) CFG[k] = v; }
-})();
-const API_URL = `${CFG.base}/api/ZiSign/TV?cnpjCertificadora=${encodeURIComponent(CFG.cnpj)}`;
+const CFG={cnpj:"54638076000176",base:"https://custodiabackend-prod.idsf.com.br",amb:"custodia",
+token:"DHQzckJ0TGWHiFxaVuUlmrBLWXwuejrtSAT0Mf47gvclZ5GKY543iYKNeLfqlzngXH0YcKGLe4qyv0avru3xeVGBp9yUQKKKlSyJ"};
+(()=>{const q=new URLSearchParams(location.search);for(const k of ["base","cnpj","amb","token"]){const v=q.get(k);if(v)CFG[k]=v;}})();
+const API_URL=`${CFG.base}/api/ZiSign/TV?cnpjCertificadora=${encodeURIComponent(CFG.cnpj)}`;
 
 const elClock=document.getElementById("clock");
 const elTotal=document.getElementById("totalCount");
@@ -205,9 +188,9 @@ const elTable=document.getElementById("tickerTable");
 const elPanelStatus=document.getElementById("panelStatus");
 const elRateTextMain=document.getElementById("rateTextMain");
 const elRateNum=document.getElementById("rateNum");
-const elDelayPinned=document.getElementById("delayPinned");
-const elDelayListTop=document.getElementById("delayListTop");
-const elDelayScrollWrap=document.getElementById("delayScrollWrap");
+const delayPinned=document.getElementById("delayPinned");
+const delayListTop=document.getElementById("delayListTop");
+const delayScrollWrap=document.getElementById("delayScrollWrap");
 const elFooterRateText=document.getElementById("footerRateText");
 const elFooterRateSecondary=document.getElementById("footerRateSecondary");
 const elDonutPill=document.getElementById("donutPill");
@@ -217,103 +200,113 @@ const elDonutLegendA=document.getElementById("donutLegendA");
 const elDonutLegendB=document.getElementById("donutLegendB");
 
 const pad2=n=>n<10?("0"+n):(""+n);
-const formatCnpj=cnpj=>{
-  const d=(cnpj||"").toString().replace(/\D/g,"");
-  return d.length===14?d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,"$1.$2.$3/$4-$5"):(cnpj||"");
-};
+const formatCnpj=cnpj=>{const d=(cnpj||"").toString().replace(/\D/g,"");return d.length===14?d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,"$1.$2.$3/$4-$5"):(cnpj||"");};
 const abreviar=(s,max)=>{s=(s||"").trim();return s.length<=max?s:(s.slice(0,max-1)+"…");};
-const durFromSec=sec=>{
-  const s=Math.max(0,Math.floor(sec||0));const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=s%60;
-  return `${pad2(h)}:${pad2(m)}:${pad2(x)}`;
-};
-function animateCount(el,from,to,d=280){
-  const st=performance.now(); const step=t=>{
-    const p=Math.min(1,(t-st)/d); el.textContent=Math.round(from+(to-from)*p).toLocaleString("pt-BR");
-    if(p<1) requestAnimationFrame(step);
-  }; requestAnimationFrame(step);
-}
+const animateCount=(el,from,to,d=280)=>{const st=performance.now();const step=t=>{const p=Math.min(1,(t-st)/d);el.textContent=Math.round(from+(to-from)*p).toLocaleString("pt-BR");if(p<1)requestAnimationFrame(step);};requestAnimationFrame(step);};
+
 setInterval(()=>{const d=new Date();elClock.textContent=`${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`;},1000);
 
-/* ===== charts ===== */
-let donut=null, bars=null, area=null;
-function ensureChart(ctx, prev, cfg){ if(prev) prev.destroy(); return new Chart(ctx,cfg); }
+/* ===== AUTO SCROLL (ping-pong) ===== */
+function startAutoScroll(el,{speed=16,pause=800}={}){
+  if(!el) return ()=>{};
+  let raf=0,last=0,dir=1,hold=0;
+  const step=(t)=>{
+    if(!last) last=t;
+    const dt=(t-last)/1000; last=t;
 
-function buildDonut(total, pend){
+    if(hold>0){ hold-= (dt*1000); raf=requestAnimationFrame(step); return; }
+
+    const max=Math.max(0,el.scrollHeight-el.clientHeight);
+    if(max<=2){ raf=requestAnimationFrame(step); return; }
+
+    el.scrollTop = el.scrollTop + (dir*speed*dt);
+    if(el.scrollTop<=0){ el.scrollTop=0; dir=1; hold=pause; }
+    else if(el.scrollTop>=max){ el.scrollTop=max; dir=-1; hold=pause; }
+
+    raf=requestAnimationFrame(step);
+  };
+  raf=requestAnimationFrame(step);
+  return ()=>{ if(raf) cancelAnimationFrame(raf); };
+}
+let stopTickerScroll=null;
+function applyTickerAutoScroll(){
+  if(stopTickerScroll) stopTickerScroll();
+  stopTickerScroll = startAutoScroll(elTable,{speed:14,pause:900}); // devagar
+}
+
+/* ===== charts ===== */
+let donut=null,bars=null,area=null;
+const ensureChart=(ctx,prev,cfg)=>{if(prev)prev.destroy();return new Chart(ctx,cfg);};
+
+function buildDonut(total,pend){
   const ok=Math.max(0,total-pend);
   elDonutPill.textContent=`${pend} pendente`;
   elDonutLegendA.textContent=`Pendente: ${pend}`;
   elDonutLegendB.textContent=`OK: ${ok}`;
   const ctx=document.getElementById("chartDonut").getContext("2d");
-  donut=ensureChart(ctx, donut, {
-    type:"doughnut",
-    data:{ labels:["Pendente","OK"], datasets:[{ data:[pend,ok], borderWidth:0, hoverOffset:4 }] },
-    options:{ responsive:true, maintainAspectRatio:false, cutout:"70%", plugins:{ legend:{display:false}}, animation:false }
-  });
+  donut=ensureChart(ctx,donut,{type:"doughnut",
+    data:{labels:["Pendente","OK"],datasets:[{data:[pend,ok],borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:"70%",plugins:{legend:{display:false}},animation:false}});
 }
-
 function buildBars(eventos){
   const h=new Date().getHours();
-  const labels=[], data=[];
-  for(let i=Math.max(0,h-7); i<=h; i++){ labels.push(`${pad2(i)}h`); data.push(0); }
+  const labels=[],data=[];
+  for(let i=Math.max(0,h-7);i<=h;i++){labels.push(`${pad2(i)}h`);data.push(0);}
   for(const ev of eventos){
     const hh=(ev.horario||"00:00:00").split(":").map(Number)[0]||0;
-    const idx=labels.indexOf(`${pad2(hh)}h`);
-    if(idx>=0) data[idx]+=1;
+    const idx=labels.indexOf(`${pad2(hh)}h`); if(idx>=0) data[idx]+=1;
   }
   const sum=data.reduce((a,b)=>a+b,0);
   elBarsPill.textContent=`${sum} no período`;
   const ctx=document.getElementById("chartBars").getContext("2d");
-  bars=ensureChart(ctx, bars, {
-    type:"bar",
-    data:{ labels, datasets:[{ data, borderRadius:12 }] },
-    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}}, animation:false,
-      scales:{ x:{ grid:{display:false}, ticks:{color:"rgba(255,255,255,.65)",font:{size:11}}},
-              y:{ beginAtZero:true, grid:{color:"rgba(255,255,255,.06)"}, ticks:{color:"rgba(255,255,255,.65)",font:{size:11}} } }
-    }
-  });
+  bars=ensureChart(ctx,bars,{type:"bar",
+    data:{labels,datasets:[{data,borderRadius:12}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},animation:false,
+      scales:{x:{grid:{display:false},ticks:{color:"rgba(255,255,255,.65)",font:{size:11}}},
+              y:{beginAtZero:true,grid:{color:"rgba(255,255,255,.06)"},ticks:{color:"rgba(255,255,255,.65)",font:{size:11}}}}}});
 }
-
 function buildArea(atrasadas){
-  const top = atrasadas.slice().sort((a,b)=>b.atrasoSeg-a.atrasoSeg).slice(0,8);
-  const labels=top.map(e=>`#${e.idOperacaoRecebivel}`);
-  const data=top.map(e=>Number((e.atrasoSeg/60).toFixed(1)));
-  elAreaPill.textContent=top.length?`máx ${durFromSec(top[0].atrasoSeg)}`:"sem atrasos";
+  const top=atrasadas.slice().sort((a,b)=>b.atrasoSeg-a.atrasoSeg).slice(0,8);
+  elAreaPill.textContent=top.length?`máx ${top[0].atrasoStr}`:"sem atrasos";
+  const labels=top.map(e=>`#${e.idOperacaoRecebivel}`), data=top.map(e=>Number((e.atrasoSeg/60).toFixed(1)));
   const ctx=document.getElementById("chartArea").getContext("2d");
-  area=ensureChart(ctx, area, {
-    type:"line",
-    data:{ labels, datasets:[{ data, tension:.35, fill:true, pointRadius:3 }] },
-    options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{display:false}}, animation:false,
-      scales:{ x:{ grid:{display:false}, ticks:{color:"rgba(255,255,255,.65)",font:{size:11}}},
-              y:{ beginAtZero:true, grid:{color:"rgba(255,255,255,.06)"}, ticks:{color:"rgba(255,255,255,.65)",font:{size:11}} } }
-    }
-  });
+  area=ensureChart(ctx,area,{type:"line",
+    data:{labels,datasets:[{data,tension:.35,fill:true,pointRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},animation:false,
+      scales:{x:{grid:{display:false},ticks:{color:"rgba(255,255,255,.65)",font:{size:11}}},
+              y:{beginAtZero:true,grid:{color:"rgba(255,255,255,.06)"},ticks:{color:"rgba(255,255,255,.65)",font:{size:11}}}}}});
 }
 
-/* ===== scroll atrasos (top 3 fixo + loop) ===== */
-let delayAnim={raf:0,y:0,shift:0,last:0,pxps:2.2};
-function stopDelayAnim(){ if(delayAnim.raf) cancelAnimationFrame(delayAnim.raf);
-  delayAnim={raf:0,y:0,shift:0,last:0,pxps:delayAnim.pxps||2.2}; elDelayListTop.style.transform="translate3d(0,0,0)"; }
+/* ===== ATRASOS: TOP 2 FIXO + RESTO LOOP CONTÍNUO ===== */
+let delayAnim={raf:0,y:0,shift:0,last:0,pxps:1.3}; // bem devagar
+function stopDelayAnim(){
+  if(delayAnim.raf) cancelAnimationFrame(delayAnim.raf);
+  delayAnim={raf:0,y:0,shift:0,last:0,pxps:delayAnim.pxps||1.3};
+  delayListTop.style.transform="translate3d(0,0,0)";
+}
 function startDelayAnim(){
   stopDelayAnim();
-  const step=t=>{
+  const step=(t)=>{
     if(!delayAnim.last) delayAnim.last=t;
     const dt=(t-delayAnim.last)/1000; delayAnim.last=t;
     delayAnim.y += delayAnim.pxps*dt;
     if(delayAnim.y>=delayAnim.shift) delayAnim.y=0;
-    elDelayListTop.style.transform=`translate3d(0,${-delayAnim.y}px,0)`;
+    delayListTop.style.transform=`translate3d(0,${-delayAnim.y}px,0)`;
     delayAnim.raf=requestAnimationFrame(step);
   };
   delayAnim.raf=requestAnimationFrame(step);
 }
 function renderDelayTop(atrasadas){
-  stopDelayAnim(); elDelayPinned.innerHTML=""; elDelayListTop.innerHTML="";
-  if(!atrasadas.length){ elDelayPinned.innerHTML=`<div style="color:rgba(255,255,255,.55);font-weight:900">Sem atrasos</div>`; return; }
+  stopDelayAnim();
+  delayPinned.innerHTML=""; delayListTop.innerHTML="";
+  if(!atrasadas.length){ delayPinned.innerHTML=`<div style="color:rgba(255,255,255,.55);font-weight:900">Sem atrasos</div>`; return; }
 
   const mapOps=new Map();
-  for(const ev of atrasadas){ const k=ev.idOperacaoRecebivel; if(!k) continue;
+  for(const ev of atrasadas){
+    const k=ev.idOperacaoRecebivel; if(!k) continue;
     const cur=mapOps.get(k); if(!cur || ev.atrasoSeg>cur.atrasoSeg) mapOps.set(k,ev);
   }
-  const items=Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg).slice(0,120);
+  const items=Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg).slice(0,140);
   const maxA=items[0]?.atrasoSeg||1;
 
   const renderItem=(ev,cls="")=>{
@@ -335,22 +328,26 @@ function renderDelayTop(atrasadas){
     return row;
   };
 
-  if(items[0]) elDelayPinned.appendChild(renderItem(items[0],"p1"));
-  if(items[1]) elDelayPinned.appendChild(renderItem(items[1],"p2"));
-  if(items[2]) elDelayPinned.appendChild(renderItem(items[2],"p3"));
+  // ✅ TOP 2
+  if(items[0]) delayPinned.appendChild(renderItem(items[0],"p1"));
+  if(items[1]) delayPinned.appendChild(renderItem(items[1],"p2"));
 
-  const base=items.slice(3);
+  const base=items.slice(2);
   if(!base.length) return;
 
-  base.forEach(ev=>elDelayListTop.appendChild(renderItem(ev)));
+  base.forEach(ev=>delayListTop.appendChild(renderItem(ev)));
   requestAnimationFrame(()=>{
-    const viewH=elDelayScrollWrap.clientHeight;
+    const viewH=delayScrollWrap.clientHeight;
     let guard=0;
-    while(elDelayListTop.scrollHeight < viewH*2.6 && guard<60){ base.forEach(ev=>elDelayListTop.appendChild(renderItem(ev))); guard++; }
-    if(elDelayListTop.scrollHeight <= viewH*1.05) return;
-    const shift=elDelayListTop.scrollHeight;
-    base.forEach(ev=>elDelayListTop.appendChild(renderItem(ev)));
-    delayAnim.shift=shift; delayAnim.pxps=2.0; // mais TV-like (mais devagar)
+    while(delayListTop.scrollHeight < viewH*2.6 && guard<80){
+      base.forEach(ev=>delayListTop.appendChild(renderItem(ev))); guard++;
+    }
+    if(delayListTop.scrollHeight <= viewH*1.05) return;
+
+    const shift=delayListTop.scrollHeight;
+    base.forEach(ev=>delayListTop.appendChild(renderItem(ev))); // clone 1 ciclo
+    delayAnim.shift=shift;
+    delayAnim.pxps=1.25; // devagar
     startDelayAnim();
   });
 }
@@ -358,15 +355,10 @@ function renderDelayTop(atrasadas){
 function renderTabela(eventos){
   elTable.innerHTML="";
   if(!eventos.length){
-    elTable.innerHTML=`
-      <div class="row">
-        <div class="time">—</div>
-        <div class="main"><b>Nenhuma pendência</b><span>Aguardando eventos</span></div>
-        <div class="tag ok">OK</div><div class="late">00:00:00</div>
-      </div>`;
+    elTable.innerHTML=`<div class="row"><div class="time">—</div><div class="main"><b>Nenhuma pendência</b><span>Aguardando eventos</span></div><div class="tag ok">OK</div><div class="late">00:00:00</div></div>`;
     return;
   }
-  eventos.slice().sort((a,b)=>(b.atrasoSeg||0)-(a.atrasoSeg||0)).slice(0,30).forEach(ev=>{
+  eventos.slice().sort((a,b)=>(b.atrasoSeg||0)-(a.atrasoSeg||0)).slice(0,60).forEach(ev=>{
     const isLate=(ev.atrasoSeg||0)>0;
     const row=document.createElement("div");
     row.className="row";
@@ -385,12 +377,13 @@ function renderTabela(eventos){
 async function carregarEventosReais(){
   try{
     elPanelStatus.className="pill"; elPanelStatus.textContent="Carregando…";
-    const res=await fetch(API_URL,{ cache:"no-store", headers:{ "Ambiente":CFG.amb, "Token":CFG.token }});
+    const res=await fetch(API_URL,{cache:"no-store",headers:{"Ambiente":CFG.amb,"Token":CFG.token}});
     if(!res.ok){
       elPanelStatus.className="pill bad"; elPanelStatus.textContent="Erro";
-      renderTabela([]); renderDelayTop([]); buildDonut(0,0); buildBars([]); buildArea([]);
+      renderTabela([]); renderDelayTop([]); buildDonut(0,0); buildBars([]); buildArea([]); applyTickerAutoScroll();
       return;
     }
+
     const json=await res.json();
     let eventos=[];
     if(Array.isArray(json)) eventos=json;
@@ -398,7 +391,7 @@ async function carregarEventosReais(){
     else if(json && json.data) eventos=[json.data];
 
     const atrasadas=[];
-    const now=new Date(); const nowMs=now.getTime();
+    const now=new Date(), nowMs=now.getTime();
     let eventosUltimaHora=0;
 
     for(const ev of eventos){
@@ -411,37 +404,39 @@ async function carregarEventosReais(){
 
       const p=(ev.horario||"00:00:00").split(":").map(Number);
       const ts=new Date(now.getFullYear(),now.getMonth(),now.getDate(),p[0]||0,p[1]||0,p[2]||0).getTime();
-      if(nowMs-ts <= 60*60*1000) eventosUltimaHora++;
+      if(nowMs-ts<=60*60*1000) eventosUltimaHora++;
     }
 
     const qtd=eventos.length;
     const atual=Number((elTotal.textContent||"0").replace(/\./g,""))||0;
     animateCount(elTotal,atual,qtd);
-    elSub.textContent = qtd===1 ? "1 assinatura" : `${qtd.toLocaleString("pt-BR")} assinaturas`;
+    elSub.textContent=qtd===1?"1 assinatura":`${qtd.toLocaleString("pt-BR")} assinaturas`;
 
     elRateNum.textContent=eventosUltimaHora.toFixed(0);
     elRateTextMain.textContent=`${eventosUltimaHora} evento${eventosUltimaHora!==1?"s":""} na última hora`;
 
     elFooterRateText.textContent=`${eventosUltimaHora} eventos / hora`;
     elFooterRateSecondary.textContent="Atualização automática";
-
     elPanelStatus.className="pill ok"; elPanelStatus.textContent="Online";
 
     renderDelayTop(atrasadas);
     renderTabela(eventos);
 
-    buildDonut(qtd, atrasadas.length);
+    buildDonut(qtd,atrasadas.length);
     buildBars(eventos);
     buildArea(atrasadas);
+
+    // ✅ scroll automático das pendências
+    applyTickerAutoScroll();
   }catch(e){
     elPanelStatus.className="pill bad"; elPanelStatus.textContent="Erro";
-    renderTabela([]); renderDelayTop([]); buildDonut(0,0); buildBars([]); buildArea([]);
+    renderTabela([]); renderDelayTop([]); buildDonut(0,0); buildBars([]); buildArea([]); applyTickerAutoScroll();
   }
 }
 
 (function init(){
   carregarEventosReais();
-  setInterval(carregarEventosReais, 20000);
+  setInterval(carregarEventosReais,20000);
 })();
 </script>
 </body>
