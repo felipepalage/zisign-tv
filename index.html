@@ -17,6 +17,7 @@
     --accent:#00f0c0; --danger:#ff5c7a;
     --shadow:0 22px 70px rgba(0,0,0,.55);
   }
+
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   html{font-size:clamp(12px, .85vw, 16px)}
@@ -27,11 +28,11 @@
       radial-gradient(900px 600px at 90% 10%, rgba(0,160,255,.10) 0%, transparent 60%),
       linear-gradient(180deg,var(--bg0),var(--bg1));
     color:var(--text);
-    overflow:hidden; /* TV: sem scroll manual */
+    overflow:auto;
   }
 
   .wrap{
-    height:100vh;
+    min-height:100vh;
     width:min(100vw, 2560px);
     margin:0 auto;
     padding:clamp(10px, 1.2vw, 18px);
@@ -97,29 +98,19 @@
   .kpi .sub{color:var(--muted);font-size:.8rem;margin-top:6px}
   .kpi .right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 
-  /* ===== Maiores atrasos (sem buraco + top1/top2 fixos + rolagem lenta) ===== */
+  /* ===== Maiores atrasos (top1/top2 fixos + scroll JS sem buraco) ===== */
   .delay-list{
+    position:relative;
     min-height:0;
-    flex:1;
+    height:300px;
     overflow:hidden;
     display:flex;
     flex-direction:column;
     gap:10px;
   }
   .delay-pinned{display:flex;flex-direction:column;gap:8px}
-
-  .delay-scroll{
-    min-height:0;
-    flex:1;
-    overflow:hidden;
-    position:relative;
-  }
-  .delay-track{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    will-change:transform;
-  }
+  .delay-scroll{min-height:0;flex:1;overflow:hidden}
+  .delay-track{will-change:transform; transform:translate3d(0,0,0); display:flex; flex-direction:column; gap:8px;}
 
   .delay-item{
     padding:10px 12px; border-radius:16px;
@@ -141,20 +132,18 @@
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
-    max-width:52ch;
+    max-width:46ch;
   }
   .delay-cnpj{color:rgba(255,255,255,.55);font-weight:800}
   .bar{height:7px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
   .bar > i{display:block;height:100%;background:linear-gradient(90deg, rgba(255,92,122,.95), rgba(255,170,170,.95));width:30%}
 
-  /* Gauge */
   .gauge{flex:1;display:grid;place-items:center;padding:6px 0}
   .ring{width:100%;max-width:240px;aspect-ratio:1/1;position:relative}
   .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
   .ring .center{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
   .ring .center .big{font-size:clamp(30px, 2.5vw, 44px);font-weight:900}
 
-  /* Fundos */
   .chart-wrap{
     flex:1;min-height:220px;
     border-radius:18px;
@@ -163,6 +152,7 @@
     padding:10px;
   }
   .chart-wrap canvas{width:100% !important;height:100% !important}
+
   .rank{display:flex;flex-direction:column;gap:8px}
   .rank-row{
     display:grid;
@@ -177,7 +167,6 @@
   .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .val{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:900}
 
-  /* Ticker */
   .ticker{
     border-radius:20px;
     border:1px solid rgba(255,255,255,.10);
@@ -196,7 +185,8 @@
     font-weight:900;letter-spacing:.12em;text-transform:uppercase;
     font-size:.75rem;color:rgba(255,255,255,.78);
   }
-  .table{padding:12px 14px; overflow:hidden; display:grid; gap:10px; min-height:0;}
+
+  .table{padding:12px 14px; overflow:auto; display:grid; gap:10px; min-height:0;}
   .row{
     display:grid;
     grid-template-columns:90px 1fr 120px 120px;
@@ -224,7 +214,6 @@
   footer{display:flex;align-items:center;justify-content:space-between; padding:10px 12px; color:rgba(255,255,255,.55); font-size:.72rem;}
 
   @media (max-width:1400px){
-    body{overflow:auto}
     .top-grid{grid-template-columns:1fr}
     .row{grid-template-columns:90px 1fr}
     .row > :nth-child(3), .row > :nth-child(4){justify-self:start}
@@ -263,11 +252,14 @@
         </div>
       </div>
 
-      <div class="delay-list">
-        <div class="card-title" style="margin-bottom:2px;opacity:.9">Maiores atrasos</div>
-        <div class="delay-pinned" id="delayPinned"></div>
-        <div class="delay-scroll" id="delayScrollWrap">
-          <div class="delay-track" id="delayListTop"></div>
+      <div>
+        <div class="card-title" style="margin-bottom:8px;opacity:.9">Maiores atrasos</div>
+
+        <div class="delay-list">
+          <div class="delay-pinned" id="delayPinned"></div>
+          <div class="delay-scroll" id="delayScrollWrap">
+            <div class="delay-track" id="delayListTop"></div>
+          </div>
         </div>
       </div>
     </article>
@@ -324,6 +316,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
 const CFG = {
   cnpj:  "54638076000176",
@@ -331,6 +324,7 @@ const CFG = {
   amb:   "custodia",
   token: "DHQzckJ0TGWHiFxaVuUlmrBLWXwuejrtSAT0Mf47gvclZ5GKY543iYKNeLfqlzngXH0YcKGLe4qyv0avru3xeVGBp9yUQKKKlSyJ"
 };
+
 (() => {
   const q = new URLSearchParams(location.search);
   for (const k of ["base","cnpj","amb","token"]) {
@@ -338,6 +332,7 @@ const CFG = {
     if (v) CFG[k] = v;
   }
 })();
+
 const API_URL = `${CFG.base}/api/ZiSign/TV?cnpjCertificadora=${encodeURIComponent(CFG.cnpj)}`;
 
 const elClock   = document.getElementById("clock");
@@ -348,7 +343,7 @@ const elRateTextMain = document.getElementById("rateTextMain");
 const elRateTextSecondary = document.getElementById("rateTextSecondary");
 const elRateNum = document.getElementById("rateNum");
 const elPanelStatus = document.getElementById("panelStatus");
-const arc = document.getElementById("arc");
+const arc       = document.getElementById("arc");
 
 const elDelayPinned = document.getElementById("delayPinned");
 const elDelayListTop = document.getElementById("delayListTop");
@@ -408,7 +403,7 @@ function updateGauge(val){
   elRateTextSecondary.textContent = txt;
 }
 
-/** ===== histórico 7d ===== */
+/** ================== HISTÓRICO 7D (ranking fundos) ================== **/
 function carregarHistorico(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -417,15 +412,18 @@ function carregarHistorico(){
     return Array.isArray(arr) ? arr : [];
   }catch{ return []; }
 }
-function salvarHistorico(hist){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(hist)); }catch{} }
+function salvarHistorico(hist){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(hist)); }catch{}
+}
 function limparHistoricoAntigo(hist){
   const limite = Date.now() - MILLIS_7D;
   return hist.filter(e => (e.registradoEm || 0) >= limite);
 }
 let historicoEventos = carregarHistorico();
 
-/** ===== chart ===== */
+/** ================== CHART ================== **/
 let chartTopFundos = null;
+
 function atualizarGraficoFundos(ranking){
   if(!ranking || ranking.length === 0){
     elTopFundHeadline.textContent = "Nenhum atraso registrado nos últimos 7 dias";
@@ -433,6 +431,7 @@ function atualizarGraficoFundos(ranking){
     if(chartTopFundos){ chartTopFundos.destroy(); chartTopFundos = null; }
     return;
   }
+
   const top = ranking[0];
   elTopFundHeadline.textContent =
     `${abreviarFundo(top.nomeFundo, 42)} — ${formatDurationFromSeconds(top.mediaAtrasoSeg)}`;
@@ -479,13 +478,16 @@ function atualizarGraficoFundos(ranking){
     }
   });
 }
+
 function construirRanking7Dias(){
   historicoEventos = limparHistoricoAntigo(historicoEventos);
+
   const porFundo = new Map();
   for(const h of historicoEventos){
     if(!h?.nomeFundo) continue;
     const atrasoSeg = h.atrasoSeg || 0;
     if(atrasoSeg <= 0) continue;
+
     const key = (h.cnpjFundo || h.nomeFundo).toString();
     if(!porFundo.has(key)){
       porFundo.set(key,{ nomeFundo:h.nomeFundo, cnpjFundo:h.cnpjFundo||"", totalAtrasoSeg:0, qtd:0 });
@@ -494,6 +496,7 @@ function construirRanking7Dias(){
     agg.totalAtrasoSeg += atrasoSeg;
     agg.qtd += 1;
   }
+
   const ranking = Array.from(porFundo.values())
     .filter(f=>f.qtd>0)
     .map(f=>({ nomeFundo:f.nomeFundo, cnpjFundo:f.cnpjFundo, mediaAtrasoSeg:f.totalAtrasoSeg/f.qtd }))
@@ -502,37 +505,31 @@ function construirRanking7Dias(){
   atualizarGraficoFundos(ranking);
 }
 
-/** ===== scroll rAF (sem parar) ===== */
-let delayAnim = { raf:0, y:0, shift:0, last:0, pxps:3.5 };
+/** ================== SCROLL JS (sem buraco) ================== **/
+let delayAnim = { raf:0, y:0, shift:0, last:0, pxps:4 };
+
 function stopDelayAnim(){
-  if (delayAnim.raf) cancelAnimationFrame(delayAnim.raf);
-  delayAnim.raf = 0;
-  delayAnim.y = 0;
-  delayAnim.last = 0;
+  if(delayAnim.raf) cancelAnimationFrame(delayAnim.raf);
+  delayAnim = { raf:0, y:0, shift:0, last:0, pxps:delayAnim.pxps || 4 };
   elDelayListTop.style.transform = "translate3d(0,0,0)";
 }
 function startDelayAnim(){
-  if (delayAnim.raf) cancelAnimationFrame(delayAnim.raf);
-  delayAnim.last = 0;
-
-  const step = (t) => {
-    if (!delayAnim.last) delayAnim.last = t;
+  stopDelayAnim();
+  const step = (t)=>{
+    if(!delayAnim.last) delayAnim.last = t;
     const dt = (t - delayAnim.last) / 1000;
     delayAnim.last = t;
 
-    const shift = Number(delayAnim.shift) || 0;
-    if (shift > 0) {
-      delayAnim.y += (Number(delayAnim.pxps) || 3.5) * dt;
-      if (delayAnim.y >= shift) delayAnim.y = 0;
-      elDelayListTop.style.transform = `translate3d(0, ${-delayAnim.y}px, 0)`;
-    }
+    delayAnim.y += delayAnim.pxps * dt;
+    if(delayAnim.y >= delayAnim.shift) delayAnim.y = 0;
+
+    elDelayListTop.style.transform = `translate3d(0, ${-delayAnim.y}px, 0)`;
     delayAnim.raf = requestAnimationFrame(step);
   };
-
   delayAnim.raf = requestAnimationFrame(step);
 }
 
-/** ===== Maiores atrasos: preenche 100% + top1/top2 fixos ===== */
+/* ===== Maiores atrasos: top1/top2 fixos + preencher 100% do espaço + scroll lento ===== */
 function renderDelayTop(atrasadas){
   stopDelayAnim();
   elDelayPinned.innerHTML = "";
@@ -545,18 +542,17 @@ function renderDelayTop(atrasadas){
 
   const mapOps = new Map();
   for(const ev of atrasadas){
-    const key = ev.idOperacaoRecebivel;
-    if(!key) continue;
-    const cur = mapOps.get(key);
-    if(!cur || ev.atrasoSeg > cur.atrasoSeg) mapOps.set(key, ev);
+    const k = ev.idOperacaoRecebivel;
+    if(!k) continue;
+    const cur = mapOps.get(k);
+    if(!cur || ev.atrasoSeg > cur.atrasoSeg) mapOps.set(k, ev);
   }
 
-  const ordenadas = Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg);
-  const items = ordenadas.slice(0, 80);
+  const items = Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg).slice(0, 80);
   const maxAtraso = items[0]?.atrasoSeg || 1;
 
-  const renderItem = (ev, extraClass="") => {
-    const pct = Math.max(10, (ev.atrasoSeg / maxAtraso) * 100);
+  const renderItem = (ev, extraClass="")=>{
+    const pct = Math.max(10, (ev.atrasoSeg/maxAtraso)*100);
     const row = document.createElement("div");
     row.className = `delay-item ${extraClass}`.trim();
     row.innerHTML = `
@@ -564,7 +560,7 @@ function renderDelayTop(atrasadas){
         <div class="delay-op">
           Operação ${ev.idOperacaoRecebivel}
           <div class="delay-fundo" title="${ev.nomeFundo || ""}">
-            ${abreviarFundo(ev.nomeFundo || "Fundo não identificado", 64)}
+            ${abreviarFundo(ev.nomeFundo || "Fundo não identificado", 46)}
             <span class="delay-cnpj">· CNPJ ${formatCnpj(ev.cnpjFundo)}</span>
           </div>
         </div>
@@ -575,32 +571,38 @@ function renderDelayTop(atrasadas){
     return row;
   };
 
+  // TOP 1 e 2 fixos
   if(items[0]) elDelayPinned.appendChild(renderItem(items[0], "p1"));
   if(items[1]) elDelayPinned.appendChild(renderItem(items[1], "p2"));
 
-  const restBase = items.slice(2);
-  if(restBase.length === 0) return;
+  const base = items.slice(2);
+  if(!base.length) return;
 
-  // base 1x
-  restBase.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
+  // Monta 1x
+  base.forEach(ev=>elDelayListTop.appendChild(renderItem(ev)));
 
-  // Preenche o viewport (sem espaço vazio) + duplica pro loop perfeito
-  requestAnimationFrame(() => {
+  // Após layout, repete até preencher e cria loop perfeito
+  requestAnimationFrame(()=>{
     const viewH = elDelayScrollWrap.clientHeight;
 
-    // se tem pouco conteúdo, repete até preencher (sem buraco)
+    // Preenche (sem espaço preto). 2.6x fica bem TV-safe.
     let guard = 0;
-    while (elDelayListTop.scrollHeight < viewH * 1.35 && guard < 40) {
-      restBase.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
+    while(elDelayListTop.scrollHeight < viewH * 2.6 && guard < 60){
+      base.forEach(ev=>elDelayListTop.appendChild(renderItem(ev)));
       guard++;
     }
 
-    // agora mede um "bloco base" e duplica 1x pra loop
-    const baseHeight = elDelayListTop.scrollHeight;
-    restBase.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
+    // Se não tem altura suficiente, fica estático, mas cheio.
+    if(elDelayListTop.scrollHeight <= viewH * 1.05) return;
 
-    delayAnim.shift = baseHeight;
-    delayAnim.pxps = 3.0; // mais devagar (px/s). Ajuste: 2.5 bem lento / 4 mais rápido
+    // Shift = altura de 1 ciclo (antes do clone final)
+    const shift = elDelayListTop.scrollHeight;
+
+    // Clona mais 1x pro loop ser contínuo
+    base.forEach(ev=>elDelayListTop.appendChild(renderItem(ev)));
+
+    delayAnim.shift = shift;
+    delayAnim.pxps = 3.5; // MAIS DEVAGAR (ajuste aqui)
     startDelayAnim();
   });
 }
@@ -631,7 +633,7 @@ function renderTabela(eventos){
       row.innerHTML = `
         <div class="time">${ev.horario || "--:--:--"}</div>
         <div class="main">
-          <b>${abreviarFundo(ev.nomeFundo||"", 52)}</b>
+          <b>${abreviarFundo(ev.nomeFundo||"", 44)}</b>
           <span>Operação ${ev.idOperacaoRecebivel} · CNPJ ${formatCnpj(ev.cnpjFundo)}</span>
         </div>
         <div class="tag ${isLate ? "bad" : "ok"}">${isLate ? "PENDENTE" : "OK"}</div>
@@ -641,7 +643,7 @@ function renderTabela(eventos){
     });
 }
 
-/** ===== fetch ===== */
+/** ================== FETCH ================== **/
 async function carregarEventosReais(){
   try{
     elPanelStatus.className = "pill";
@@ -678,6 +680,7 @@ async function carregarEventosReais(){
       const hh = Number(ah)||0, mm = Number(am)||0, ss = Number(as)||0;
       ev.atrasoSeg = hh*3600 + mm*60 + ss;
       ev.atrasoStr = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
+
       if(ev.atrasoSeg>0) atrasadas.push(ev);
 
       const partes = (ev.horario || "00:00:00").split(":").map(Number);
@@ -699,7 +702,7 @@ async function carregarEventosReais(){
     renderDelayTop(atrasadas);
     renderTabela(eventos);
 
-    // histórico 7d
+    // historico 7d
     historicoEventos = limparHistoricoAntigo(historicoEventos);
     for(const ev of atrasadas){
       const keyHist = `${ev.idOperacaoRecebivel || ""}-${ev.cnpjFundo || ""}`;
@@ -725,7 +728,6 @@ async function carregarEventosReais(){
     elPanelStatus.textContent = "Erro";
     console.error("Erro ao carregar eventos", e);
     renderTabela([]);
-    renderDelayTop([]);
   }
 }
 
@@ -733,12 +735,6 @@ async function carregarEventosReais(){
   construirRanking7Dias();
   carregarEventosReais();
   setInterval(carregarEventosReais, 20000);
-
-  // se redimensionar (TV/Chromecast), recalcula a lista e mantém o scroll ok
-  window.addEventListener("resize", () => {
-    // força re-render do delay usando o que tiver na tela (rebusca rápido)
-    carregarEventosReais();
-  }, { passive:true });
 })();
 </script>
 </body>
