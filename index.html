@@ -9,21 +9,18 @@
 
 <style>
   :root{
-    --bg0:#05070b;
-    --bg1:#070c12;
-    --card:rgba(255,255,255,.06);
-    --card2:rgba(255,255,255,.04);
+    --bg0:#05070b; --bg1:#070c12;
+    --card:rgba(255,255,255,.06); --card2:rgba(255,255,255,.04);
     --border:rgba(255,255,255,.10);
     --muted:rgba(255,255,255,.65);
     --text:rgba(255,255,255,.92);
-    --accent:#00f0c0;
-    --danger:#ff5c7a;
-    --ok:#00f0c0;
+    --accent:#00f0c0; --danger:#ff5c7a;
     --shadow:0 22px 70px rgba(0,0,0,.55);
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
+  html{font-size:clamp(12px, .85vw, 16px)}
   body{
     font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
     background:
@@ -31,156 +28,120 @@
       radial-gradient(900px 600px at 90% 10%, rgba(0,160,255,.10) 0%, transparent 60%),
       linear-gradient(180deg,var(--bg0),var(--bg1));
     color:var(--text);
-    overflow:hidden;
+    overflow:auto; /* TV-safe: não corta */
   }
 
   .wrap{
-    height:100vh;
-    max-width:1920px;
+    min-height:100vh;
+    width:min(100vw, 2560px);
     margin:0 auto;
-    padding:18px;
+    padding:clamp(10px, 1.2vw, 18px);
     display:grid;
     grid-template-rows:auto 1fr auto;
-    gap:14px;
+    gap:clamp(10px, 1vw, 14px);
   }
 
-  /* HEADER minimal */
   header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    display:flex; align-items:center; justify-content:space-between;
     padding:10px 12px;
   }
-  .brand{
-    display:flex;align-items:center;gap:10px;
-    opacity:.95;
+  .brand{display:flex;align-items:center;gap:12px;opacity:.95}
+  .brand img{
+    height:clamp(70px, 9vh, 130px);
+    width:auto;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,.45));
   }
-  .brand img{height:200px;width:auto}
   .brand .dot{
-    width:7px;height:7px;border-radius:999px;background:var(--accent);
-    box-shadow:0 0 0 4px rgba(0,240,192,.12);
-  }
-  .brand .title{
-    font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:12px;
+    width:8px;height:8px;border-radius:999px;background:var(--accent);
+    box-shadow:0 0 0 6px rgba(0,240,192,.10);
   }
   .clock{
-    font-weight:800;
-    letter-spacing:.18em;
-    font-size:12px;
-    color:rgba(255,255,255,.85);
-    padding:8px 12px;
+    font-weight:800; letter-spacing:.18em; font-size:.8rem;
+    color:rgba(255,255,255,.88);
+    padding:10px 14px;
     border-radius:999px;
     background:rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.08);
     backdrop-filter: blur(10px);
   }
 
-  /* GRID */
   .top-grid{
     display:grid;
-    grid-template-columns:1fr 1fr 1.2fr;
-    gap:14px;
+    grid-template-columns:1fr 1fr 1.15fr;
+    gap:clamp(10px, 1vw, 14px);
     min-height:0;
   }
 
   .card{
     min-height:0;
-    border-radius:18px;
+    border-radius:20px;
     background:linear-gradient(180deg,var(--card),var(--card2));
     border:1px solid var(--border);
     box-shadow:var(--shadow);
     backdrop-filter: blur(14px);
-    padding:16px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
+    padding:clamp(12px, 1vw, 16px);
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .card-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .card-title{
+    font-weight:800; font-size:.75rem; letter-spacing:.12em;
+    text-transform:uppercase; color:rgba(255,255,255,.78);
   }
 
-  .card-head{
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
-  }
-  .card-title{
-    font-weight:800;
-    font-size:12px;
-    letter-spacing:.10em;
-    text-transform:uppercase;
-    color:rgba(255,255,255,.78);
-  }
   .pill{
-    font-size:11px;
-    font-weight:800;
-    padding:6px 10px;
-    border-radius:999px;
+    font-size:.72rem; font-weight:900;
+    padding:7px 11px; border-radius:999px;
     border:1px solid rgba(255,255,255,.10);
     background:rgba(255,255,255,.04);
-    color:rgba(255,255,255,.80);
+    color:rgba(255,255,255,.82);
     white-space:nowrap;
   }
   .pill.ok{border-color:rgba(0,240,192,.25); color:var(--accent); background:rgba(0,240,192,.08)}
   .pill.bad{border-color:rgba(255,92,122,.25); color:var(--danger); background:rgba(255,92,122,.08)}
 
-  /* KPIs */
-  .kpi{
-    display:flex;align-items:flex-end;justify-content:space-between;
-    gap:10px;
-  }
-  .kpi .num{font-size:44px;line-height:1;font-weight:900;letter-spacing:-.02em}
-  .kpi .sub{color:var(--muted);font-size:12px;margin-top:4px}
+  .kpi{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+  .kpi .num{font-size:clamp(34px, 3.2vw, 56px);line-height:1;font-weight:900;letter-spacing:-.02em}
+  .kpi .sub{color:var(--muted);font-size:.8rem;margin-top:6px}
   .kpi .right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 
-  /* Delay list */
-  .delay-list{min-height:0;overflow:hidden}
+  .delay-list{min-height:0; overflow:auto; padding-right:6px}
+  .delay-list::-webkit-scrollbar{width:8px}
+  .delay-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.10);border-radius:999px}
   .delay-track{display:flex;flex-direction:column;gap:8px}
   .delay-item{
-    padding:10px 12px;
-    border-radius:14px;
+    padding:10px 12px; border-radius:16px;
     border:1px solid rgba(255,255,255,.08);
     background:rgba(0,0,0,.14);
     display:flex;flex-direction:column;gap:6px;
   }
   .delay-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
-  .delay-op{font-weight:800;font-size:12px;opacity:.95}
-  .delay-time{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:800}
-  .bar{
-    height:6px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden
-  }
-  .bar > i{
-    display:block;height:100%;
-    background:linear-gradient(90deg, rgba(255,92,122,.95), rgba(255,170,170,.95));
-    width:30%;
-    border-radius:inherit;
-  }
+  .delay-op{font-weight:900;font-size:.85rem;opacity:.95}
+  .delay-time{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:900}
+  .bar{height:7px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg, rgba(255,92,122,.95), rgba(255,170,170,.95));width:30%}
 
-  /* Gauge */
-  .gauge{
-    flex:1;
-    display:grid;
-    place-items:center;
-    padding:8px 0;
-  }
-  .ring{width:100%;max-width:220px;aspect-ratio:1/1;position:relative}
+  .gauge{flex:1;display:grid;place-items:center;padding:6px 0}
+  .ring{width:100%;max-width:240px;aspect-ratio:1/1;position:relative}
   .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
   .ring .center{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
-  .ring .center .big{font-size:38px;font-weight:900}
-  .ring .center .small{font-size:12px;color:var(--muted);font-weight:800;margin-top:6px}
+  .ring .center .big{font-size:clamp(30px, 2.5vw, 44px);font-weight:900}
 
-  /* Chart area */
   .chart-wrap{
-    flex:1;min-height:210px;
-    border-radius:16px;
+    flex:1;min-height:220px;
+    border-radius:18px;
     border:1px solid rgba(255,255,255,.08);
     background:rgba(0,0,0,.12);
     padding:10px;
   }
   .chart-wrap canvas{width:100% !important;height:100% !important}
-  .rank{display:flex;flex-direction:column;gap:6px}
+
+  .rank{display:flex;flex-direction:column;gap:8px}
   .rank-row{
     display:grid;
     grid-template-columns:22px 1fr auto;
-    gap:10px;
-    align-items:center;
-    padding:8px 10px;
-    border-radius:12px;
+    gap:10px; align-items:center;
+    padding:9px 11px;
+    border-radius:14px;
     border:1px solid rgba(255,255,255,.06);
     background:rgba(255,255,255,.03);
   }
@@ -188,9 +149,8 @@
   .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .val{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:900}
 
-  /* TICKER */
   .ticker{
-    border-radius:18px;
+    border-radius:20px;
     border:1px solid rgba(255,255,255,.10);
     background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
     box-shadow:var(--shadow);
@@ -204,59 +164,52 @@
     border-bottom:1px solid rgba(255,255,255,.08);
   }
   .ticker-head .left{
-    font-weight:800;
-    letter-spacing:.10em;
-    text-transform:uppercase;
-    font-size:12px;
-    color:rgba(255,255,255,.78);
+    font-weight:900;letter-spacing:.12em;text-transform:uppercase;
+    font-size:.75rem;color:rgba(255,255,255,.78);
   }
 
-  .table{padding:12px 14px;overflow:auto;display:grid;gap:8px}
+  .table{
+    padding:12px 14px;
+    overflow:auto;
+    display:grid; gap:10px;
+    min-height:0;
+  }
+  .table::-webkit-scrollbar{height:10px;width:10px}
+  .table::-webkit-scrollbar-thumb{background:rgba(255,255,255,.10);border-radius:999px}
+
   .row{
     display:grid;
-    grid-template-columns:90px 1fr 110px 110px;
-    gap:10px;
-    align-items:center;
+    grid-template-columns:90px 1fr 120px 120px;
+    gap:10px; align-items:center;
     padding:12px 12px;
-    border-radius:16px;
+    border-radius:18px;
     border:1px solid rgba(255,255,255,.08);
     background:rgba(0,0,0,.12);
   }
-  .time{
-    font-variant-numeric:tabular-nums;
-    font-weight:900;
-    color:rgba(255,255,255,.85);
-  }
-  .main{
-    display:flex;flex-direction:column;gap:4px;min-width:0;
-  }
-  .main b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .main span{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .time{font-variant-numeric:tabular-nums;font-weight:900;color:rgba(255,255,255,.88)}
+  .main{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .main b{font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .main span{font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .tag{
     justify-self:start;
-    font-size:11px;font-weight:900;
-    padding:6px 10px;border-radius:999px;
+    font-size:.72rem;font-weight:900;
+    padding:7px 11px;border-radius:999px;
     border:1px solid rgba(255,255,255,.10);
     background:rgba(255,255,255,.04);
   }
   .tag.ok{border-color:rgba(0,240,192,.25); color:var(--accent); background:rgba(0,240,192,.08)}
   .tag.bad{border-color:rgba(255,92,122,.25); color:var(--danger); background:rgba(255,92,122,.08)}
-  .late{
-    justify-self:end;
-    font-variant-numeric:tabular-nums;
-    font-weight:900;
-    color:rgba(255,255,255,.88);
-  }
+  .late{justify-self:end;font-variant-numeric:tabular-nums;font-weight:900;color:rgba(255,255,255,.90)}
 
   footer{
     display:flex;align-items:center;justify-content:space-between;
     padding:10px 12px;
     color:rgba(255,255,255,.55);
-    font-size:11px;
+    font-size:.72rem;
   }
 
+  /* TV/Resoluções menores: empilha sem quebrar */
   @media (max-width:1400px){
-    .wrap{padding:12px}
     .top-grid{grid-template-columns:1fr}
     .row{grid-template-columns:90px 1fr}
     .row > :nth-child(3), .row > :nth-child(4){justify-self:start}
@@ -276,7 +229,6 @@
   </header>
 
   <section class="top-grid">
-    <!-- Geral -->
     <article class="card">
       <div class="card-head">
         <div class="card-title">Visão geral</div>
@@ -295,13 +247,12 @@
 
       <div>
         <div class="card-title" style="margin-bottom:8px;opacity:.9">Maiores atrasos</div>
-        <div class="delay-list" style="max-height:160px;">
+        <div class="delay-list" style="max-height:180px;">
           <div class="delay-track" id="delayListTop"></div>
         </div>
       </div>
     </article>
 
-    <!-- Gauge -->
     <article class="card">
       <div class="card-head">
         <div class="card-title">Ritmo</div>
@@ -327,14 +278,13 @@
       </div>
     </article>
 
-    <!-- Fundos -->
     <article class="card">
       <div class="card-head">
         <div class="card-title">Fundos</div>
         <span class="pill">média (7 dias)</span>
       </div>
 
-      <div style="font-weight:900;font-size:14px" id="topFundHeadline">Nenhum atraso registrado</div>
+      <div style="font-weight:900;font-size:1rem" id="topFundHeadline">Nenhum atraso registrado</div>
       <div class="chart-wrap"><canvas id="chartTopFundos"></canvas></div>
       <div class="rank" id="topFundList"></div>
     </article>
@@ -374,7 +324,6 @@ const CFG = {
 
 const API_URL = `${CFG.base}/api/ZiSign/TV?cnpjCertificadora=${encodeURIComponent(CFG.cnpj)}`;
 
-/** ================== HELPERS ================== **/
 const elClock   = document.getElementById("clock");
 const elTotal   = document.getElementById("totalCount");
 const elSub     = document.getElementById("subCount");
@@ -439,7 +388,6 @@ function updateGauge(val){
   elRateTextSecondary.textContent = txt;
 }
 
-/** ================== HISTÓRICO 7D (para ranking fundos) ================== **/
 function carregarHistorico(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -457,7 +405,6 @@ function limparHistoricoAntigo(hist){
 }
 let historicoEventos = carregarHistorico();
 
-/** ================== CHART ================== **/
 let chartTopFundos = null;
 
 function atualizarGraficoFundos(ranking){
@@ -470,7 +417,7 @@ function atualizarGraficoFundos(ranking){
 
   const top = ranking[0];
   elTopFundHeadline.textContent =
-    `${abreviarFundo(top.nomeFundo, 40)} — ${formatDurationFromSeconds(top.mediaAtrasoSeg)}`;
+    `${abreviarFundo(top.nomeFundo, 42)} — ${formatDurationFromSeconds(top.mediaAtrasoSeg)}`;
 
   elTopFundList.innerHTML = "";
   ranking.slice(0,5).forEach((f,i)=>{
@@ -478,7 +425,7 @@ function atualizarGraficoFundos(ranking){
     row.className = "rank-row";
     row.innerHTML = `
       <div class="pos">${i+1}</div>
-      <div class="name" title="${f.nomeFundo}">${abreviarFundo(f.nomeFundo, 32)}</div>
+      <div class="name" title="${f.nomeFundo}">${abreviarFundo(f.nomeFundo, 34)}</div>
       <div class="val">${formatDurationFromSeconds(f.mediaAtrasoSeg)}</div>
     `;
     elTopFundList.appendChild(row);
@@ -494,9 +441,10 @@ function atualizarGraficoFundos(ranking){
 
   chartTopFundos = new Chart(ctx, {
     type:"bar",
-    data:{ labels, datasets:[{ data, borderRadius:10 }] },
+    data:{ labels, datasets:[{ data, borderRadius:12 }] },
     options:{
       responsive:true, maintainAspectRatio:false,
+      animation:false, /* TV: evita stutter */
       plugins:{
         legend:{display:false},
         tooltip:{
@@ -507,8 +455,8 @@ function atualizarGraficoFundos(ranking){
         }
       },
       scales:{
-        x:{ ticks:{color:"rgba(255,255,255,.65)",font:{size:10}}, grid:{display:false} },
-        y:{ beginAtZero:true, ticks:{color:"rgba(255,255,255,.65)",font:{size:10}}, grid:{color:"rgba(255,255,255,.06)"} }
+        x:{ ticks:{color:"rgba(255,255,255,.65)",font:{size:11}}, grid:{display:false} },
+        y:{ beginAtZero:true, ticks:{color:"rgba(255,255,255,.65)",font:{size:11}}, grid:{color:"rgba(255,255,255,.06)"} }
       }
     }
   });
@@ -540,11 +488,10 @@ function construirRanking7Dias(){
   atualizarGraficoFundos(ranking);
 }
 
-/** ================== UI HELPERS ================== **/
 function renderDelayTop(atrasadas){
   elDelayListTop.innerHTML = "";
   if(!atrasadas.length){
-    elDelayListTop.innerHTML = `<div style="color:rgba(255,255,255,.55);font-weight:800">Sem atrasos</div>`;
+    elDelayListTop.innerHTML = `<div style="color:rgba(255,255,255,.55);font-weight:900">Sem atrasos</div>`;
     return;
   }
 
@@ -590,8 +537,7 @@ function renderTabela(eventos){
     return;
   }
 
-  eventos
-    .slice()
+  eventos.slice()
     .sort((a,b)=>(b.atrasoSeg||0)-(a.atrasoSeg||0))
     .slice(0, 30)
     .forEach(ev=>{
@@ -601,7 +547,7 @@ function renderTabela(eventos){
       row.innerHTML = `
         <div class="time">${ev.horario || "--:--:--"}</div>
         <div class="main">
-          <b>${abreviarFundo(ev.nomeFundo||"", 40)}</b>
+          <b>${abreviarFundo(ev.nomeFundo||"", 44)}</b>
           <span>Operação ${ev.idOperacaoRecebivel} · CNPJ ${formatCnpj(ev.cnpjFundo)}</span>
         </div>
         <div class="tag ${isLate ? "bad" : "ok"}">${isLate ? "PENDENTE" : "OK"}</div>
@@ -611,7 +557,6 @@ function renderTabela(eventos){
     });
 }
 
-/** ================== FETCH ================== **/
 async function carregarEventosReais(){
   try{
     elPanelStatus.className = "pill";
@@ -647,7 +592,6 @@ async function carregarEventosReais(){
       const hh = Number(ah)||0, mm = Number(am)||0, ss = Number(as)||0;
       ev.atrasoSeg = hh*3600 + mm*60 + ss;
       ev.atrasoStr = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
-
       if(ev.atrasoSeg>0) atrasadas.push(ev);
 
       const partes = (ev.horario || "00:00:00").split(":").map(Number);
@@ -660,9 +604,7 @@ async function carregarEventosReais(){
     animateCount(elTotal, atual, qtd);
     elSub.textContent = qtd === 1 ? "1 assinatura" : `${qtd.toLocaleString("pt-BR")} assinaturas`;
 
-    elFooterRateText.textContent =
-      eventosUltimaHora === 0 ? "0 eventos / hora" : `${eventosUltimaHora} eventos / hora`;
-
+    elFooterRateText.textContent = `${eventosUltimaHora} eventos / hora`;
     elFooterRateSecondary.textContent = "Atualização automática";
     elPanelStatus.className = "pill ok";
     elPanelStatus.textContent = "Online";
