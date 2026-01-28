@@ -41,20 +41,14 @@
     gap:clamp(10px, 1vw, 14px);
   }
 
-  header{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:10px 12px;
-  }
+  header{display:flex; align-items:center; justify-content:space-between; padding:10px 12px;}
   .brand{display:flex;align-items:center;gap:12px;opacity:.95}
   .brand img{
     height:clamp(70px, 9vh, 130px);
     width:auto;
     filter: drop-shadow(0 10px 30px rgba(0,0,0,.45));
   }
-  .brand .dot{
-    width:8px;height:8px;border-radius:999px;background:var(--accent);
-    box-shadow:0 0 0 6px rgba(0,240,192,.10);
-  }
+  .brand .dot{width:8px;height:8px;border-radius:999px;background:var(--accent);box-shadow:0 0 0 6px rgba(0,240,192,.10);}
   .clock{
     font-weight:800; letter-spacing:.18em; font-size:.8rem;
     color:rgba(255,255,255,.88);
@@ -104,20 +98,18 @@
   .kpi .sub{color:var(--muted);font-size:.8rem;margin-top:6px}
   .kpi .right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 
-  /* ===== Maiores atrasos: preencher área vazia + scroll lento ===== */
+  /* ===== Maiores atrasos (sem buraco + top1/top2 fixos) ===== */
   .delay-list{
     position:relative;
     min-height:0;
-    height:260px;                 /* um pouco mais alto pra TV */
-    overflow:hidden;              /* sem scrollbar */
+    height:290px;            /* TV: mais área, sem “vazio” visual */
+    overflow:hidden;
     display:flex;
     flex-direction:column;
     gap:10px;
   }
-
   .delay-pinned{display:flex;flex-direction:column;gap:8px}
 
-  /* o resto ocupa TUDO que sobrar, e o conteúdo vai “preencher” porque duplicamos até passar da altura */
   .delay-scroll{
     min-height:0;
     flex:1;
@@ -139,6 +131,7 @@
   }
   .delay-item.p1{border-color:rgba(0,240,192,.22); background:rgba(0,240,192,.06)}
   .delay-item.p2{border-color:rgba(0,184,255,.18); background:rgba(0,184,255,.05)}
+
   .delay-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
   .delay-op{font-weight:900;font-size:.9rem;line-height:1.1;opacity:.95}
   .delay-time{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:900;white-space:nowrap}
@@ -157,7 +150,7 @@
   .bar > i{display:block;height:100%;background:linear-gradient(90deg, rgba(255,92,122,.95), rgba(255,170,170,.95));width:30%}
 
   .delay-scroll.auto .delay-track{
-    animation: delayScroll var(--delayDur, 30s) linear infinite; /* default lento */
+    animation: delayScroll var(--delayDur, 60s) linear infinite;
   }
   @keyframes delayScroll{
     0%   { transform: translateY(0); }
@@ -215,12 +208,7 @@
     font-size:.75rem;color:rgba(255,255,255,.78);
   }
 
-  .table{
-    padding:12px 14px;
-    overflow:auto;
-    display:grid; gap:10px;
-    min-height:0;
-  }
+  .table{padding:12px 14px; overflow:auto; display:grid; gap:10px; min-height:0;}
   .row{
     display:grid;
     grid-template-columns:90px 1fr 120px 120px;
@@ -245,19 +233,13 @@
   .tag.bad{border-color:rgba(255,92,122,.25); color:var(--danger); background:rgba(255,92,122,.08)}
   .late{justify-self:end;font-variant-numeric:tabular-nums;font-weight:900;color:rgba(255,255,255,.90)}
 
-  footer{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:10px 12px;
-    color:rgba(255,255,255,.55);
-    font-size:.72rem;
-  }
+  footer{display:flex;align-items:center;justify-content:space-between; padding:10px 12px; color:rgba(255,255,255,.55); font-size:.72rem;}
 
   @media (max-width:1400px){
     .top-grid{grid-template-columns:1fr}
     .row{grid-template-columns:90px 1fr}
     .row > :nth-child(3), .row > :nth-child(4){justify-self:start}
     footer{flex-direction:column;align-items:flex-start;gap:6px}
-
     .delay-top{flex-direction:column;align-items:flex-start}
     .delay-time{margin-top:6px}
     .delay-fundo{white-space:normal;max-width:100%}
@@ -403,13 +385,6 @@ const formatCnpj = cnpj => {
   if (d.length !== 14) return cnpj || "";
   return d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,"$1.$2.$3/$4-$5");
 };
-const formatDurationFromSeconds = totalSeconds => {
-  const s = Math.max(0, Math.floor(totalSeconds || 0));
-  const h = Math.floor(s/3600);
-  const m = Math.floor((s%3600)/60);
-  const sec = s%60;
-  return `${pad2(h)}:${pad2(m)}:${pad2(sec)}`;
-};
 const abreviarFundo = (nome, max=24) => {
   if(!nome) return "";
   const n = nome.trim();
@@ -443,24 +418,20 @@ function updateGauge(val){
   elRateTextSecondary.textContent = txt;
 }
 
-function carregarHistorico(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return [];
-    const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? arr : [];
-  }catch{ return []; }
-}
-function salvarHistorico(hist){
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(hist)); }catch{}
-}
-function limparHistoricoAntigo(hist){
-  const limite = Date.now() - MILLIS_7D;
-  return hist.filter(e => (e.registradoEm || 0) >= limite);
-}
+/* ===== HISTÓRICO / CHART (mantido) ===== */
+function carregarHistorico(){ try{ const raw=localStorage.getItem(STORAGE_KEY); if(!raw) return []; const arr=JSON.parse(raw); return Array.isArray(arr)?arr:[]; }catch{ return []; } }
+function salvarHistorico(hist){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(hist)); }catch{} }
+function limparHistoricoAntigo(hist){ const limite=Date.now()-MILLIS_7D; return hist.filter(e => (e.registradoEm||0) >= limite); }
 let historicoEventos = carregarHistorico();
-
 let chartTopFundos = null;
+
+function formatDurationFromSeconds(totalSeconds){
+  const s = Math.max(0, Math.floor(totalSeconds || 0));
+  const h = Math.floor(s/3600);
+  const m = Math.floor((s%3600)/60);
+  const sec = s%60;
+  return `${pad2(h)}:${pad2(m)}:${pad2(sec)}`;
+}
 
 function atualizarGraficoFundos(ranking){
   if(!ranking || ranking.length === 0){
@@ -543,9 +514,9 @@ function construirRanking7Dias(){
   atualizarGraficoFundos(ranking);
 }
 
-/* ===== FIX: preencher o vazio embaixo + scroll mais devagar ===== */
+/* ===== MAIORES ATRASOS: sem espaço vazio (preenche) + loop perfeito + lento ===== */
 function renderDelayTop(atrasadas){
-  // RESET
+  // reset
   elDelayPinned.innerHTML = "";
   elDelayListTop.innerHTML = "";
   elDelayScrollWrap.classList.remove("auto");
@@ -557,7 +528,7 @@ function renderDelayTop(atrasadas){
     return;
   }
 
-  // dedup por operação (maior atraso por ID)
+  // dedup por operação (pega maior atraso por ID)
   const mapOps = new Map();
   for(const ev of atrasadas){
     const key = ev.idOperacaoRecebivel;
@@ -567,10 +538,7 @@ function renderDelayTop(atrasadas){
   }
 
   const ordenadas = Array.from(mapOps.values()).sort((a,b)=>b.atrasoSeg-a.atrasoSeg);
-
-  // mais itens pra “encher” + rolar
-  const maxMostrar = 18;
-  const items = ordenadas.slice(0, maxMostrar);
+  const items = ordenadas.slice(0, 30);
   const maxAtraso = items[0]?.atrasoSeg || 1;
 
   const renderItem = (ev, extraClass="") => {
@@ -593,51 +561,36 @@ function renderDelayTop(atrasadas){
     return row;
   };
 
-  // TOP 1 e TOP 2 fixos
-  const top1 = items[0];
-  const top2 = items[1];
-  if(top1) elDelayPinned.appendChild(renderItem(top1, "p1"));
-  if(top2) elDelayPinned.appendChild(renderItem(top2, "p2"));
+  // TOP 1 e 2 fixos
+  if(items[0]) elDelayPinned.appendChild(renderItem(items[0], "p1"));
+  if(items[1]) elDelayPinned.appendChild(renderItem(items[1], "p2"));
 
-  // RESTO
-  let rest = items.slice(2);
-  rest.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
+  // resto vai rolar
+  const restBase = items.slice(2);
+  if(restBase.length === 0) return;
 
-  // Se não tem resto suficiente, acabou.
-  if(rest.length === 0) return;
+  // 1) adiciona uma vez
+  restBase.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
 
-  // ===== preencher área vazia =====
-  // duplicar o RESTO até o track ficar MAIOR que a altura visível,
-  // assim nunca aparece “buraco preto”.
+  // 2) PREENCHE: duplica até o conteúdo ficar MAIOR que a viewport (sem buraco)
   const viewH = elDelayScrollWrap.clientHeight;
-  let safety = 0;
-
-  while (elDelayListTop.scrollHeight < viewH * 1.25 && rest.length > 0 && safety < 8) {
-    rest.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
-    safety++;
+  let guard = 0;
+  while (elDelayListTop.scrollHeight < viewH * 1.15 && guard < 12) {
+    restBase.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
+    guard++;
   }
 
-  // Se mesmo assim não ficou grande o suficiente, não anima (fica “cheio” e estático)
+  // se ainda não ficou grande, deixa estático (mas preenchido)
   const baseHeight = elDelayListTop.scrollHeight;
-  if(baseHeight <= viewH * 1.05){
-    return;
-  }
+  if(baseHeight <= viewH * 1.02) return;
 
-  // ===== scroll contínuo até o fim =====
-  // pega altura de UM bloco base (antes do último append pra loop perfeito):
-  // aqui vamos considerar metade do conteúdo (primeira metade) como "base"
-  // Então garantimos que o track tem pelo menos 2 bases.
-  // Se não tiver, duplica mais uma vez.
-  const before = baseHeight;
-  rest.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
-  const after = elDelayListTop.scrollHeight;
+  // 3) LOOP PERFEITO: duplica MAIS UMA “base” e anima o shift = altura ANTES de duplicar
+  const shift = elDelayListTop.scrollHeight;
+  restBase.forEach(ev => elDelayListTop.appendChild(renderItem(ev)));
 
-  // shift = altura antes de duplicar (um ciclo)
-  const shift = before;
-
-  // MAIS DEVAGAR: ~10px/s (bem lento)
-  const pxPerSecond = 10;
-  const dur = Math.max(30, Math.min(120, shift / pxPerSecond));
+  // 4) MAIS DEVAGAR: 8px/s (bem lento)
+  const pxPerSecond = 8;
+  const dur = Math.max(40, Math.min(160, shift / pxPerSecond));
 
   elDelayScrollWrap.classList.add("auto");
   elDelayScrollWrap.style.setProperty("--delayShift", `${shift}px`);
