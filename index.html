@@ -28,7 +28,7 @@
       radial-gradient(900px 600px at 90% 10%, rgba(0,160,255,.10) 0%, transparent 60%),
       linear-gradient(180deg,var(--bg0),var(--bg1));
     color:var(--text);
-    overflow:auto; /* TV-safe: não corta */
+    overflow:auto;
   }
 
   .wrap{
@@ -104,6 +104,7 @@
   .kpi .sub{color:var(--muted);font-size:.8rem;margin-top:6px}
   .kpi .right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 
+  /* Delay list */
   .delay-list{min-height:0; overflow:auto; padding-right:6px}
   .delay-list::-webkit-scrollbar{width:8px}
   .delay-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.10);border-radius:999px}
@@ -114,9 +115,20 @@
     background:rgba(0,0,0,.14);
     display:flex;flex-direction:column;gap:6px;
   }
-  .delay-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
-  .delay-op{font-weight:900;font-size:.85rem;opacity:.95}
-  .delay-time{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:900}
+  .delay-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+  .delay-op{font-weight:900;font-size:.9rem;line-height:1.1;opacity:.95}
+  .delay-time{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:900;white-space:nowrap}
+  .delay-fundo{
+    margin-top:6px;
+    font-weight:700;
+    font-size:.78rem;
+    color:rgba(255,255,255,.72);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:46ch;
+  }
+  .delay-cnpj{color:rgba(255,255,255,.55);font-weight:800}
   .bar{height:7px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
   .bar > i{display:block;height:100%;background:linear-gradient(90deg, rgba(255,92,122,.95), rgba(255,170,170,.95));width:30%}
 
@@ -208,12 +220,15 @@
     font-size:.72rem;
   }
 
-  /* TV/Resoluções menores: empilha sem quebrar */
   @media (max-width:1400px){
     .top-grid{grid-template-columns:1fr}
     .row{grid-template-columns:90px 1fr}
     .row > :nth-child(3), .row > :nth-child(4){justify-self:start}
     footer{flex-direction:column;align-items:flex-start;gap:6px}
+
+    .delay-top{flex-direction:column;align-items:flex-start}
+    .delay-time{margin-top:6px}
+    .delay-fundo{white-space:normal;max-width:100%}
   }
 </style>
 </head>
@@ -229,6 +244,7 @@
   </header>
 
   <section class="top-grid">
+    <!-- Geral -->
     <article class="card">
       <div class="card-head">
         <div class="card-title">Visão geral</div>
@@ -253,6 +269,7 @@
       </div>
     </article>
 
+    <!-- Gauge -->
     <article class="card">
       <div class="card-head">
         <div class="card-title">Ritmo</div>
@@ -278,6 +295,7 @@
       </div>
     </article>
 
+    <!-- Fundos -->
     <article class="card">
       <div class="card-head">
         <div class="card-title">Fundos</div>
@@ -444,7 +462,7 @@ function atualizarGraficoFundos(ranking){
     data:{ labels, datasets:[{ data, borderRadius:12 }] },
     options:{
       responsive:true, maintainAspectRatio:false,
-      animation:false, /* TV: evita stutter */
+      animation:false,
       plugins:{
         legend:{display:false},
         tooltip:{
@@ -512,7 +530,13 @@ function renderDelayTop(atrasadas){
     row.className = "delay-item";
     row.innerHTML = `
       <div class="delay-top">
-        <div class="delay-op">Operação ${ev.idOperacaoRecebivel}</div>
+        <div class="delay-op">
+          Operação ${ev.idOperacaoRecebivel}
+          <div class="delay-fundo" title="${ev.nomeFundo || ""}">
+            ${abreviarFundo(ev.nomeFundo || "Fundo não identificado", 46)}
+            <span class="delay-cnpj">· CNPJ ${formatCnpj(ev.cnpjFundo)}</span>
+          </div>
+        </div>
         <div class="delay-time">${ev.atrasoStr}</div>
       </div>
       <div class="bar"><i style="width:${pct.toFixed(1)}%"></i></div>
